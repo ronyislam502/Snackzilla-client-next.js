@@ -1,12 +1,11 @@
 import { baseApi } from "../../api/baseApi";
 
-const authApi = baseApi.injectEndpoints({
+const foodApi = baseApi.injectEndpoints({
   endpoints: (builder) => ({
-    logIn: builder.mutation({
-      query: (userInfo) => ({
-        url: "/auth/login",
-        method: "POST",
-        body: userInfo,
+    allFoods: builder.query({
+      query: () => ({
+        url: "/foods",
+        method: "GET",
       }),
     }),
     signUp: builder.mutation({
@@ -27,7 +26,7 @@ const authApi = baseApi.injectEndpoints({
 });
 
 export const {
-  useLogInMutation,
+  useAllFoodsQuery,
   useSignUpMutation,
   useChangePasswordMutation,
-} = authApi;
+} = foodApi;

@@ -1,7 +1,13 @@
+import Footer from "@/components/shared/Footer";
+import Navbar from "@/components/shared/Navbar";
+import SZProvider from "@/lib/provider/ReduxProvider";
+
 const layout = ({ children }: { children: React.ReactNode }) => {
   return (
     <div className="relative flex flex-col">
-      <main>{children}</main>
+      <Navbar />
+      {children}
+      <Footer />
     </div>
   );
 };

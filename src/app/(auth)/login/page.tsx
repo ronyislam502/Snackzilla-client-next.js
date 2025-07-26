@@ -2,11 +2,18 @@
 
 import SZForm from "@/components/form/SZFrom";
 import SZInput from "@/components/form/SZInput";
+import { useLogInMutation } from "@/redux/features/auth/authApi";
 import { loginValidationSchema } from "@/schema/auth";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { FieldValues } from "react-hook-form";
 
 const Login = () => {
-  const onSubmit = () => {};
+  const [signIn] = useLogInMutation();
+
+  const onSubmit = async (data: FieldValues) => {
+    try {
+    } catch (error) {}
+  };
 
   return (
     <div className="hero bg-base-200 min-h-screen">
