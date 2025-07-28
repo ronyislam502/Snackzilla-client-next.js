@@ -2,6 +2,7 @@
 
 import { persistor, store } from "@/redux/store";
 import { Provider } from "react-redux";
+import { ToastContainer } from "react-toastify";
 import { PersistGate } from "redux-persist/integration/react";
 
 const SZProvider = ({ children }: { children: React.ReactNode }) => {
@@ -10,6 +11,7 @@ const SZProvider = ({ children }: { children: React.ReactNode }) => {
       <PersistGate loading={null} persistor={persistor}>
         {children}
       </PersistGate>
+      <ToastContainer />
     </Provider>
   );
 };

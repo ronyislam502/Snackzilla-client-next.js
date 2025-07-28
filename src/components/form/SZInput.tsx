@@ -18,7 +18,9 @@ const SZInput = ({
   return (
     <div className="form-control">
       <label className="label">
-        <span className="label-text text-xl font-bold text-white">{label}</span>
+        <span className="label-text text-xl font-bold text-success">
+          {label}
+        </span>
       </label>
       <input
         type={type}

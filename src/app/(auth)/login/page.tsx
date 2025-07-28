@@ -2,17 +2,42 @@
 
 import SZForm from "@/components/form/SZFrom";
 import SZInput from "@/components/form/SZInput";
+import { verifyToken } from "@/components/utilities/verifyToken";
 import { useLogInMutation } from "@/redux/features/auth/authApi";
+import { setUser } from "@/redux/features/auth/authSlice";
+import { useAppDispatch } from "@/redux/hooks";
 import { loginValidationSchema } from "@/schema/auth";
+import { TError } from "@/types/global";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { useRouter } from "next/navigation";
 import { FieldValues } from "react-hook-form";
+import { toast } from "react-toastify";
 
 const Login = () => {
+  const dispatch = useAppDispatch();
+  const router = useRouter();
   const [signIn] = useLogInMutation();
 
   const onSubmit = async (data: FieldValues) => {
     try {
-    } catch (error) {}
+      const authData = {
+        email: data.email,
+        password: data.password,
+      };
+
+      const res = await signIn(authData).unwrap();
+      const user = await verifyToken(res?.data?.accessToken);
+      dispatch(setUser({ user: user, token: res.data.accessToken }));
+
+      if (res?.success) {
+        toast.success(res?.message);
+        router.push("/");
+      }
+    } catch (error) {
+      const err = error as TError;
+      console.log(err);
+      toast.error(err?.data?.message);
+    }
   };
 
   return (

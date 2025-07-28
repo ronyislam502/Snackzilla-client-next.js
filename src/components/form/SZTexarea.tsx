@@ -13,7 +13,7 @@ const SZTextarea = ({ name, label, placeholder = "" }: IProps) => {
   return (
     <div className="form-control">
       <label className="label">
-        <span className="label-text text-white">{label}</span>
+        <span className="label-text text-success">{label}</span>
       </label>
       <textarea
         placeholder={placeholder}

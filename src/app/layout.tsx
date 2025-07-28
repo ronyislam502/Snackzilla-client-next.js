@@ -24,11 +24,13 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
+    <html lang="en" suppressHydrationWarning>
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
-        <SZProvider>{children}</SZProvider>
+        <SZProvider>
+          <div className="max-w-7xl mx-auto">{children}</div>
+        </SZProvider>
       </body>
     </html>
   );

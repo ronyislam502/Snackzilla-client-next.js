@@ -4,8 +4,8 @@ export const MenuLinks = [
     name: "Home",
   },
   {
-    path: "/services",
-    name: "Services",
+    path: "/foods",
+    name: "Foods",
   },
   {
     path: "/about",

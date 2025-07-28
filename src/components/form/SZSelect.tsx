@@ -18,7 +18,7 @@ const SZSelect = ({ name, label, options }: IProps) => {
   return (
     <div className="form-control w-full">
       <label className="label">
-        <span className="label-text text-white text-xl">{label}</span>
+        <span className="label-text text-success text-xl">{label}</span>
       </label>
       <select
         {...register(name)}

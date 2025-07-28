@@ -8,25 +8,49 @@ const foodApi = baseApi.injectEndpoints({
         method: "GET",
       }),
     }),
-    signUp: builder.mutation({
-      query: (userInfo) => ({
-        url: "/auth/create-user",
+    createFood: builder.mutation({
+      query: (foodInfo) => ({
+        url: "/foods/create-food",
         method: "POST",
-        body: userInfo,
+        body: foodInfo,
       }),
     }),
-    changePassword: builder.mutation({
-      query: (userInfo) => ({
-        url: "/auth/change-password",
-        method: "POST",
-        body: userInfo,
+    updateFood: builder.mutation({
+      query: (args) => ({
+        url: `/foods/update/${args?.id}`,
+        method: "PATCH",
+        body: args.data,
       }),
+    }),
+    singleFood: builder.query({
+      query: (args) => ({
+        url: `/foods/${args?.id}`,
+        method: "GET",
+      }),
+      providesTags: ["food"],
+    }),
+    deleteFood: builder.mutation({
+      query: (id) => ({
+        url: `/foods/delete/${id}`,
+        method: "DELETE",
+      }),
+      invalidatesTags: ["food"],
+    }),
+    foodsByCategory: builder.query({
+      query: (args) => ({
+        url: `/foods/category-foods/${args?.id}`,
+        method: "GET",
+      }),
+      providesTags: ["food"],
     }),
   }),
 });
 
 export const {
   useAllFoodsQuery,
-  useSignUpMutation,
-  useChangePasswordMutation,
+  useCreateFoodMutation,
+  useSingleFoodQuery,
+  useDeleteFoodMutation,
+  useUpdateFoodMutation,
+  useFoodsByCategoryQuery,
 } = foodApi;
