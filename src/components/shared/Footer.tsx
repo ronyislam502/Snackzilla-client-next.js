@@ -1,9 +1,11 @@
+"use client";
+
 import Image from "next/image";
 import React from "react";
 
 const Footer = () => {
   return (
-    <footer className="footer sm:footer-horizontal bg-base-200 text-base-content p-10">
+    <footer className="footer sm:footer-horizontal bg-black text-white p-10">
       <aside>
         <Image
           src="https://i.postimg.cc/gjhSbS06/resturent.png"

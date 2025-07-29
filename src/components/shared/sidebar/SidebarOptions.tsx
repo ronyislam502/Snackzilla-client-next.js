@@ -11,7 +11,7 @@ export const SidebarOptions = ({ links }: { links: LinkItem[] }) => {
       {links?.map((link) => (
         <Link
           key={link?.href}
-          className="block w-full rounded-md px-3 py-2 hover:bg-orange-200"
+          className="block w-full rounded-md px-3 py-2 hover:bg-orange-600"
           href={link?.href}
         >
           {link?.label}

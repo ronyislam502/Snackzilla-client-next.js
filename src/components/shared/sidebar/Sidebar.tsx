@@ -1,12 +1,15 @@
-import React from "react";
-import { SidebarOptions } from "./SidebarOptions";
+"use client";
+
 import { adminLinks, userLinks } from "./constants";
+import { useAppSelector } from "@/redux/hooks";
+import { TUser } from "@/redux/features/auth/authSlice";
+import { useGetUserByEmailQuery } from "@/redux/features/user/userApi";
+import { SidebarOptions } from "./SidebarOptions";
 
 const Sidebar = () => {
-  const user = {
-    email: "ronyislam1074@gmail.com",
-    role: "user",
-  };
+  const loggedUser = useAppSelector((state) => state?.auth?.user) as TUser;
+  const { data: userData } = useGetUserByEmailQuery(loggedUser?.email);
+  const user = userData?.data[0];
 
   return (
     <div className="drawer lg:drawer-open">
@@ -43,7 +46,9 @@ const Sidebar = () => {
         <ul className="menu bg-base-300 text-base-content min-h-full w-50 p-4">
           {/* Sidebar content here */}
           <SidebarOptions
-            links={user?.role === "admin" ? adminLinks : userLinks}
+            links={
+              user?.role?.toLowerCase() === "admin" ? adminLinks : userLinks
+            }
           />
         </ul>
       </div>

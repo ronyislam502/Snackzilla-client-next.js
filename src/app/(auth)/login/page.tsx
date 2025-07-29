@@ -26,7 +26,7 @@ const Login = () => {
       };
 
       const res = await signIn(authData).unwrap();
-      const user = await verifyToken(res?.data?.accessToken);
+      const user = verifyToken(res?.data?.accessToken);
       dispatch(setUser({ user: user, token: res.data.accessToken }));
 
       if (res?.success) {
@@ -41,7 +41,7 @@ const Login = () => {
   };
 
   return (
-    <div className="hero bg-base-200 min-h-screen">
+    <div className="hero min-h-screen">
       <div className="card bg-base-100 w-full max-w-sm shrink-0 shadow-2xl">
         <div className="card-body">
           <SZForm

@@ -3,7 +3,7 @@
 import Navbar from "@/components/shared/Navbar";
 import Sidebar from "@/components/shared/sidebar/Sidebar";
 
-const AdminLayout = ({ children }: { children: React.ReactNode }) => {
+const layout = ({ children }: { children: React.ReactNode }) => {
   return (
     <div>
       <Navbar />
@@ -17,4 +17,4 @@ const AdminLayout = ({ children }: { children: React.ReactNode }) => {
   );
 };
 
-export default AdminLayout;
+export default layout;

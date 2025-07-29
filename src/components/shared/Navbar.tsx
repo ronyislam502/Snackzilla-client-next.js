@@ -1,10 +1,30 @@
+"use client";
+
 import Link from "next/link";
 import { MenuLinks } from "./NavMenu";
 import Image from "next/image";
+import { toast } from "react-toastify";
+import { useDispatch } from "react-redux";
+import { useAppSelector } from "@/redux/hooks";
+import { logout, TUser } from "@/redux/features/auth/authSlice";
+import { useRouter } from "next/navigation";
+import { useGetUserByEmailQuery } from "@/redux/features/user/userApi";
 
 const Navbar = () => {
+  const loggedUser = useAppSelector((state) => state?.auth?.user) as TUser;
+  const { data: userData } = useGetUserByEmailQuery(loggedUser?.email);
+  const user = userData?.data[0];
+  const dispatch = useDispatch();
+  const router = useRouter();
+
+  const handleLogout = () => {
+    dispatch(logout());
+    toast.success("Log out successfully");
+    router.push("/login");
+  };
+
   return (
-    <div className="navbar bg-base-100 shadow-sm">
+    <div className="navbar bg-base-500 shadow-sm">
       <div className="navbar-start">
         <div className="dropdown">
           <div tabIndex={0} role="button" className="btn btn-ghost lg:hidden">
@@ -35,7 +55,7 @@ const Navbar = () => {
             ))}
           </ul>
         </div>
-        <a className="btn btn-ghost text-xl">
+        <Link href="/" className="btn btn-ghost text-xl">
           <Image
             src="https://i.postimg.cc/gjhSbS06/resturent.png"
             height={100}
@@ -43,21 +63,44 @@ const Navbar = () => {
             alt="logo"
             className="rounded-lg"
           />
-        </a>
+        </Link>
       </div>
       <div className="navbar-center hidden lg:flex">
         <ul className="menu menu-horizontal px-1">
           {MenuLinks?.map((menu) => (
-            <Link className="px-2" key={menu?.name} href={menu?.path}>
+            <Link className="px-2 text-lg" key={menu?.name} href={menu?.path}>
               {menu?.name}
             </Link>
           ))}
         </ul>
       </div>
       <div className="navbar-end">
-        <Link href="/login" className="btn">
-          Login
-        </Link>
+        {user ? (
+          <div className="dropdown dropdown-center">
+            <div tabIndex={0} role="button">
+              <div className="avatar">
+                <div className="w-10 rounded-full">
+                  <img src={user?.avatar || ""} />
+                </div>
+              </div>
+            </div>
+            <ul
+              tabIndex={0}
+              className="dropdown-content menu rounded-box z-1 w-52 p-2 shadow-sm bg-black/80 text-xl font-bold text-blue-700"
+            >
+              <li>
+                <Link href={`/${user?.role?.toLowerCase()}`}>Dashboard</Link>
+              </li>
+              <li onClick={handleLogout}>
+                <a>logout</a>
+              </li>
+            </ul>
+          </div>
+        ) : (
+          <Link href="/login" className="btn">
+            Login
+          </Link>
+        )}
       </div>
     </div>
   );

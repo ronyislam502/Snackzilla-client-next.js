@@ -7,26 +7,16 @@ const categoryApi = baseApi.injectEndpoints({
         url: "/categories",
         method: "GET",
       }),
+      providesTags: ["category"],
     }),
-    signUp: builder.mutation({
-      query: (userInfo) => ({
-        url: "/auth/create-user",
+    createCategory: builder.mutation({
+      query: (categoryInfo) => ({
+        url: "/categories/create-category",
         method: "POST",
-        body: userInfo,
-      }),
-    }),
-    changePassword: builder.mutation({
-      query: (userInfo) => ({
-        url: "/auth/change-password",
-        method: "POST",
-        body: userInfo,
+        body: categoryInfo,
       }),
     }),
   }),
 });
 
-export const {
-  useAllCategoriesQuery,
-  useSignUpMutation,
-  useChangePasswordMutation,
-} = categoryApi;
+export const { useAllCategoriesQuery } = categoryApi;

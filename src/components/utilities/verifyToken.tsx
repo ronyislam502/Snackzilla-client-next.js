@@ -1,7 +1,5 @@
-"use client";
-
 import { jwtDecode } from "jwt-decode";
 
-export const verifyToken = async (token: string) => {
+export const verifyToken = (token: string) => {
   return jwtDecode(token);
 };

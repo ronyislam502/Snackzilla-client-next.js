@@ -1,5 +1,5 @@
 import Banner from "@/components/ui/home/Banner";
-import Category from "../../../components/ui/home/Category";
+import Category from "@/components/ui/home/Category";
 
 const Home = () => {
   return (

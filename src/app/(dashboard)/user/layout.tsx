@@ -3,7 +3,7 @@
 import Navbar from "@/components/shared/Navbar";
 import Sidebar from "@/components/shared/sidebar/Sidebar";
 
-const UserLayout = ({ children }: { children: React.ReactNode }) => {
+const layout = ({ children }: { children: React.ReactNode }) => {
   return (
     <div>
       <Navbar />
@@ -17,4 +17,4 @@ const UserLayout = ({ children }: { children: React.ReactNode }) => {
   );
 };
 
-export default UserLayout;
+export default layout;
