@@ -14,7 +14,7 @@ const Category = () => {
   if (isLoading) return <p className="text-center">Loading...</p>;
 
   return (
-    <div>
+    <div className="my-6">
       <SectionTitle subHeading="Choice your" heading="category" />
       <div className="px-4">
         <Swiper
