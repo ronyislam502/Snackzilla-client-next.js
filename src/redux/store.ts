@@ -14,7 +14,7 @@ import {
 import storage from "redux-persist/lib/storage";
 
 const persistConfig = {
-  key: "root",
+  key: "auth",
   storage,
 };
 
@@ -37,5 +37,7 @@ export const store = configureStore({
 export type RootState = ReturnType<typeof store.getState>;
 // Inferred type: {posts: PostsState, comments: CommentsState, users: UsersState}
 export type AppDispatch = typeof store.dispatch;
+
+export type AppStore = typeof store;
 
 export const persistor = persistStore(store);

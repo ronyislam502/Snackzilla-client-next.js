@@ -5,7 +5,8 @@ export const userLinks = [
 
 export const adminLinks = [
   { href: "/admin/orders", label: "Orders" },
-  { href: "/admin", label: "Dashboard" },
+  { href: "/admin", label: "Sales" },
   { href: "/admin/userManagement", label: "User Management" },
-  { href: "/admin/productManagement", label: "Product Management" },
+  { href: "/admin/categoryManagement", label: "Category Management" },
+  { href: "/admin/productManagement", label: "Food Management" },
 ];

@@ -9,6 +9,7 @@ import { useAppDispatch } from "@/redux/hooks";
 import { loginValidationSchema } from "@/schema/auth";
 import { TError } from "@/types/global";
 import { zodResolver } from "@hookform/resolvers/zod";
+import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { FieldValues } from "react-hook-form";
 import { toast } from "react-toastify";
@@ -55,7 +56,9 @@ const Login = () => {
               <SZInput label="Password" name="password" type="password" />
             </div>
             <div>
-              <a className="link link-hover">Forgot password?</a>
+              <Link href="/recover" className="link link-hover">
+                Forgot password?
+              </Link>
             </div>
             <div className="text-center py-4">
               <button
@@ -66,6 +69,14 @@ const Login = () => {
               </button>
             </div>
           </SZForm>
+          <div className="text-center">
+            <Link href="/register">
+              <p>
+                Don&lsquo;t have an account ?
+                <span className="text-blue-400"> Register</span>
+              </p>
+            </Link>
+          </div>
         </div>
       </div>
     </div>
