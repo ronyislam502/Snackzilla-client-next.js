@@ -1,6 +1,6 @@
 "use client";
 
-import TableSkeleton from "@/components/ui/skeleaton/TableSkeleton";
+import TableSkeleton from "@/components/ui/skeleton/TableSkeleton";
 import { useAllUsersQuery } from "@/redux/features/user/userApi";
 import { TUserDetail } from "@/types/user";
 import React, { useState } from "react";
@@ -9,7 +9,6 @@ const UserManagement = () => {
   const [page, setPage] = useState(1);
   const [limit] = useState(8);
   const { data: users, isLoading } = useAllUsersQuery({ page, limit });
-
   const totalPages = users?.meta?.totalPage || 1;
 
   return (

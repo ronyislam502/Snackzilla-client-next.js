@@ -1,6 +1,6 @@
 "use client";
 
-import TableSkeleton from "@/components/ui/skeleaton/TableSkeleton";
+import TableSkeleton from "@/components/ui/skeleton/TableSkeleton";
 import { useAllFoodsQuery } from "@/redux/features/food/foodApi";
 import { TFood } from "@/types/food";
 import React, { useState } from "react";
@@ -9,9 +9,6 @@ const ProductManagement = () => {
   const [page, setPage] = useState(1);
   const [limit] = useState(8);
   const { data: foods, isLoading } = useAllFoodsQuery({ page, limit });
-
-  console.log("data", foods);
-
   const totalPages = foods?.meta?.totalPage || 1;
 
   return (

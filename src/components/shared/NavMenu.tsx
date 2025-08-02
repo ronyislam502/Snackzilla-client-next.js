@@ -4,7 +4,7 @@ export const MenuLinks = [
     name: "Home",
   },
   {
-    path: "/foods",
+    path: "/menu",
     name: "Foods",
   },
   {

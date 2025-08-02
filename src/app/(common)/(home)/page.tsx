@@ -1,11 +1,13 @@
-import Banner from "@/components/ui/home/Banner";
-import Category from "@/components/ui/home/Category";
+import Banner from "./_components/Banner";
+import Category from "./_components/Category";
+import FeatureFoods from "./_components/FeatureFoods";
 
 const Home = () => {
   return (
     <div>
       <Banner />
       <Category />
+      <FeatureFoods />
     </div>
   );
 };

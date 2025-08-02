@@ -1,60 +1,63 @@
 "use client";
 
 import TableSkeleton from "@/components/ui/skeleton/TableSkeleton";
-import { useAllCategoriesQuery } from "@/redux/features/category/categoryApi";
-import { TCategory } from "@/types/food";
+import { formatDate } from "@/components/utilities/Date";
+import { useAllOrdersQuery } from "@/redux/features/order/orderApi";
+
 import React, { useState } from "react";
 
-const CategoryManagement = () => {
+const Orders = () => {
   const [page, setPage] = useState(1);
   const [limit] = useState(8);
-  const { data: categories, isLoading } = useAllCategoriesQuery({
-    page,
-    limit,
-  });
-  const totalPages = categories?.meta?.totalPage || 1;
+  const { data: orders, isLoading } = useAllOrdersQuery({ page, limit });
+  const totalPages = orders?.meta?.totalPage || 1;
 
   return (
     <div>
       <div className="text-xl font-bold text-center py-6">
-        <h2>Categories</h2>
-        <h2>Total Category: {categories?.data?.length}</h2>
+        <h2>Orders</h2>
+        <h2>Total Orders: {orders?.data?.length}</h2>
       </div>
       <div className="overflow-x-auto">
         <table className="table">
           {/* head */}
           <thead className="">
             <tr className="bg-base-300 text-green-500 text-lg">
-              <th>Image</th>
-              <th>Name</th>
-              <th>isDelete</th>
+              <th>Date</th>
+              <th>OrderNo</th>
+              <th>Price</th>
+              <th>Tax</th>
+              <th>Payment</th>
+              <th>isPayment</th>
               <th>Action</th>
             </tr>
           </thead>
           <tbody>
             {isLoading ? (
-              <TableSkeleton columns={4} rows={limit} />
+              <TableSkeleton columns={6} rows={limit} />
             ) : (
-              categories?.data?.map((category: TCategory) => (
-                <tr key={category?._id}>
-                  <td>
+              orders?.data?.map((order: any) => (
+                <tr key={order?._id}>
+                  {/* <td>
                     <div className="avatar">
                       <div className="w-12 rounded-full">
-                        <img src={category?.icon} />
+                        <img src={order?.image} />
                       </div>
                     </div>
-                  </td>
-                  <td>{category?.name}</td>
+                  </td> */}
+                  <td>{formatDate(order.createdAt)}</td>
+                  <td>$ {order?.transactionId}</td>
+                  <td>{order?.totalPrice}</td>
+                  <td>{order?.tax}</td>
+                  <td>{order?.grandAmount}</td>
                   <td>
                     {" "}
-                    {category?.isDeleted ? (
+                    {order?.paymentStatus ? (
                       <span className="text-red-500 font-semibold">
-                        Deleted
+                        Pending
                       </span>
                     ) : (
-                      <span className="text-green-600 font-semibold">
-                        Active
-                      </span>
+                      <span className="text-green-600 font-semibold">Paid</span>
                     )}
                   </td>
                   <th>
@@ -94,4 +97,4 @@ const CategoryManagement = () => {
   );
 };
 
-export default CategoryManagement;
+export default Orders;
