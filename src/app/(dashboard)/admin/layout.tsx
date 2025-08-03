@@ -7,7 +7,7 @@ const layout = ({ children }: { children: React.ReactNode }) => {
   return (
     <div>
       <Navbar />
-      <div className="grid grid-cols-1 lg:grid-cols-5 gap-2">
+      <div className="max-w-[1280px] mx-auto grid grid-cols-1 lg:grid-cols-5 gap-2">
         <div className="col-span-1">
           <Sidebar />
         </div>

@@ -34,7 +34,7 @@ const Orders = () => {
           </thead>
           <tbody>
             {isLoading ? (
-              <TableSkeleton columns={6} rows={limit} />
+              <TableSkeleton columns={7} rows={limit} />
             ) : (
               orders?.data?.map((order: any) => (
                 <tr key={order?._id}>

@@ -2,7 +2,7 @@ import { TFood } from "@/types/food";
 
 const FoodCard = ({ food }: { food: TFood }) => {
   return (
-    <div className="card bg-base-100 shadow-sm">
+    <div className="card bg-base-300 shadow-sm">
       <img src={food?.image} alt="Foods" className="rounded-t-lg" />
       <div className="card-body items-center text-center">
         <h2 className="card-title">{food?.name}</h2>

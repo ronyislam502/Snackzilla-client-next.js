@@ -147,7 +147,7 @@ const Menu = () => {
                 <FoodCard key={food._id} food={food} />
               ))
             ) : (
-              <p className="col-span-3 text-center">No foods found</p>
+              <p className="col-span-3 text-7xl text-center">No foods found</p>
             )}
           </div>
           <div className="flex gap-2 mx-auto text-center md:w-4/12 my-8">
