@@ -18,7 +18,7 @@ const Category = () => {
 
   return (
     <div className="my-6">
-      <SectionTitle subHeading="Choice your" heading="category" />
+      <SectionTitle subHeading="" heading="our categories" />
       <div className="px-4">
         <Swiper
           slidesPerView={4}

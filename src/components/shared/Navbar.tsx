@@ -9,8 +9,10 @@ import { useAppSelector } from "@/redux/hooks";
 import { logout, TUser } from "@/redux/features/auth/authSlice";
 import { useRouter } from "next/navigation";
 import { useGetUserByEmailQuery } from "@/redux/features/user/userApi";
+import { ShoppingCartIcon } from "./Icons";
 
 const Navbar = () => {
+  const foods = useAppSelector((store) => store.cart.foods);
   const loggedUser = useAppSelector((state) => state?.auth?.user) as TUser;
   const { data: userData } = useGetUserByEmailQuery(loggedUser?.email);
   const user = userData?.data[0];
@@ -75,32 +77,40 @@ const Navbar = () => {
         </ul>
       </div>
       <div className="navbar-end">
-        {user ? (
-          <div className="dropdown dropdown-center">
-            <div tabIndex={0} role="button">
-              <div className="avatar">
-                <div className="w-10 rounded-full">
-                  <img src={user?.avatar || ""} />
+        <div className="mx-2 text-center">
+          <Link href="/cart" className="flex">
+            <ShoppingCartIcon />
+            <span className="text-green-400 font-bold">{foods?.length}</span>
+          </Link>
+        </div>
+        <div>
+          {user ? (
+            <div className="dropdown dropdown-center">
+              <div tabIndex={0} role="button">
+                <div className="avatar">
+                  <div className="w-10 rounded-full">
+                    <img src={user?.avatar || ""} />
+                  </div>
                 </div>
               </div>
+              <ul
+                tabIndex={0}
+                className="dropdown-content menu rounded-box z-1 w-52 p-2 shadow-sm bg-black/80 text-xl font-bold text-blue-700"
+              >
+                <li>
+                  <Link href={`/${user?.role?.toLowerCase()}`}>Dashboard</Link>
+                </li>
+                <li onClick={handleLogout}>
+                  <a>logout</a>
+                </li>
+              </ul>
             </div>
-            <ul
-              tabIndex={0}
-              className="dropdown-content menu rounded-box z-1 w-52 p-2 shadow-sm bg-black/80 text-xl font-bold text-blue-700"
-            >
-              <li>
-                <Link href={`/${user?.role?.toLowerCase()}`}>Dashboard</Link>
-              </li>
-              <li onClick={handleLogout}>
-                <a>logout</a>
-              </li>
-            </ul>
-          </div>
-        ) : (
-          <Link href="/login" className="btn">
-            Login
-          </Link>
-        )}
+          ) : (
+            <Link href="/login" className="btn">
+              Login
+            </Link>
+          )}
+        </div>
       </div>
     </div>
   );

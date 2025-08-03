@@ -5,7 +5,7 @@ import { Carousel } from "react-responsive-carousel";
 
 const Banner = () => {
   return (
-    <Carousel>
+    <Carousel autoPlay>
       <div>
         <img src="https://i.ibb.co/1fM3zs7/01.jpg" />
       </div>

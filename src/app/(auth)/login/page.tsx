@@ -43,7 +43,7 @@ const Login = () => {
 
   return (
     <div className="hero min-h-screen">
-      <div className="card bg-base-100 w-full max-w-sm shrink-0 shadow-2xl">
+      <div className="card bg-base-100 w-full max-w-sm shadow-2xl">
         <div className="card-body">
           <SZForm
             resolver={zodResolver(loginValidationSchema)}
@@ -62,7 +62,7 @@ const Login = () => {
             </div>
             <div className="text-center py-4">
               <button
-                className="btn btn-outline btn-success w-full"
+                className="btn btn-outline btn-success w-2/4"
                 type="submit"
               >
                 Login
