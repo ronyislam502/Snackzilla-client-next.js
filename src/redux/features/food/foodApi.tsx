@@ -1,12 +1,48 @@
+import { TResponseRedux } from "@/types/global";
 import { baseApi } from "../../api/baseApi";
+import { TFood } from "@/types/food";
 
 const foodApi = baseApi.injectEndpoints({
   endpoints: (builder) => ({
     allFoods: builder.query({
-      query: () => ({
-        url: "/foods",
-        method: "GET",
-      }),
+      query: ({ search, sort, page, limit, category, minPrice, maxPrice }) => {
+        const params = new URLSearchParams();
+
+        if (search) {
+          params.append("searchTerm", search);
+        }
+        if (category) {
+          params.append("category", category);
+        }
+        if (minPrice) {
+          params.append("minPrice", String(minPrice));
+        }
+        if (maxPrice) {
+          params.append("maxPrice", String(maxPrice));
+        }
+        if (sort) {
+          params.append("sort", sort);
+        }
+        if (page) {
+          params.append("page", page);
+        }
+        if (limit) {
+          params.append("limit", limit);
+        }
+
+        return {
+          url: "/foods",
+          method: "GET",
+          params: params,
+        };
+      },
+      providesTags: ["food"],
+      transformResponse: (response: TResponseRedux<TFood[]>) => {
+        return {
+          data: response.data,
+          meta: response.meta,
+        };
+      },
     }),
     createFood: builder.mutation({
       query: (foodInfo) => ({

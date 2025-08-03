@@ -29,7 +29,7 @@ export default function RootLayout({
         className={`${geistSans?.variable} ${geistMono?.variable} antialiased`}
       >
         <SZProvider>
-          <div className="max-w-7xl mx-auto">{children}</div>
+          <div>{children}</div>
         </SZProvider>
       </body>
     </html>

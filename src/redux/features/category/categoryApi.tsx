@@ -9,9 +9,16 @@ const categoryApi = baseApi.injectEndpoints({
       }),
       providesTags: ["category"],
     }),
+    allFoodsByCategories: builder.query({
+      query: () => ({
+        url: "/categories",
+        method: "GET",
+      }),
+      providesTags: ["category"],
+    }),
     createCategory: builder.mutation({
       query: (categoryInfo) => ({
-        url: "/categories/create-category",
+        url: "/categories/category-foods/:categoryId",
         method: "POST",
         body: categoryInfo,
       }),
@@ -19,4 +26,8 @@ const categoryApi = baseApi.injectEndpoints({
   }),
 });
 
-export const { useAllCategoriesQuery } = categoryApi;
+export const {
+  useAllCategoriesQuery,
+  useCreateCategoryMutation,
+  useAllFoodsByCategoriesQuery,
+} = categoryApi;
