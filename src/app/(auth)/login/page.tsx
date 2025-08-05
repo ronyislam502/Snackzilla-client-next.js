@@ -33,7 +33,9 @@ const Login = () => {
       dispatch(setCartUser(user.email));
 
       if (res?.success) {
-        toast.success(res?.message);
+        toast.success(res?.message, {
+          autoClose: 1000,
+        });
         router.push("/");
       }
     } catch (error) {
@@ -44,7 +46,7 @@ const Login = () => {
   };
 
   return (
-    <div className="hero min-h-screen">
+    <div className="hero h-[90vh]">
       <div className="card bg-base-100 w-full max-w-sm shadow-2xl">
         <div className="card-body">
           <SZForm

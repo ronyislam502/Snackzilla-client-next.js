@@ -6,11 +6,11 @@ import Image from "next/image";
 import { toast } from "react-toastify";
 import { useDispatch } from "react-redux";
 import { useAppSelector } from "@/redux/hooks";
-import { logout, TUser } from "@/redux/features/auth/authSlice";
+import { logout, setUser, TUser } from "@/redux/features/auth/authSlice";
 import { useRouter } from "next/navigation";
 import { useGetUserByEmailQuery } from "@/redux/features/user/userApi";
 import { ShoppingCartIcon } from "./Icons";
-import { clearCart } from "@/redux/features/order/orderSlice";
+import { clearCart, setCartUser } from "@/redux/features/order/orderSlice";
 
 const Navbar = () => {
   const foods = useAppSelector((store) => store.cart.foods);
@@ -21,9 +21,13 @@ const Navbar = () => {
   const router = useRouter();
 
   const handleLogout = () => {
-    dispatch(clearCart());
     dispatch(logout());
-    toast.success("Log out successfully");
+    dispatch(setUser({ user: null, token: null }));
+    dispatch(setCartUser(""));
+    dispatch(clearCart());
+    toast.success("Log out successfully", {
+      autoClose: 1000,
+    });
     router.push("/login");
   };
 

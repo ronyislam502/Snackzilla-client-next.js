@@ -3,18 +3,20 @@
 import { Swiper, SwiperSlide } from "swiper/react";
 import "swiper/css";
 import "swiper/css/pagination";
-import { Pagination } from "swiper/modules";
+import "swiper/css/autoplay"; // autoplay এর জন্য
+import { Pagination, Autoplay } from "swiper/modules"; // Autoplay module ইম্পোর্ট
 import { useAllCategoriesQuery } from "@/redux/features/category/categoryApi";
-import Link from "next/link";
 import SectionTitle from "@/components/shared/SectionTitle";
-import { useRouter } from "next/navigation";
 import Image from "next/image";
+import CategorySkeleton from "@/components/ui/skeleton/CategorySkeleton";
+import { TCategory } from "@/types/food";
+import { useRouter } from "next/navigation";
 
 const Category = () => {
   const router = useRouter();
   const { data: categories, isLoading } = useAllCategoriesQuery({});
 
-  if (isLoading) return <p className="text-center">Loading...</p>;
+  if (isLoading) return <CategorySkeleton />;
 
   return (
     <div className="my-6">
@@ -25,11 +27,19 @@ const Category = () => {
           spaceBetween={30}
           centeredSlides={true}
           pagination={{ clickable: true }}
-          modules={[Pagination]}
+          autoplay={{
+            delay: 3000,
+            disableOnInteraction: false,
+          }}
+          modules={[Pagination, Autoplay]}
           className="mySwiper"
         >
-          {categories?.data?.map((category: any) => (
-            <SwiperSlide key={category?._id}>
+          {categories?.data?.map((category: TCategory) => (
+            <SwiperSlide
+              key={category?._id}
+              onClick={() => router.push(`/menu?category=${category._id}`)}
+              className="cursor-pointer"
+            >
               <Image
                 src={category?.icon || ""}
                 alt={category?.name}

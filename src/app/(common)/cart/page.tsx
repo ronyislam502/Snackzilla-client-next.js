@@ -9,7 +9,6 @@ import OrderSummary from "./_components/OrderSummary";
 const Cart = () => {
   const foods = useAppSelector((state) => state.cart.foods) as TFood[];
 
-  console.log("food", foods);
   return (
     <div className="grid grid-cols-1 lg:grid-cols-6 gap-6 items-center">
       <div className="col-span-4">

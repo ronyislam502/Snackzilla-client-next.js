@@ -7,11 +7,16 @@ import { useDebounce } from "@/components/utilities/Debaounce";
 import { useAllCategoriesQuery } from "@/redux/features/category/categoryApi";
 import { useAllFoodsQuery } from "@/redux/features/food/foodApi";
 import { TCategory, TFood } from "@/types/food";
-import { useState } from "react";
+import { useRouter, useSearchParams } from "next/navigation";
+import { useEffect, useState, useRef } from "react";
 
 const Menu = () => {
+  const searchParams = useSearchParams();
+  const router = useRouter();
+  const categoryFromQuery = searchParams.get("category") || "";
   // ==== States ====
-  const [selectedCategory, setSelectedCategory] = useState<string>("");
+  const [selectedCategory, setSelectedCategory] =
+    useState<string>(categoryFromQuery);
   const [minPrice, setMinPrice] = useState<number>(10);
   const [maxPrice, setMaxPrice] = useState<number>(1000);
   const [search, setSearch] = useState<string>("");
@@ -19,6 +24,12 @@ const Menu = () => {
   const [sort, setSort] = useState("");
   const [page, setPage] = useState(1);
   const debouncedSearch = useDebounce(search, 500);
+
+  useEffect(() => {
+    if (categoryFromQuery) {
+      setSelectedCategory(categoryFromQuery);
+    }
+  }, [categoryFromQuery]);
 
   // ==== Fetch Categories ====
   const { data: categories, isLoading: categoryLoading } =
@@ -50,6 +61,14 @@ const Menu = () => {
 
   const clearSelection = () => {
     setSelectedCategory("");
+    router.replace("/menu", { scroll: false });
+  };
+
+  const handleCategoryChange = (id: string) => {
+    setSelectedCategory(id);
+    setPage(1);
+    // URL থেকে category মুছে ফেলে শুধু /menu রাখুন
+    router.replace("/menu", { scroll: false });
   };
 
   // ==== UI ====
@@ -116,7 +135,7 @@ const Menu = () => {
                     type="radio"
                     name="category"
                     checked={selectedCategory === category._id}
-                    onChange={() => setSelectedCategory(category?._id)}
+                    onChange={() => handleCategoryChange(category?._id)}
                   />
                   <span>{category?.name}</span>
                 </label>
@@ -150,27 +169,29 @@ const Menu = () => {
               <p className="col-span-3 text-7xl text-center">No foods found</p>
             )}
           </div>
-          <div className="flex gap-2 mx-auto text-center md:w-4/12 my-8">
-            <button
-              className="btn btn-outline btn-primary text-success btn-sm"
-              disabled={page <= 1}
-              onClick={() => setPage((prev: number) => Math.max(prev - 1, 1))}
-            >
-              Prev
-            </button>
-            <span className="text-success">
-              {page} / {totalPages}
-            </span>
-            <button
-              className="btn btn-outline btn-primary text-success btn-sm"
-              disabled={page >= totalPages}
-              onClick={() =>
-                setPage((prev: number) => Math.min(prev + 1, totalPages))
-              }
-            >
-              Next
-            </button>
-          </div>
+          {(foods?.meta?.total as number) > limit && (
+            <div className="flex gap-2 mx-auto text-center md:w-4/12 my-8">
+              <button
+                className="btn btn-outline btn-primary text-success btn-sm"
+                disabled={page <= 1}
+                onClick={() => setPage((prev: number) => Math.max(prev - 1, 1))}
+              >
+                Prev
+              </button>
+              <span className="text-success">
+                {page} / {totalPages}
+              </span>
+              <button
+                className="btn btn-outline btn-primary text-success btn-sm"
+                disabled={page >= totalPages}
+                onClick={() =>
+                  setPage((prev: number) => Math.min(prev + 1, totalPages))
+                }
+              >
+                Next
+              </button>
+            </div>
+          )}
         </div>
       </div>
     </div>

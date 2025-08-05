@@ -2,7 +2,7 @@ import Image from "next/image";
 
 const Loading = () => {
   return (
-    <div className="w-[90%] mx-auto">
+    <div className="hero min-h-screen">
       <Image
         alt="Animated GIF"
         height={300}

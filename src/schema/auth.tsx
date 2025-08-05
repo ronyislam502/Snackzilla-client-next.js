@@ -8,6 +8,17 @@ export const loginValidationSchema = z.object({
     .min(6, "Password needs to be at lest 6 character"),
 });
 
+export const forgotPasswordSchema = z.object({
+  email: z.string().trim().email("Please enter a valid email"),
+});
+
+export const resetPasswordSchema = z.object({
+  newPassword: z
+    .string()
+    .trim()
+    .min(6, "Password needs to be at lest 6 character"),
+});
+
 export const contactValidationSchema = z.object({
   name: z.string().min(1, "Please enter your name!"),
   email: z.string().email("Please enter a valid email"),
