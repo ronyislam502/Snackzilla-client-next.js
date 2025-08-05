@@ -4,7 +4,8 @@ import SZForm from "@/components/form/SZFrom";
 import SZInput from "@/components/form/SZInput";
 import { verifyToken } from "@/components/utilities/verifyToken";
 import { useLogInMutation } from "@/redux/features/auth/authApi";
-import { setUser } from "@/redux/features/auth/authSlice";
+import { setUser, TUser } from "@/redux/features/auth/authSlice";
+import { setCartUser } from "@/redux/features/order/orderSlice";
 import { useAppDispatch } from "@/redux/hooks";
 import { loginValidationSchema } from "@/schema/auth";
 import { TError } from "@/types/global";
@@ -27,8 +28,9 @@ const Login = () => {
       };
 
       const res = await signIn(authData).unwrap();
-      const user = verifyToken(res?.data?.accessToken);
+      const user = verifyToken(res?.data?.accessToken) as TUser;
       dispatch(setUser({ user: user, token: res.data.accessToken }));
+      dispatch(setCartUser(user.email));
 
       if (res?.success) {
         toast.success(res?.message);

@@ -10,6 +10,7 @@ import { logout, TUser } from "@/redux/features/auth/authSlice";
 import { useRouter } from "next/navigation";
 import { useGetUserByEmailQuery } from "@/redux/features/user/userApi";
 import { ShoppingCartIcon } from "./Icons";
+import { clearCart } from "@/redux/features/order/orderSlice";
 
 const Navbar = () => {
   const foods = useAppSelector((store) => store.cart.foods);
@@ -20,6 +21,7 @@ const Navbar = () => {
   const router = useRouter();
 
   const handleLogout = () => {
+    dispatch(clearCart());
     dispatch(logout());
     toast.success("Log out successfully");
     router.push("/login");

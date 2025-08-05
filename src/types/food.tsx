@@ -17,6 +17,7 @@ export type TFood = {
   image: string;
   preparationTime: number;
   isDeleted: boolean;
+  quantity: number;
   createdAt: string;
   updatedAt: string;
 };

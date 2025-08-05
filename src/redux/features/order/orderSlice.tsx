@@ -1,8 +1,9 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
+import { createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { TCartState } from "@/types/order";
 import { TFood } from "@/types/food";
-import { createSlice } from "@reduxjs/toolkit";
 
-const initialState = {
+const initialState: TCartState = {
+  user: null,
   foods: [],
   selectedItems: 0,
   totalPrice: 0,
@@ -10,80 +11,80 @@ const initialState = {
   taxRate: 0.1,
   grandTotal: 0,
 };
+
+// Helper to calculate totals safely
+const calculateTotals = (state: TCartState) => {
+  state.selectedItems = state.foods.reduce(
+    (total, food) => total + (food.quantity || 0),
+    0
+  );
+
+  state.totalPrice = state.foods.reduce(
+    (total, food) => total + (food.quantity || 0) * (food.price || 0),
+    0
+  );
+
+  state.tax = state.totalPrice * state.taxRate;
+  state.grandTotal = state.totalPrice + state.tax;
+};
+
 const cartSlice = createSlice({
   name: "cart",
   initialState,
   reducers: {
-    addToCart: (state: any, action: any) => {
-      const isExist = state.foods.find(
-        (food: TFood) => food._id === action.payload._id
+    setCartUser: (state, action: PayloadAction<string>) => {
+      state.user = action.payload;
+    },
+    addToCart: (state, action: PayloadAction<TFood>) => {
+      const existing = state.foods.find(
+        (food) => food._id === action.payload._id
       );
 
-      if (!isExist) {
+      if (!existing) {
         state.foods.push({ ...action.payload, quantity: 1 });
       }
 
-      state.selectedItems = selectSelectedItems(state);
-      state.totalPrice = selectTotalPrice(state);
-      state.tax = selectTax(state);
-      state.grandTotal = selectGrandTotal(state);
+      calculateTotals(state);
     },
-    updateQuantity: (state: any, action) => {
-      const foods = state.foods.map((food: any) => {
-        if (food._id === action.payload._id) {
-          if (action.payload.type === "increment") {
-            food.quantity += 1;
-          } else if (action.payload.type === "decrement") {
-            food.quantity -= 1;
-          }
-        }
 
-        return food;
-      });
-
-      state.foods = foods.filter((food: any) => food.quantity > 0);
-
-      state.selectedItems = selectSelectedItems(state);
-      state.totalPrice = selectTotalPrice(state);
-      state.tax = selectTax(state);
-      state.grandTotal = selectGrandTotal(state);
-    },
-    removeFromCart: (state, action) => {
-      state.foods = state.foods.filter(
-        (food: TFood) => food._id !== action.payload._id
+    updateQuantity: (
+      state,
+      action: PayloadAction<{ type: "increment" | "decrement"; _id: string }>
+    ) => {
+      state.foods = state.foods.map((food) =>
+        food._id === action.payload._id
+          ? {
+              ...food,
+              quantity:
+                action.payload.type === "increment"
+                  ? food.quantity + 1
+                  : Math.max(food.quantity - 1, 1),
+            }
+          : food
       );
-      state.selectedItems = selectSelectedItems(state);
-      state.totalPrice = selectTotalPrice(state);
-      state.tax = selectTax(state);
-      state.grandTotal = selectGrandTotal(state);
+
+      calculateTotals(state);
     },
+
+    removeFromCart: (state, action: PayloadAction<{ _id: string }>) => {
+      state.foods = state.foods.filter(
+        (food) => food._id !== action.payload._id
+      );
+      calculateTotals(state);
+    },
+
     clearCart: (state) => {
       state.foods = [];
-      state.selectedItems = 0;
-      state.totalPrice = 0;
-      state.tax = 0;
-      state.grandTotal = 0;
+      calculateTotals(state);
     },
   },
 });
 
-export const selectSelectedItems = (state: any) =>
-  state.foods.reduce((total: number, food: any) => {
-    return Number(total + food.quantity);
-  }, 0);
-
-export const selectTotalPrice = (state: any) =>
-  state.foods.reduce((total: number, food: any) => {
-    return Number(total + food.quantity * food.price);
-  }, 0);
-
-export const selectTax = (state: any) =>
-  selectTotalPrice(state) * state.taxRate;
-
-export const selectGrandTotal = (state: any) => {
-  return selectTotalPrice(state) + selectTotalPrice(state) * state.taxRate;
-};
-
-export const { addToCart, updateQuantity, removeFromCart, clearCart } =
-  cartSlice.actions;
+export const {
+  setCartUser,
+  addToCart,
+  updateQuantity,
+  removeFromCart,
+  clearCart,
+} = cartSlice.actions;
 export default cartSlice.reducer;

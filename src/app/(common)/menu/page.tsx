@@ -141,7 +141,7 @@ const Menu = () => {
           </div>
           <div className="grid lg:grid-cols-3 gap-4">
             {isLoading ? (
-              <CardSkeleton count={8} />
+              <CardSkeleton count={limit} />
             ) : foods?.data?.length ? (
               foods.data.map((food: TFood) => (
                 <FoodCard key={food._id} food={food} />
