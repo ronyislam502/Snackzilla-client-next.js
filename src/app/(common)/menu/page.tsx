@@ -67,7 +67,6 @@ const Menu = () => {
   const handleCategoryChange = (id: string) => {
     setSelectedCategory(id);
     setPage(1);
-    // URL থেকে category মুছে ফেলে শুধু /menu রাখুন
     router.replace("/menu", { scroll: false });
   };
 

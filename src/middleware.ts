@@ -21,7 +21,6 @@ export async function middleware(request: NextRequest) {
 
   if (accessToken) {
     user = jwtDecode(accessToken) as TUser;
-    // console.log("user", user);
   }
 
   if (!user) {

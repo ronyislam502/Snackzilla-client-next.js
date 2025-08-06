@@ -1,7 +1,7 @@
 import React from "react";
 
 const User = () => {
-  return <div>user</div>;
+  return <div className="h-[80vh]">user</div>;
 };
 
 export default User;

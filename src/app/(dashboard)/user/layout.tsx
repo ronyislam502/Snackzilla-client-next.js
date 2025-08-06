@@ -11,7 +11,7 @@ const layout = ({ children }: { children: React.ReactNode }) => {
         <div className="col-span-1">
           <Sidebar />
         </div>
-        <div className="col-span-4 mx-auto">{children}</div>
+        <div className="col-span-4">{children}</div>
       </div>
     </div>
   );

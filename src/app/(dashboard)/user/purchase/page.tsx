@@ -2,21 +2,32 @@
 
 import TableSkeleton from "@/components/ui/skeleton/TableSkeleton";
 import { formatDate } from "@/components/utilities/Date";
-import { useAllOrdersQuery } from "@/redux/features/order/orderApi";
+import { TUser } from "@/redux/features/auth/authSlice";
+import { useMyOrdersQuery } from "@/redux/features/order/orderApi";
+import { useAppSelector } from "@/redux/hooks";
+import { TOrder } from "@/types/order";
+import { useState } from "react";
 
-import React, { useState } from "react";
-
-const Orders = () => {
+const Purchase = () => {
   const [page, setPage] = useState(1);
   const [limit] = useState(8);
-  const { data: orders, isLoading } = useAllOrdersQuery({ page, limit });
-  const totalPages = orders?.meta?.totalPage || 1;
+  const user = useAppSelector((state) => state?.auth?.user) as TUser;
+
+  const { data: purchases, isLoading } = useMyOrdersQuery({
+    user,
+    page,
+    limit,
+  });
+
+  const totalPages = purchases?.meta?.totalPage || 1;
+
+  console.log("purchase", purchases);
 
   return (
-    <div>
+    <div className="">
       <div className="text-xl font-bold text-center py-6">
         <h2>Orders</h2>
-        <h2>Total Orders: {orders?.data?.length}</h2>
+        <h2>Total Orders: {purchases?.data?.length}</h2>
       </div>
       <div className="overflow-x-auto">
         <table className="table">
@@ -27,7 +38,7 @@ const Orders = () => {
               <th>OrderNo</th>
               <th>Price</th>
               <th>Tax</th>
-              <th>Payment</th>
+              <th>Total</th>
               <th>isPayment</th>
               <th>Action</th>
             </tr>
@@ -36,7 +47,7 @@ const Orders = () => {
             {isLoading ? (
               <TableSkeleton columns={7} rows={limit} />
             ) : (
-              orders?.data?.map((order: any) => (
+              purchases?.data?.map((order: TOrder) => (
                 <tr key={order?._id}>
                   <td>{formatDate(order.createdAt)}</td>
                   <td>{order?.transactionId}</td>
@@ -67,27 +78,31 @@ const Orders = () => {
           </tbody>
         </table>
       </div>
-      <div className="flex gap-2 my-2 px-10">
-        <button
-          className="btn btn-outline btn-primary text-white btn-sm"
-          disabled={page <= 1}
-          onClick={() => setPage((prev) => Math.max(prev - 1, 1))}
-        >
-          Prev
-        </button>
-        <span className="text-success text-xl font-bold">
-          {page} / {totalPages}
-        </span>
-        <button
-          className="btn btn-outline btn-primary btn-sm"
-          disabled={page >= totalPages}
-          onClick={() => setPage((prev) => Math.min(prev + 1, totalPages))}
-        >
-          Next
-        </button>
-      </div>
+      {(purchases?.meta?.total as number) > limit && (
+        <div className="flex gap-2 mx-auto text-center md:w-4/12 my-8">
+          <button
+            className="btn btn-outline btn-primary text-success btn-sm"
+            disabled={page <= 1}
+            onClick={() => setPage((prev: number) => Math.max(prev - 1, 1))}
+          >
+            Prev
+          </button>
+          <span className="text-success">
+            {page} / {totalPages}
+          </span>
+          <button
+            className="btn btn-outline btn-primary text-success btn-sm"
+            disabled={page >= totalPages}
+            onClick={() =>
+              setPage((prev: number) => Math.min(prev + 1, totalPages))
+            }
+          >
+            Next
+          </button>
+        </div>
+      )}
     </div>
   );
 };
 
-export default Orders;
+export default Purchase;
