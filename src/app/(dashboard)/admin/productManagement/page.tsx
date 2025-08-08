@@ -4,6 +4,8 @@ import TableSkeleton from "@/components/ui/skeleton/TableSkeleton";
 import { useAllFoodsQuery } from "@/redux/features/food/foodApi";
 import { TFood } from "@/types/food";
 import React, { useState } from "react";
+import UpdateFood from "./_component/UpdateFood";
+import DeleteFood from "./_component/DeleteFood";
 
 const ProductManagement = () => {
   const [page, setPage] = useState(1);
@@ -59,12 +61,8 @@ const ProductManagement = () => {
                     )}
                   </td>
                   <th>
-                    <button
-                      // onClick={() => handleDeleteUser(user)}
-                      className="btn btn-outline btn-success"
-                    >
-                      add
-                    </button>
+                    <UpdateFood food={food} />
+                    <DeleteFood food={food} />
                   </th>
                 </tr>
               ))
