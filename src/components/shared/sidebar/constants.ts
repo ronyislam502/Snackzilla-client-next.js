@@ -1,11 +1,12 @@
 export const userLinks = [
-  { href: "/user", label: "Profile" },
+  { href: "/user/profile", label: "Profile" },
   { href: "/user/purchase", label: "Purchase" },
+  { href: "/user", label: "Dashboard" },
 ];
 
 export const adminLinks = [
   { href: "/admin/orders", label: "Orders" },
-  { href: "/admin", label: "Sales" },
+  { href: "/admin", label: "Dashboard" },
   { href: "/admin/userManagement", label: "User Management" },
   { href: "/admin/categoryManagement", label: "Category Management" },
   { href: "/admin/productManagement", label: "Food Management" },

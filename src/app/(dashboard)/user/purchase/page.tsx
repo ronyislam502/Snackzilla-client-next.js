@@ -7,6 +7,7 @@ import { useMyOrdersQuery } from "@/redux/features/order/orderApi";
 import { useAppSelector } from "@/redux/hooks";
 import { TOrder } from "@/types/order";
 import { useState } from "react";
+import CancelOrder from "./_component/CancelOrder";
 
 const Purchase = () => {
   const [page, setPage] = useState(1);
@@ -65,12 +66,9 @@ const Purchase = () => {
                     )}
                   </td>
                   <th>
-                    <button
-                      // onClick={() => handleDeleteUser(user)}
-                      className="btn btn-outline btn-success"
-                    >
-                      add
-                    </button>
+                    <div>
+                      <CancelOrder order={order} />
+                    </div>
                   </th>
                 </tr>
               ))
