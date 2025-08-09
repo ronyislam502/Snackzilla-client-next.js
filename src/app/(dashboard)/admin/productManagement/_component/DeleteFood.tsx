@@ -1,23 +1,28 @@
 "use client";
 
 import SZForm from "@/components/form/SZFrom";
+import { DeleteIcon } from "@/components/shared/Icons";
+import { useDeleteFoodMutation } from "@/redux/features/food/foodApi";
+import { TError } from "@/types/global";
 import { useState } from "react";
+import { toast } from "react-toastify";
 
 const DeleteFood = ({ food }: { food: any }) => {
   const [isOpen, setIsOpen] = useState(false);
-  //   const [deleteService] = useDeleteServiceMutation();
+  const [deleteService] = useDeleteFoodMutation();
 
   const handleDelete = async (id: string) => {
     console.log("id", id);
-    // try {
-    //   const res = await deleteService(id);
-    //   if (res?.data.success) {
-    //     toast.success(res?.data?.message);
-    //   }
-    // } catch (error) {
-    //   const err = error as TError;
-    //   toast.error(err?.data?.message);
-    // }
+    try {
+      const res = await deleteService(id);
+      console.log("res-delete", res);
+      if (res?.data.success) {
+        toast.success(res?.data?.message, { autoClose: 1000 });
+      }
+    } catch (error) {
+      const err = error as TError;
+      toast.error(err?.data?.message, { autoClose: 1000 });
+    }
   };
 
   return (
@@ -27,7 +32,7 @@ const DeleteFood = ({ food }: { food: any }) => {
           className="btn btn-outline btn-error"
           onClick={() => setIsOpen(true)}
         >
-          Cancel
+          <DeleteIcon />
         </button>
       </div>
 
@@ -39,12 +44,17 @@ const DeleteFood = ({ food }: { food: any }) => {
             <p className="py-4">Are you sure you want to cancel this order?</p>
             <div className="modal-action">
               <SZForm onSubmit={() => handleDelete(food?._id)}>
-                <button className="btn" onClick={() => setIsOpen(false)}>
-                  No
-                </button>
-                <button className="btn btn-outline btn-success" type="submit">
-                  Yes, Cancel
-                </button>
+                <div className="flex gap-4">
+                  <button
+                    className="btn btn-outline btn-accent"
+                    onClick={() => setIsOpen(false)}
+                  >
+                    No
+                  </button>
+                  <button className="btn btn-outline btn-error" type="submit">
+                    Yes
+                  </button>
+                </div>
               </SZForm>
             </div>
           </div>

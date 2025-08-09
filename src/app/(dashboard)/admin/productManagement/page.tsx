@@ -4,26 +4,34 @@ import TableSkeleton from "@/components/ui/skeleton/TableSkeleton";
 import { useAllFoodsQuery } from "@/redux/features/food/foodApi";
 import { TFood } from "@/types/food";
 import React, { useState } from "react";
-import UpdateFood from "./_component/UpdateFood";
 import DeleteFood from "./_component/DeleteFood";
+import AddFood from "./_component/AddFood";
+import SectionTitle from "@/components/shared/SectionTitle";
+import UpdateFood from "./_component/UpdateFood";
 
 const ProductManagement = () => {
   const [page, setPage] = useState(1);
-  const [limit] = useState(8);
+  const [limit] = useState(7);
   const { data: foods, isLoading } = useAllFoodsQuery({ page, limit });
   const totalPages = foods?.meta?.totalPage || 1;
 
   return (
     <div>
-      <div className="text-xl font-bold text-center py-6">
-        <h2>Foods</h2>
-        <h2>Total Foods: {foods?.data?.length}</h2>
+      <SectionTitle subHeading="" heading="Foods" />
+      <div className="flex justify-between">
+        <h2 className="text-2xl font-bold mt-4">
+          Total Foods:
+          <span className="text-info text-3xl font-extrabold">
+            {foods?.data?.length}
+          </span>
+        </h2>
+        <AddFood />
       </div>
       <div className="overflow-x-auto">
-        <table className="table">
+        <table className="table text-center">
           {/* head */}
           <thead className="">
-            <tr className="bg-base-300 text-green-500 text-lg">
+            <tr className="bg-blue-700 text-green-500 text-lg">
               <th>Image</th>
               <th>Name</th>
               <th>Price</th>
@@ -32,7 +40,7 @@ const ProductManagement = () => {
               <th>Action</th>
             </tr>
           </thead>
-          <tbody>
+          <tbody className="text-lg">
             {isLoading ? (
               <TableSkeleton columns={6} rows={limit} />
             ) : (
@@ -46,7 +54,7 @@ const ProductManagement = () => {
                     </div>
                   </td>
                   <td>{food?.name}</td>
-                  <td>$ {food?.price}</td>
+                  <td>$ {food?.price.toFixed(2)}</td>
                   <td>{food?.category?.name}</td>
                   <td>
                     {" "}
@@ -60,7 +68,7 @@ const ProductManagement = () => {
                       </span>
                     )}
                   </td>
-                  <th>
+                  <th className="flex gap-6">
                     <UpdateFood food={food} />
                     <DeleteFood food={food} />
                   </th>
@@ -70,25 +78,29 @@ const ProductManagement = () => {
           </tbody>
         </table>
       </div>
-      <div className="flex gap-2 my-2 px-10">
-        <button
-          className="btn btn-outline btn-primary text-white btn-sm"
-          disabled={page <= 1}
-          onClick={() => setPage((prev) => Math.max(prev - 1, 1))}
-        >
-          Prev
-        </button>
-        <span className="text-success text-xl font-bold">
-          {page} / {totalPages}
-        </span>
-        <button
-          className="btn btn-outline btn-primary btn-sm"
-          disabled={page >= totalPages}
-          onClick={() => setPage((prev) => Math.min(prev + 1, totalPages))}
-        >
-          Next
-        </button>
-      </div>
+      {Number(foods?.meta?.total) > limit && (
+        <div className="flex gap-2 mx-auto text-center md:w-4/12 my-8">
+          <button
+            className="btn btn-outline btn-primary text-success btn-sm"
+            disabled={page <= 1}
+            onClick={() => setPage((prev: number) => Math.max(prev - 1, 1))}
+          >
+            Prev
+          </button>
+          <span className="text-success">
+            {page} / {totalPages}
+          </span>
+          <button
+            className="btn btn-outline btn-primary text-success btn-sm"
+            disabled={page >= totalPages}
+            onClick={() =>
+              setPage((prev: number) => Math.min(prev + 1, totalPages))
+            }
+          >
+            Next
+          </button>
+        </div>
+      )}
     </div>
   );
 };

@@ -18,7 +18,7 @@ const SZInput = ({
   return (
     <div className="form-control">
       <label className="label">
-        <span className="label-text text-xl font-bold text-success">
+        <span className="label-text text-xl font-medium text-success">
           {label}
         </span>
       </label>
@@ -28,7 +28,7 @@ const SZInput = ({
         disabled={disabled}
         // {...register(name)}
         {...register(name, type === "number" ? { valueAsNumber: true } : {})}
-        className="input input-bordered  input-success bg-transparent"
+        className="input input-bordered input-success bg-transparent"
       />
       {errors[name] && (
         <p className="text-red-500 text-sm">

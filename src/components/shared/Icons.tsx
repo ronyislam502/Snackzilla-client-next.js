@@ -362,31 +362,6 @@ export const DeleteIcon = () => {
   );
 };
 
-export const TrashIcon: React.FC<IconSvgProps> = ({
-  size = 24,
-  width,
-  height,
-  ...props
-}) => {
-  return (
-    <svg
-      fill="currentColor"
-      height={size || height}
-      viewBox="0 0 24 24"
-      width={size || width}
-      {...props}
-    >
-      <path
-        d="M3 6h18M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2m2 0v14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2V6h12ZM10 11v6M14 11v6"
-        stroke="currentColor"
-        strokeLinecap="round"
-        strokeLinejoin="round"
-        strokeWidth="2"
-      />
-    </svg>
-  );
-};
-
 export const CreditCardIcon: React.FC<{ size?: number; color?: string }> = ({
   size = 24,
   color = "currentColor",

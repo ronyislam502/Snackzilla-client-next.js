@@ -16,13 +16,15 @@ const SZSelect = ({ name, label, options }: IProps) => {
   const currentValue = useWatch({ name });
 
   return (
-    <div className="form-control w-full">
+    <div className="form-control">
       <label className="label">
-        <span className="label-text text-success text-xl">{label}</span>
+        <span className="label-text text-xl font-medium text-success">
+          {label}
+        </span>
       </label>
       <select
         {...register(name)}
-        className={`select text-white bg-black/50 select-bordered w-full ${
+        className={`select text-info w-full select-bordered ${
           errors[name] ? "select-error" : "select-success"
         }`}
         value={currentValue || ""}

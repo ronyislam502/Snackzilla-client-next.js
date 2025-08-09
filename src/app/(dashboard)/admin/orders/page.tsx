@@ -22,7 +22,7 @@ const Orders = () => {
         <table className="table">
           {/* head */}
           <thead className="">
-            <tr className="bg-base-300 text-green-500 text-lg">
+            <tr className="bg-blue-700 text-green-500 text-lg">
               <th>Date</th>
               <th>OrderNo</th>
               <th>Price</th>

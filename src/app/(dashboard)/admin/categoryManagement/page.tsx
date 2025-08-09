@@ -21,10 +21,10 @@ const CategoryManagement = () => {
         <h2>Total Category: {categories?.data?.length}</h2>
       </div>
       <div className="overflow-x-auto">
-        <table className="table">
+        <table className="table text-center">
           {/* head */}
-          <thead className="">
-            <tr className="bg-base-300 text-green-500 text-lg">
+          <thead>
+            <tr className="bg-blue-700 text-green-500 text-lg">
               <th>Image</th>
               <th>Name</th>
               <th>isDelete</th>
@@ -71,25 +71,29 @@ const CategoryManagement = () => {
           </tbody>
         </table>
       </div>
-      <div className="flex gap-2 my-2 px-10">
-        <button
-          className="btn btn-outline btn-primary text-white btn-sm"
-          disabled={page <= 1}
-          onClick={() => setPage((prev) => Math.max(prev - 1, 1))}
-        >
-          Prev
-        </button>
-        <span className="text-success text-xl font-bold">
-          {page} / {totalPages}
-        </span>
-        <button
-          className="btn btn-outline btn-primary btn-sm"
-          disabled={page >= totalPages}
-          onClick={() => setPage((prev) => Math.min(prev + 1, totalPages))}
-        >
-          Next
-        </button>
-      </div>
+      {(categories?.meta?.total as number) > limit && (
+        <div className="flex gap-2 mx-auto text-center md:w-4/12 my-8">
+          <button
+            className="btn btn-outline btn-primary text-success btn-sm"
+            disabled={page <= 1}
+            onClick={() => setPage((prev: number) => Math.max(prev - 1, 1))}
+          >
+            Prev
+          </button>
+          <span className="text-success">
+            {page} / {totalPages}
+          </span>
+          <button
+            className="btn btn-outline btn-primary text-success btn-sm"
+            disabled={page >= totalPages}
+            onClick={() =>
+              setPage((prev: number) => Math.min(prev + 1, totalPages))
+            }
+          >
+            Next
+          </button>
+        </div>
+      )}
     </div>
   );
 };

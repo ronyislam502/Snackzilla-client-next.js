@@ -50,6 +50,7 @@ const foodApi = baseApi.injectEndpoints({
         method: "POST",
         body: foodInfo,
       }),
+      invalidatesTags: ["food"],
     }),
     updateFood: builder.mutation({
       query: (args) => ({
@@ -57,6 +58,7 @@ const foodApi = baseApi.injectEndpoints({
         method: "PATCH",
         body: args.data,
       }),
+      invalidatesTags: ["food"],
     }),
     singleFood: builder.query({
       query: (args) => ({
