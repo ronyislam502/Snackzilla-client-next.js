@@ -12,11 +12,10 @@ const DeleteFood = ({ food }: { food: any }) => {
   const [deleteService] = useDeleteFoodMutation();
 
   const handleDelete = async (id: string) => {
-    console.log("id", id);
     try {
       const res = await deleteService(id);
-      console.log("res-delete", res);
-      if (res?.data.success) {
+      // console.log("res-delete", res?.data?.success);
+      if (res?.data?.success) {
         toast.success(res?.data?.message, { autoClose: 1000 });
       }
     } catch (error) {
@@ -40,8 +39,10 @@ const DeleteFood = ({ food }: { food: any }) => {
       {isOpen && (
         <dialog id="modal" className="modal modal-open">
           <div className="modal-box">
-            <h3 className="font-bold text-lg text-red-600">Cancel Order?</h3>
-            <p className="py-4">Are you sure you want to cancel this order?</p>
+            <h3 className="font-bold text-3xl text-red-600">Delete Food?</h3>
+            <p className="py-4 text-xl">
+              Are you sure you want to delete this food item?
+            </p>
             <div className="modal-action">
               <SZForm onSubmit={() => handleDelete(food?._id)}>
                 <div className="flex gap-4">

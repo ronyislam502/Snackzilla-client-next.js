@@ -48,6 +48,7 @@ const AddFood = () => {
 
   const onSubmit = async (data: FieldValues) => {
     const numericPrice = Number(data?.price);
+    const readyTime = Number(data?.preparationTime);
     const formData = new FormData();
     try {
       const foodData = {
@@ -55,7 +56,7 @@ const AddFood = () => {
         name: data.name,
         price: numericPrice,
         description: data.description,
-        preparationTime: data.preparationTime,
+        preparationTime: readyTime,
       };
 
       formData.append("data", JSON.stringify(foodData));
@@ -123,13 +124,13 @@ const AddFood = () => {
                     <SZInput
                       label="Price"
                       name="price"
-                      type="text"
+                      type="number"
                       placeholder="enter food price"
                     />
                     <SZInput
                       label="Time"
                       name="preparationTime"
-                      type="text"
+                      type="number"
                       placeholder="enter food ready time"
                     />
                   </div>

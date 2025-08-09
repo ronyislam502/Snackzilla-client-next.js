@@ -15,9 +15,9 @@ import { FieldValues, FormProvider, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { toast } from "react-toastify";
 import { foodUpdatedSchema } from "@/schema/food";
+import { useUpdateFoodMutation } from "@/redux/features/food/foodApi";
 
 const UpdateFood = ({ food }: { food: any }) => {
-  console.log("food", food);
   const [isOpen, setIsOpen] = useState(false);
   const methods = useForm();
   const [previewImage, setPreviewImage] = useState(food?.image || "");
@@ -25,7 +25,7 @@ const UpdateFood = ({ food }: { food: any }) => {
   const { data: categories, isLoading: serviceLoading } = useAllCategoriesQuery(
     {}
   );
-  const [updateFood] = useCreateCategoryMutation();
+  const [updateFood] = useUpdateFoodMutation();
 
   let categoryOption: { key: string; label: string }[] = [];
 
@@ -61,6 +61,8 @@ const UpdateFood = ({ food }: { food: any }) => {
         description: data.description,
         preparationTime: data.preparationTime,
       };
+
+      console.log("data", foodData);
 
       formData.append("data", JSON.stringify(foodData));
       if (selectedImage) {
@@ -111,7 +113,7 @@ const UpdateFood = ({ food }: { food: any }) => {
                   name: food?.name,
                   description: food?.description,
                   price: food?.price,
-                  category: food?.category,
+                  category: food?.category?._id,
                   preparationTime: food?.preparationTime,
                 }}
                 resolver={zodResolver(foodUpdatedSchema)}
@@ -137,13 +139,13 @@ const UpdateFood = ({ food }: { food: any }) => {
                     <SZInput
                       label="Price"
                       name="price"
-                      type="text"
+                      type="number"
                       placeholder="enter food price"
                     />
                     <SZInput
                       label="Time"
                       name="preparationTime"
-                      type="text"
+                      type="number"
                       placeholder="enter food ready time"
                     />
                   </div>
