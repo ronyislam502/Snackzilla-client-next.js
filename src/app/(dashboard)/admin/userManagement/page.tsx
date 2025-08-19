@@ -63,29 +63,27 @@ const UserManagement = () => {
           </tbody>
         </table>
       </div>
-      {(users?.meta?.total as number) > limit && (
-        <div className="flex gap-2 mx-auto text-center md:w-4/12 my-8">
-          <button
-            className="btn btn-outline btn-primary text-success btn-sm"
-            disabled={page <= 1}
-            onClick={() => setPage((prev: number) => Math.max(prev - 1, 1))}
-          >
-            Prev
-          </button>
-          <span className="text-success">
-            {page} / {totalPages}
-          </span>
-          <button
-            className="btn btn-outline btn-primary text-success btn-sm"
-            disabled={page >= totalPages}
-            onClick={() =>
-              setPage((prev: number) => Math.min(prev + 1, totalPages))
-            }
-          >
-            Next
-          </button>
-        </div>
-      )}
+      <div className="flex gap-2 mx-auto text-center md:w-4/12 my-8">
+        <button
+          className="btn btn-outline btn-primary text-success btn-sm"
+          disabled={page <= 1}
+          onClick={() => setPage((prev: number) => Math.max(prev - 1, 1))}
+        >
+          Prev
+        </button>
+        <span className="text-success">
+          {page} / {totalPages}
+        </span>
+        <button
+          className="btn btn-outline btn-primary text-success btn-sm"
+          disabled={page >= totalPages}
+          onClick={() =>
+            setPage((prev: number) => Math.min(prev + 1, totalPages))
+          }
+        >
+          Next
+        </button>
+      </div>
     </div>
   );
 };

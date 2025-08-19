@@ -37,8 +37,8 @@ const CheckOut = () => {
 
     if (res?.success) {
       toast.success(res?.message);
+      window.location.href = res?.data;
       dispatch(clearCart());
-      router.push("/menu");
     }
   };
 

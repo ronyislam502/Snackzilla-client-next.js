@@ -59,7 +59,7 @@ const Orders = () => {
         >
           Prev
         </button>
-        <span className="text-success">
+        <span className="px-2 py-1 text-success border rounded">
           {page} / {totalPages}
         </span>
         <button
