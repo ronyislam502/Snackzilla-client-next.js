@@ -1,6 +1,6 @@
 "use client";
 
-import { MinusIcon, PlusIcon, TrashIcon } from "@/components/shared/Icons";
+import { DeleteIcon, MinusIcon, PlusIcon } from "@/components/shared/Icons";
 import {
   removeFromCart,
   updateQuantity,
@@ -24,7 +24,7 @@ const CartDetails = ({ food }: TProps) => {
   };
 
   return (
-    <div className="flex items-center justify-between gap-4 border border-base-300 rounded-lg p-4 bg-base-100 shadow-md hover:shadow-lg hover:scale-105 transition-transform w-full">
+    <div className="flex items-center justify-between gap-4 border border-base-300 rounded-lg p-4 bg-base-100 shadow-md hover:shadow-lg hover:scale-105 transition-transform">
       {/* Avatar */}
       <div className="avatar">
         <div className="w-16 h-16 rounded">
@@ -34,7 +34,7 @@ const CartDetails = ({ food }: TProps) => {
 
       {/* Product Info */}
       <div className="flex-grow">
-        <h3 className="text-lg font-semibold text-neutral truncate">
+        <h3 className="text-lg font-semibold text-success truncate">
           {food.name}
         </h3>
         <p className="text-lg font-bold text-warning">
@@ -65,7 +65,7 @@ const CartDetails = ({ food }: TProps) => {
         className="btn btn-sm btn-error"
         onClick={() => handleRemove(food._id)}
       >
-        <TrashIcon />
+        <DeleteIcon />
       </button>
     </div>
   );

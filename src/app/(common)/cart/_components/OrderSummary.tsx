@@ -1,6 +1,6 @@
 "use client";
 
-import { CreditCardIcon, TrashIcon } from "@/components/shared/Icons";
+import { CreditCardIcon, DeleteIcon } from "@/components/shared/Icons";
 import { clearCart } from "@/redux/features/order/orderSlice";
 import { useAppDispatch, useAppSelector } from "@/redux/hooks";
 import { useRouter } from "next/navigation";
@@ -16,7 +16,7 @@ const OrderSummary = () => {
   };
 
   return (
-    <div className="w-full h-full bg-base-200 border-l-4 border-primary p-4 rounded-lg shadow-lg">
+    <div className="w-full bg-base-200 border-l-4 border-primary p-4 rounded-lg shadow-lg mb-4">
       {/* Order Summary Title */}
       <h2 className="text-2xl font-bold text-center mb-4">Order Summary</h2>
 
@@ -60,7 +60,7 @@ const OrderSummary = () => {
           }}
         >
           <span>Clear Cart</span>
-          <TrashIcon />
+          <DeleteIcon />
         </button>
 
         <button

@@ -6,9 +6,10 @@ import { toast } from "react-toastify";
 const FoodCard = ({ food }: { food: TFood }) => {
   const dispatch = useDispatch();
 
-  const handleAddToCart = (product: any) => {
-    dispatch(addToCart(product));
-    toast.success("Add to cart successfully");
+  const handleAddToCart = (food: any) => {
+    dispatch(addToCart(food));
+    console.log(food);
+    toast.success("Add to cart successfully", { autoClose: 1000 });
   };
 
   return (

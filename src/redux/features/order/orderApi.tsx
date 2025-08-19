@@ -5,11 +5,29 @@ import { TOrder } from "@/types/order";
 const orderApi = baseApi.injectEndpoints({
   endpoints: (builder) => ({
     allOrders: builder.query({
-      query: () => ({
-        url: "/orders",
-        method: "GET",
-      }),
+      query: ({ user, page, limit }) => {
+        const params = new URLSearchParams();
+
+        if (page) {
+          params.append("page", page);
+        }
+        if (limit) {
+          params.append("limit", limit);
+        }
+
+        return {
+          url: `/orders`,
+          method: "GET",
+          params: params,
+        };
+      },
       providesTags: ["order"],
+      transformResponse: (response: TResponseRedux<TOrder[]>) => {
+        return {
+          data: response.data,
+          meta: response?.meta,
+        };
+      },
     }),
     createOrder: builder.mutation({
       query: (categoryInfo) => ({

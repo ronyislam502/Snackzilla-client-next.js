@@ -22,11 +22,9 @@ const Purchase = () => {
 
   const totalPages = purchases?.meta?.totalPage || 1;
 
-  console.log("purchase", purchases);
-
   return (
-    <div className="">
-      <div className="text-xl font-bold text-center py-6">
+    <div>
+      <div className="text-xl font-bold py-2 text-center">
         <h2>Orders</h2>
         <h2>Total Orders: {purchases?.data?.length}</h2>
       </div>
@@ -34,17 +32,17 @@ const Purchase = () => {
         <table className="table">
           {/* head */}
           <thead className="">
-            <tr className="bg-base-300 text-green-500 text-lg">
+            <tr className="bg-base-300 text-green-500 text-lg text-center">
               <th>Date</th>
               <th>OrderNo</th>
               <th>Price</th>
               <th>Tax</th>
               <th>Total</th>
-              <th>isPayment</th>
+              <th>Payment</th>
               <th>Action</th>
             </tr>
           </thead>
-          <tbody>
+          <tbody className="text-center">
             {isLoading ? (
               <TableSkeleton columns={7} rows={limit} />
             ) : (
@@ -55,16 +53,7 @@ const Purchase = () => {
                   <td>$ {order?.totalPrice.toFixed(2)}</td>
                   <td>$ {order?.tax.toFixed(2)}</td>
                   <td>$ {order?.grandAmount.toFixed(2)}</td>
-                  <td>
-                    {" "}
-                    {order?.paymentStatus ? (
-                      <span className="text-red-500 font-semibold">
-                        Pending
-                      </span>
-                    ) : (
-                      <span className="text-green-600 font-semibold">Paid</span>
-                    )}
-                  </td>
+                  <td>{order?.paymentStatus}</td>
                   <th>
                     <div>
                       <CancelOrder order={order} />
@@ -76,29 +65,27 @@ const Purchase = () => {
           </tbody>
         </table>
       </div>
-      {(purchases?.meta?.total as number) > limit && (
-        <div className="flex gap-2 mx-auto text-center md:w-4/12 my-8">
-          <button
-            className="btn btn-outline btn-primary text-success btn-sm"
-            disabled={page <= 1}
-            onClick={() => setPage((prev: number) => Math.max(prev - 1, 1))}
-          >
-            Prev
-          </button>
-          <span className="text-success">
-            {page} / {totalPages}
-          </span>
-          <button
-            className="btn btn-outline btn-primary text-success btn-sm"
-            disabled={page >= totalPages}
-            onClick={() =>
-              setPage((prev: number) => Math.min(prev + 1, totalPages))
-            }
-          >
-            Next
-          </button>
-        </div>
-      )}
+      <div className="flex gap-2 mx-auto text-center md:w-4/12 my-4">
+        <button
+          className="btn btn-outline btn-primary text-success btn-sm"
+          disabled={page <= 1}
+          onClick={() => setPage((prev: number) => Math.max(prev - 1, 1))}
+        >
+          Prev
+        </button>
+        <span className="text-success">
+          {page} / {totalPages}
+        </span>
+        <button
+          className="btn btn-outline btn-primary text-success btn-sm"
+          disabled={page >= totalPages}
+          onClick={() =>
+            setPage((prev: number) => Math.min(prev + 1, totalPages))
+          }
+        >
+          Next
+        </button>
+      </div>
     </div>
   );
 };

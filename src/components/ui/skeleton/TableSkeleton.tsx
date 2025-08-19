@@ -12,7 +12,7 @@ const TableSkeleton: React.FC<TableSkeletonProps> = ({ columns, rows = 5 }) => {
         <tr key={rowIndex}>
           {Array.from({ length: columns }).map((_, colIndex) => (
             <td key={colIndex}>
-              <div className="h-4 w-full bg-gray-700 rounded animate-pulse" />
+              <div className="h-6 w-full bg-gray-700 rounded animate-pulse" />
             </td>
           ))}
         </tr>
