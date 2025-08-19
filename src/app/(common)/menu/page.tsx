@@ -98,16 +98,16 @@ const Menu = () => {
             <div className="flex items-center gap-2">
               <input
                 type="range"
-                min={10} // updated
-                max={1000} // updated
+                min={10}
+                max={1000}
                 value={minPrice}
                 onChange={handleMinChange}
                 className="w-full accent-teal-700"
               />
               <input
                 type="range"
-                min={10} // updated
-                max={1000} // updated
+                min={10}
+                max={1000}
                 value={maxPrice}
                 onChange={handleMaxChange}
                 className="w-full accent-teal-700"
