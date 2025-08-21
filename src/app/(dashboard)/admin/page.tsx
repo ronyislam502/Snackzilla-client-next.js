@@ -16,7 +16,7 @@ import {
   Legend,
   ResponsiveContainer,
 } from "recharts";
-import CategoryStates from "./_components/CategoryStates";
+import CategoryStates from "./_components/CategoryStats";
 import FoodStats from "./_components/FoodStats";
 
 const COLORS = [
@@ -50,7 +50,8 @@ const Dashboard = () => {
   console.log("data", stats);
 
   const revenue = stats?.data?.revenueData;
-  console.log(revenue);
+  const categoryData = stats?.data?.categoryWise;
+  console.log(categoryData);
 
   return (
     <div>
@@ -64,14 +65,14 @@ const Dashboard = () => {
       </h2>
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
         {/* Category-wise */}
-        <div className="card shadow-xl bg-black/80">
+        <div className="card shadow-xl">
           <div className="card-header">
-            <h3 className="text-center text-2xl font-semibold text-white">
+            <h3 className="text-center text-2xl font-semibold">
               Category-wise
             </h3>
           </div>
           <div className="card-body">
-            <FoodStats />
+            <CategoryStates category={categoryData} />
           </div>
         </div>
 
@@ -83,7 +84,7 @@ const Dashboard = () => {
             </h3>
           </div>
           <div className="card-body">
-            <CategoryStates />
+            <FoodStats />
           </div>
         </div>
       </div>
