@@ -13,8 +13,6 @@ const CategoryStats = ({ category }: { category: any }) => {
     totalRevenue: item?.totalRevenue,
   }));
 
-  console.log("format", formattedData);
-
   return (
     <div>
       <ResponsiveContainer

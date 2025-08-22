@@ -22,7 +22,7 @@ const CategoryManagement = () => {
         <h2>Total Category: {categories?.data?.length}</h2>
       </div>
       <div className="grid grid-cols-1 lg:grid-cols-4 gap-4">
-        {categories.data?.map((category: TCategory) => (
+        {categories?.data?.map((category: TCategory) => (
           <CategoryCard key={category?._id} category={category} />
         ))}
       </div>

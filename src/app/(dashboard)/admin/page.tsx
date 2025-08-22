@@ -51,18 +51,37 @@ const Dashboard = () => {
 
   const revenue = stats?.data?.revenueData;
   const categoryData = stats?.data?.categoryWise;
-  console.log(categoryData);
+  const foodData = stats?.data?.foodWise;
 
+  const revenue2 = [
+    {
+      title: "Revenue Inc. tax",
+      amount: `$${revenue?.totalRevenue}`,
+    },
+    {
+      title: "Total Tax",
+      amount: `$${revenue?.totalTax}`,
+    },
+    {
+      title: "Revenue Exc. Tax",
+      amount: `$${revenue?.totalRevenueWithoutTax}`,
+    },
+  ];
   return (
     <div>
-      <h2 className="text-center text-4xl font-bold py-6 text-white">
-        Sales Dashboard
-      </h2>
+      <div className="grid grid-cols-1 md:grid-cols-6 gap-2">
+        {revenue2.map((item, index) => (
+          <div key={index}>
+            <div className="card bg-neutral text-neutral-content">
+              <div className="card-body items-center text-center">
+                <h2 className="card-title">{item?.title}</h2>
+                <p>{item?.amount}</p>
+              </div>
+            </div>
+          </div>
+        ))}
+      </div>
 
-      <h2 className="text-2xl font-bold p-2 text-white">
-        Revenue:{" "}
-        <span className="text-green-500">${revenue?.totalRevenue}</span>
-      </h2>
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
         {/* Category-wise */}
         <div className="card shadow-xl">
@@ -77,14 +96,12 @@ const Dashboard = () => {
         </div>
 
         {/* service-wise  */}
-        <div className="card shadow-xl bg-black/80">
+        <div className="card shadow-xl">
           <div className="card-header">
-            <h3 className="text-center text-2xl font-bold text-white">
-              Service-wise
-            </h3>
+            <h3 className="text-center text-2xl font-bold">Food-wise</h3>
           </div>
           <div className="card-body">
-            <FoodStats />
+            <FoodStats foodData={foodData} />
           </div>
         </div>
       </div>

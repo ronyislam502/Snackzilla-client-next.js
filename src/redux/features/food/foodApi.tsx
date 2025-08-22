@@ -61,8 +61,8 @@ const foodApi = baseApi.injectEndpoints({
       invalidatesTags: ["food"],
     }),
     singleFood: builder.query({
-      query: (args) => ({
-        url: `/foods/${args?.id}`,
+      query: (id) => ({
+        url: `/foods/food/${id}`,
         method: "GET",
       }),
       providesTags: ["food"],

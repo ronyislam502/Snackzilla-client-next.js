@@ -21,7 +21,7 @@ const COLORS = ["#0088FE", "#00C49F", "#FFBB28", "#FF8042"];
 
 const Dashboard = () => {
   const loggedUser = useAppSelector((state) => state?.auth?.user) as TUser;
-  const { data: stats } = useUserStatisticsQuery(loggedUser.email);
+  const { data: stats } = useUserStatisticsQuery(loggedUser?.email);
 
   return (
     <div className="p-6 space-y-8">
