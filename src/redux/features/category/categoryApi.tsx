@@ -10,8 +10,8 @@ const categoryApi = baseApi.injectEndpoints({
       providesTags: ["category"],
     }),
     allFoodsByCategories: builder.query({
-      query: () => ({
-        url: "/categories",
+      query: (id) => ({
+        url: `/categories/category-foods/${id}`,
         method: "GET",
       }),
       providesTags: ["category"],
