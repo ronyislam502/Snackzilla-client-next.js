@@ -9,8 +9,10 @@ const FoodCard = ({ food }: { food: TFood }) => {
 
   const handleAddToCart = (food: TFood) => {
     dispatch(addToCart(food));
-    console.log(food);
-    toast.success("Add to cart successfully", { autoClose: 1000 });
+    // console.log(food);
+    toast.success(`${food?.name} Add to cart successfully`, {
+      autoClose: 1000,
+    });
   };
 
   return (

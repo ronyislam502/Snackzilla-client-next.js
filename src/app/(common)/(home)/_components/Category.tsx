@@ -3,8 +3,8 @@
 import { Swiper, SwiperSlide } from "swiper/react";
 import "swiper/css";
 import "swiper/css/pagination";
-import "swiper/css/autoplay"; // autoplay এর জন্য
-import { Pagination, Autoplay } from "swiper/modules"; // Autoplay module ইম্পোর্ট
+import "swiper/css/autoplay";
+import { Pagination, Autoplay } from "swiper/modules";
 import { useAllCategoriesQuery } from "@/redux/features/category/categoryApi";
 import SectionTitle from "@/components/shared/SectionTitle";
 import Image from "next/image";

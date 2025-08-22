@@ -35,10 +35,10 @@ const CartDetails = ({ food }: TProps) => {
       {/* Product Info */}
       <div className="flex-grow">
         <h3 className="text-lg font-semibold text-success truncate">
-          {food.name}
+          {food?.name}
         </h3>
         <p className="text-lg font-bold text-warning">
-          ${(food.price * food.quantity).toFixed(2)}
+          ${(food?.price * food?.quantity).toFixed(2)}
         </p>
       </div>
 
@@ -46,15 +46,15 @@ const CartDetails = ({ food }: TProps) => {
       <div className="flex items-center gap-2">
         <button
           className="btn btn-sm btn-error"
-          disabled={food.quantity <= 1}
-          onClick={() => handleQuantity("decrement", food._id)}
+          disabled={food?.quantity <= 1}
+          onClick={() => handleQuantity("decrement", food?._id)}
         >
           <MinusIcon />
         </button>
-        <span className="text-lg font-semibold">{food.quantity}</span>
+        <span className="text-lg font-semibold">{food?.quantity}</span>
         <button
           className="btn btn-sm btn-primary"
-          onClick={() => handleQuantity("increment", food._id)}
+          onClick={() => handleQuantity("increment", food?._id)}
         >
           <PlusIcon />
         </button>

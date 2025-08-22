@@ -40,8 +40,13 @@ const cartSlice = createSlice({
         (food) => food._id === action.payload._id
       );
 
-      if (!existing) {
-        state.foods.push({ ...action.payload, quantity: 1 });
+      if (existing) {
+        existing.quantity += action.payload.quantity || 1;
+      } else {
+        state.foods.push({
+          ...action.payload,
+          quantity: action.payload.quantity || 1,
+        });
       }
 
       calculateTotals(state);

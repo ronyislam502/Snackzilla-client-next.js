@@ -11,7 +11,7 @@ const SZProvider = ({ children }: { children: React.ReactNode }) => {
       <PersistGate loading={null} persistor={persistor}>
         {children}
       </PersistGate>
-      <ToastContainer />
+      <ToastContainer position="top-center" />
     </Provider>
   );
 };
