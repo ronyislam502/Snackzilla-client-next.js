@@ -82,7 +82,6 @@ const Dashboard = () => {
               <YAxis />
               <Tooltip />
               <Legend />
-              <Bar dataKey="totalOrders" fill="#8884d8" />
               <Bar dataKey="totalSpend" fill="#82ca9d" />
             </BarChart>
           </ResponsiveContainer>

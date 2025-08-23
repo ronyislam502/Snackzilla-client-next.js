@@ -25,8 +25,8 @@ const FoodDetails = ({ params }: { params: Promise<{ id: string }> }) => {
   return (
     <div>
       <FoodDetail food={food?.data} />
-      <div>
-        <h2 className="font-bold text-2xl">Related Category Foods</h2>
+      <div className="mt-20">
+        <h2 className="font-bold text-4xl mb-6">Related Category Foods</h2>
         <Swiper
           slidesPerView={4}
           spaceBetween={30}
@@ -37,7 +37,7 @@ const FoodDetails = ({ params }: { params: Promise<{ id: string }> }) => {
             disableOnInteraction: false,
           }}
           modules={[Pagination, Autoplay]}
-          className="mySwiper"
+          className="mySwiper my-6"
         >
           {foods?.map((food: TFood) => (
             <SwiperSlide key={food?._id}>

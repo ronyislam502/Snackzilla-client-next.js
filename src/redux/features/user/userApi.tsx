@@ -42,6 +42,13 @@ const userApi = baseApi?.injectEndpoints({
       }),
       invalidatesTags: ["user"],
     }),
+    signUp: builder.mutation({
+      query: (userInfo) => ({
+        url: "/users/create-user",
+        method: "POST",
+        body: userInfo,
+      }),
+    }),
   }),
 });
 
@@ -49,4 +56,5 @@ export const {
   useAllUsersQuery,
   useGetUserByEmailQuery,
   useUpdateUserMutation,
+  useSignUpMutation,
 } = userApi;

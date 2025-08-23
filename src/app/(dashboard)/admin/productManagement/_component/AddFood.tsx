@@ -34,7 +34,7 @@ const AddFood = () => {
     );
   }
 
-  const handleImageChange = (e: ChangeEvent<HTMLInputElement>) => {
+  const handleImage = (e: ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
 
     if (file) {
@@ -151,7 +151,7 @@ const AddFood = () => {
                     <input
                       type="file"
                       accept="image/*"
-                      onChange={handleImageChange}
+                      onChange={handleImage}
                       className="file-input file-input-bordered file-input-success"
                     />
                     {previewImage && (

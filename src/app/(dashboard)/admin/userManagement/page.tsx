@@ -1,6 +1,7 @@
 "use client";
 
 import TableSkeleton from "@/components/ui/skeleton/TableSkeleton";
+import UserDetails from "@/components/ui/UserDetails";
 import { useAllUsersQuery } from "@/redux/features/user/userApi";
 import { TUserDetail } from "@/types/user";
 import React, { useState } from "react";
@@ -50,12 +51,7 @@ const UserManagement = () => {
                   <td>{user?.role}</td>
                   <td>{user?.status}</td>
                   <th>
-                    <button
-                      // onClick={() => handleDeleteUser(user)}
-                      className="btn btn-outline btn-success"
-                    >
-                      add
-                    </button>
+                    <UserDetails user={user} />
                   </th>
                 </tr>
               ))

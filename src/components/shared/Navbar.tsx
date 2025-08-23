@@ -11,6 +11,7 @@ import { useRouter } from "next/navigation";
 import { useGetUserByEmailQuery } from "@/redux/features/user/userApi";
 import { ShoppingCartIcon } from "./Icons";
 import { clearCart, setCartUser } from "@/redux/features/order/orderSlice";
+import Cookies from "js-cookie";
 
 const Navbar = () => {
   const foods = useAppSelector((store) => store.cart.foods);
@@ -22,10 +23,10 @@ const Navbar = () => {
 
   const handleLogout = () => {
     dispatch(logout());
-    dispatch(setUser({ user: null, token: null }));
+    Cookies.remove("refreshToken");
     dispatch(setCartUser(""));
     dispatch(clearCart());
-    toast.success("Log out successfully", {
+    toast.success(`${user?.name} Log out successfully`, {
       autoClose: 1000,
     });
     router.push("/login");

@@ -14,9 +14,13 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { FieldValues } from "react-hook-form";
 import { toast } from "react-toastify";
+import Cookies from "js-cookie";
+import { useState } from "react";
+import { EyeFilledIcon, EyeSlashFilledIcon } from "@/components/shared/Icons";
 
 const Login = () => {
   const dispatch = useAppDispatch();
+  const [showPassword, setShowPassword] = useState(false);
   const router = useRouter();
   const [signIn] = useLogInMutation();
 
@@ -33,6 +37,8 @@ const Login = () => {
       dispatch(setCartUser(user.email));
 
       if (res?.success) {
+        Cookies.set("accessToken", res?.data?.accessToken);
+        Cookies.set("refreshToken", res?.data?.refreshToken);
         toast.success(res?.message, {
           autoClose: 1000,
         });
@@ -56,8 +62,26 @@ const Login = () => {
             <div className="py-3">
               <SZInput label="Email" name="email" type="email" />
             </div>
-            <div className="py-3">
-              <SZInput label="Password" name="password" type="password" />
+            <div className="py-3 relative">
+              <SZInput
+                label="Password"
+                name="password"
+                type={showPassword ? "text" : "password"}
+              />
+              <div
+                className="absolute right-6 top-13 cursor-pointer"
+                onClick={() => setShowPassword(!showPassword)}
+              >
+                {showPassword ? (
+                  <span className="text-lg">
+                    <EyeSlashFilledIcon />
+                  </span>
+                ) : (
+                  <span className="text-lg">
+                    <EyeFilledIcon />
+                  </span>
+                )}
+              </div>
             </div>
             <div>
               <Link href="/recover" className="link link-hover">
