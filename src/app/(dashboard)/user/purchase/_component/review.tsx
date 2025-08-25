@@ -3,6 +3,7 @@
 import SZForm from "@/components/form/SZFrom";
 import SZTextarea from "@/components/form/SZTexarea";
 import { TUser } from "@/redux/features/auth/authSlice";
+import { useCreateReviewMutation } from "@/redux/features/review/reviewApi";
 import { useGetUserByEmailQuery } from "@/redux/features/user/userApi";
 import { useAppSelector } from "@/redux/hooks";
 import { TError } from "@/types/global";
@@ -17,7 +18,7 @@ const review = ({ order }: { order: any }) => {
   const loggedUser = useAppSelector((state) => state.auth.user) as TUser;
   const { data: userData } = useGetUserByEmailQuery(loggedUser?.email);
   const user = userData?.data[0];
-  const [createReview] = useAddReviewMutation();
+  const [createReview] = useCreateReviewMutation();
 
   const onSubmit = async (data: FieldValues) => {
     try {
@@ -30,7 +31,6 @@ const review = ({ order }: { order: any }) => {
       const res = await createReview(reviewData).unwrap();
       if (res.success) {
         toast.success(res?.message);
-        methods.reset();
       }
     } catch (error) {
       const err = error as TError;
