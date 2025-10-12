@@ -3,7 +3,7 @@
 import SZForm from "@/components/form/SZFrom";
 import SZInput from "@/components/form/SZInput";
 import SZSelect from "@/components/form/SZSelect";
-import SZTextarea from "@/components/form/SZTexarea";
+import SZTextarea from "@/components/form/SZTextarea";
 import { useAllCategoriesQuery } from "@/redux/features/category/categoryApi";
 import { useCreateFoodMutation } from "@/redux/features/food/foodApi";
 import { TError } from "@/types/global";

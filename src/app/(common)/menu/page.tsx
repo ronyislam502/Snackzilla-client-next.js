@@ -169,7 +169,7 @@ const Menu = () => {
             )}
           </div>
           {(foods?.meta?.total as number) > limit && (
-            <div className="flex gap-2 mx-auto text-center md:w-4/12 my-8">
+            <div className="flex gap-2 mx-auto text-center md:w-2/12 my-8">
               <button
                 className="btn btn-outline btn-primary text-success btn-sm"
                 disabled={page <= 1}

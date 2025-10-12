@@ -12,10 +12,7 @@ const FeatureFoods = () => {
   return (
     <div className="my-4">
       <SectionTitle subHeading="" heading="Feature Foods" />
-      <div className="max-w-5xl mx-auto grid lg:grid-cols-3 gap-6">
-        {/* {foods?.data?.slice(0, 6).map((food: TFood) => (
-          <FoodCard key={food?._id} food={food} />
-        ))} */}
+      <div className="max-w-5xl mx-auto grid lg:grid-cols-3 gap-6 my-6">
         {isLoading ? (
           <CardSkeleton count={6} />
         ) : foods?.data?.slice(0, 6).length ? (
@@ -25,6 +22,11 @@ const FeatureFoods = () => {
         ) : (
           <p className="text-center col-span-3">No foods available</p>
         )}
+      </div>
+      <div className="text-center my-4">
+        <button className="btn btn-outline btn-success lg:w-1/12 rounded-lg">
+           See More
+        </button>
       </div>
     </div>
   );

@@ -8,6 +8,7 @@ import { useAppSelector } from "@/redux/hooks";
 import { TOrder } from "@/types/order";
 import { useState } from "react";
 import CancelOrder from "./_component/CancelOrder";
+import AddReview from "./_component/AddReview";
 
 const Purchase = () => {
   const [page, setPage] = useState(1);
@@ -56,6 +57,7 @@ const Purchase = () => {
                   <td>{order?.paymentStatus}</td>
                   <th>
                     <div>
+                      <AddReview id={order?._id} />
                       <CancelOrder order={order} />
                     </div>
                   </th>
@@ -91,3 +93,4 @@ const Purchase = () => {
 };
 
 export default Purchase;
+ 

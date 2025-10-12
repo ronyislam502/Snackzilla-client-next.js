@@ -1,7 +1,7 @@
 "use client";
 
 import SZForm from "@/components/form/SZFrom";
-import SZTextarea from "@/components/form/SZTexarea";
+import SZTextarea from "@/components/form/SZTextarea";
 import { TUser } from "@/redux/features/auth/authSlice";
 import { useCreateReviewMutation } from "@/redux/features/review/reviewApi";
 import { useGetUserByEmailQuery } from "@/redux/features/user/userApi";
@@ -12,7 +12,7 @@ import { FieldValues } from "react-hook-form";
 import { FaStar } from "react-icons/fa";
 import { toast } from "react-toastify";
 
-const review = ({ order }: { order: any }) => {
+const AddReview = ({ id }: { id: string }) => {
   const [isOpen, setIsOpen] = useState(false);
   const [rating, setRating] = useState<number>(0);
   const loggedUser = useAppSelector((state) => state.auth.user) as TUser;
@@ -24,14 +24,15 @@ const review = ({ order }: { order: any }) => {
     try {
       const reviewData = {
         user: user?._id,
-        order: order?._id,
+        order: id,
         feedback: data?.feedback,
         rating,
       };
-      const res = await createReview(reviewData).unwrap();
-      if (res.success) {
-        toast.success(res?.message);
-      }
+      console.log(reviewData);
+        const res = await createReview(reviewData).unwrap();
+        if (res.success) {
+          toast.success(res?.message);
+        }
     } catch (error) {
       const err = error as TError;
       toast.error(err?.data?.message);
@@ -42,15 +43,15 @@ const review = ({ order }: { order: any }) => {
     <div>
       <div className="flex mb-4  flex-col items-center justify-center">
         <button
-          className="btn btn-outline btn-primary text-white"
+          className="btn btn-outline btn-primary"
           onClick={() => setIsOpen(true)}
         >
-          review
+          Give Review
         </button>
       </div>
 
       {isOpen && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/80">
+        <div className="fixed inset-0 z-50 flex items-center justify-center">
           <div className="rounded-lg shadow-2xl">
             <h3 className="text-xl font-bold text-center mb-4">Add Service</h3>
             <div>
@@ -93,4 +94,4 @@ const review = ({ order }: { order: any }) => {
   );
 };
 
-export default review;
+export default AddReview;

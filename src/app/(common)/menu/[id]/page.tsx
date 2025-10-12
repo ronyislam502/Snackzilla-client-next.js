@@ -27,24 +27,11 @@ const FoodDetails = ({ params }: { params: Promise<{ id: string }> }) => {
       <FoodDetail food={food?.data} />
       <div className="mt-20">
         <h2 className="font-bold text-4xl mb-6">Related Category Foods</h2>
-        <Swiper
-          slidesPerView={4}
-          spaceBetween={30}
-          centeredSlides={true}
-          pagination={{ clickable: true }}
-          autoplay={{
-            delay: 3000,
-            disableOnInteraction: false,
-          }}
-          modules={[Pagination, Autoplay]}
-          className="mySwiper my-6"
-        >
+        <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-6">
           {foods?.map((food: TFood) => (
-            <SwiperSlide key={food?._id}>
               <FoodCard key={food?._id} food={food} />
-            </SwiperSlide>
           ))}
-        </Swiper>
+        </div>
       </div>
     </div>
   );
