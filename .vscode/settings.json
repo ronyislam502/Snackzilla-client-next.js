@@ -1,4 +1,4 @@
 {
     "editor.formatOnSave": true,
-    "editor.defaultFormatter": "evolution-gaming.evolution-gaming--vscode-eslint"
+    "editor.defaultFormatter": null
 }

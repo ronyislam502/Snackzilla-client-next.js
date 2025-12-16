@@ -40,7 +40,17 @@ const Banner = () => {
       buttonText: "View Specials",
       motionType: "panRight",
     },
-  ];
+   // 🆕 Added new slide
+   {
+     image: "https://i.postimg.cc/zBnHFf6N/banner-5.jpg",
+     title: "A Feast for Every Occasion",
+     subtitle:
+       "Celebrate your special moments with our chef’s signature dishes.",
+     buttonText: "Reserve Now",
+     motionType: "zoomIn",
+   },
+ ];
+
 
   // Motion Variants
   const fadeDown = {
