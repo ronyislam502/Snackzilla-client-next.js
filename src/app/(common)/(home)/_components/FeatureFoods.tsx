@@ -5,6 +5,7 @@ import FoodCard from "@/components/ui/FoodCard";
 import CardSkeleton from "@/components/ui/skeleton/CardSkeleton";
 import { useAllFoodsQuery } from "@/redux/features/food/foodApi";
 import { TFood } from "@/types/food";
+import Link from "next/link";
 
 const FeatureFoods = () => {
   const { data: foods, isLoading } = useAllFoodsQuery({});
@@ -24,9 +25,10 @@ const FeatureFoods = () => {
         )}
       </div>
       <div className="text-center my-4">
-        <button className="btn btn-outline btn-success lg:w-1/12 rounded-lg">
-           See More
-        </button>
+        <Link href="/menu">
+          <button className="btn btn-outline btn-success lg:w-1/12 rounded-lg">
+            See More
+          </button></Link>
       </div>
     </div>
   );
