@@ -6,11 +6,10 @@ import { useAllFoodsByCategoriesQuery } from "@/redux/features/category/category
 import { useSingleFoodQuery } from "@/redux/features/food/foodApi";
 import { TFood } from "@/types/food";
 import { use } from "react";
-import { Swiper, SwiperSlide } from "swiper/react";
 import "swiper/css";
 import "swiper/css/pagination";
 import "swiper/css/autoplay";
-import { Pagination, Autoplay } from "swiper/modules";
+
 
 const FoodDetails = ({ params }: { params: Promise<{ id: string }> }) => {
   const { id } = use(params);
@@ -29,7 +28,7 @@ const FoodDetails = ({ params }: { params: Promise<{ id: string }> }) => {
         <h2 className="font-bold text-4xl mb-6">Related Category Foods</h2>
         <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-6">
           {foods?.map((food: TFood) => (
-              <FoodCard key={food?._id} food={food} />
+            <FoodCard key={food?._id} food={food} />
           ))}
         </div>
       </div>
