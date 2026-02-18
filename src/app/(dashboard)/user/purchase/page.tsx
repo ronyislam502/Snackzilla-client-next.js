@@ -12,7 +12,7 @@ import AddReview from "./_component/AddReview";
 
 const Purchase = () => {
   const [page, setPage] = useState(1);
-  const [limit] = useState(8);
+  const [limit] = useState(7);
   const user = useAppSelector((state) => state?.auth?.user) as TUser;
 
   const { data: purchases, isLoading } = useMyOrdersQuery({
@@ -56,7 +56,7 @@ const Purchase = () => {
                   <td>$ {order?.grandAmount.toFixed(2)}</td>
                   <td>{order?.paymentStatus}</td>
                   <th>
-                    <div>
+                    <div className="flex gap-4">
                       <AddReview id={order?._id} />
                       <CancelOrder order={order} />
                     </div>
@@ -93,4 +93,3 @@ const Purchase = () => {
 };
 
 export default Purchase;
- 

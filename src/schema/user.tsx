@@ -2,6 +2,7 @@ import { z } from "zod"
 
 export const userValidationSchema = z.object({
     name: z.string().optional(),
+    email: z.string().optional(),
     phone: z.string().optional(),
     street: z.string().optional(),
     city: z.string().optional(),
@@ -11,3 +12,4 @@ export const userValidationSchema = z.object({
         .optional(),
     country: z.string().optional(),
 });
+

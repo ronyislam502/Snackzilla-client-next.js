@@ -25,7 +25,7 @@ const Special = () => {
       title: "SnackZilla Lassi",
       subtitle:
         "Lassi is a signature dish made with yogurt, spices and water. Sweet or salty, its refreshing taste represents traditional Mughal-era drinks.",
-      motionType: "panLeft",
+      motionType: "zoomIn",
     },
   ];
 
@@ -34,28 +34,28 @@ const Special = () => {
       hidden: { scale: 1 },
       visible: {
         scale: 1.15,
-        transition: { duration: 6, ease: "easeInOut" },
+        transition: { duration: 6, ease: "easeInOut", repeat: Infinity, repeatType: "mirror" },
       },
     },
     zoomOut: {
       hidden: { scale: 1.15 },
       visible: {
         scale: 1,
-        transition: { duration: 6, ease: "easeInOut" },
+        transition: { duration: 6, ease: "easeInOut", repeat: Infinity, repeatType: "mirror" },
       },
     },
     panLeft: {
       hidden: { x: 40, scale: 1.05 },
       visible: {
         x: -40,
-        transition: { duration: 6, ease: "easeInOut" },
+        transition: { duration: 6, ease: "easeInOut", },
       },
     },
     panRight: {
       hidden: { x: -40, scale: 1.05 },
       visible: {
         x: 40,
-        transition: { duration: 6, ease: "easeInOut" },
+        transition: { duration: 6, ease: "easeInOut", repeat: Infinity, repeatType: "mirror" },
       },
     },
   };
@@ -64,9 +64,12 @@ const Special = () => {
     <section className="max-w-7xl mx-auto px-6 py-20">
       <SectionTitle subHeading="" heading="Our Specials" />
       {/* Items */}
-      <div className="grid md:grid-cols-3 gap-10 my-6">
+      <div className="grid md:grid-cols-3 gap-6 my-6">
         {items.map((item, index) => (
-          <div key={index} className="group">
+          <motion.div
+            key={index}
+            className="group border border-green-500 rounded-xl p-2 hover:shadow-lg transition-shadow duration-300"
+          >
             {/* Image */}
             <div className="relative w-full h-[260px] overflow-hidden rounded-lg">
               <motion.div
@@ -79,22 +82,23 @@ const Special = () => {
                 <Image
                   src={item?.image}
                   alt={item.title}
-                  fill
+                  width={700}
+                  height={260}
                   className="object-cover rounded-xl"
                 />
               </motion.div>
             </div>
 
             {/* Content */}
-            <div className="mt-6">
-              <h3 className="text-xl font-semibold mb-2">
+            <div className="mt-6 p-2">
+              <h3 className="text-xl font-semibold mb-2 text-green-500">
                 {item.title}
               </h3>
-              <p className="text-gray-600 text-sm leading-6 text-justify">
+              <p className="text-white text-sm leading-6 text-justify">
                 {item.subtitle}
               </p>
             </div>
-          </div>
+          </motion.div>
         ))}
       </div>
     </section>

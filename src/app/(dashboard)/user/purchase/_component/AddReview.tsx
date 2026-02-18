@@ -29,10 +29,10 @@ const AddReview = ({ id }: { id: string }) => {
         rating,
       };
       console.log(reviewData);
-        const res = await createReview(reviewData).unwrap();
-        if (res.success) {
-          toast.success(res?.message);
-        }
+      const res = await createReview(reviewData).unwrap();
+      if (res.success) {
+        toast.success(res?.message);
+      }
     } catch (error) {
       const err = error as TError;
       toast.error(err?.data?.message);
@@ -46,14 +46,14 @@ const AddReview = ({ id }: { id: string }) => {
           className="btn btn-outline btn-primary"
           onClick={() => setIsOpen(true)}
         >
-          Give Review
+          Review
         </button>
       </div>
 
       {isOpen && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center">
-          <div className="rounded-lg shadow-2xl">
-            <h3 className="text-xl font-bold text-center mb-4">Add Service</h3>
+        <div className="fixed inset-0 z-50 flex items-center justify-center ">
+          <div className="rounded-lg shadow-2xl bg-yellow-700 p-6 ">
+            <h3 className="text-xl font-bold text-center mb-4">Give Review</h3>
             <div>
               <SZForm onSubmit={onSubmit}>
                 <div className="py-2">
@@ -65,9 +65,8 @@ const AddReview = ({ id }: { id: string }) => {
                     {[1, 2, 3, 4, 5].map((star) => (
                       <FaStar
                         key={star}
-                        className={`cursor-pointer w-6 h-6 ${
-                          rating >= star ? "text-yellow-500" : "text-gray-300"
-                        }`}
+                        className={`cursor-pointer w-6 h-6 ${rating >= star ? "text-yellow-500" : "text-gray-300"
+                          }`}
                         onClick={() => setRating(star)}
                       />
                     ))}

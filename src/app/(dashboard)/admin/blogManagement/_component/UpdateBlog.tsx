@@ -14,9 +14,7 @@ import { TError } from "@/types/global";
 
 const UpdateBlog = ({ blog }: { blog: any }) => {
   const [isOpen, setIsOpen] = useState(false);
-  const methods = useForm({
-    resolver: zodResolver(blogUpdatedSchema),
-  });
+  const methods = useForm();
 
   const [previewImage, setPreviewImage] = useState(blog?.image || "");
   const [selectedImage, setSelectedImage] = useState<File | null>(null);
@@ -91,6 +89,7 @@ const UpdateBlog = ({ blog }: { blog: any }) => {
                   description: blog?.description,
                   tags: blog?.tags?.join(", "),
                 }}
+                resolver={zodResolver(blogUpdatedSchema)}
                 onSubmit={onSubmit}
               >
                 {/* Title */}

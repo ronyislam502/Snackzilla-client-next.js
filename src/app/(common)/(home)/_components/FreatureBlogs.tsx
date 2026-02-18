@@ -13,7 +13,7 @@ const FeatureBlogs = () => {
 
     return (
         <div className="my-4">
-            <SectionTitle subHeading="" heading="Feature Blogs" />
+            <SectionTitle subHeading="" heading="Our Blogs" />
             <div className="grid lg:grid-cols-3 gap-6 my-6">
                 {isLoading ? (
                     <CardSkeleton count={3} />

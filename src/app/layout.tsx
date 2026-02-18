@@ -17,9 +17,9 @@ const geistMono = Geist_Mono({
 export const metadata: Metadata = {
   title: "SnackZilla",
   description: "Resturent and food ordering website",
-   icons: {
-     icon: "https://i.postimg.cc/gjhSbS06/resturent.png",
-     
+  icons: {
+    icon: "https://i.postimg.cc/gjhSbS06/resturent.png",
+
   },
 };
 
@@ -35,7 +35,7 @@ export default function RootLayout({
       >
         <SZProvider>
           <AuthListener />
-          <div className="max-w-[1280px] mx-auto">{children}</div>
+          <div className="max-w-[1280px]  mx-auto">{children}</div>
         </SZProvider>
       </body>
     </html>

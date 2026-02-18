@@ -37,7 +37,7 @@ const BlogCard = ({ blog }: { blog: TBlog }) => {
             initial="hidden"
             animate="visible"
             whileHover="hover"
-            className="bg-base-300 shadow-md rounded-lg cursor-pointer transition-all duration-300"
+            className="bg-base-300 border border-green-500 p-2 shadow-md rounded-lg cursor-pointer transition-all duration-300"
         >
             {/* Image */}
             <div className="relative w-full h-56 sm:h-64 md:h-72 rounded-t-lg overflow-hidden">

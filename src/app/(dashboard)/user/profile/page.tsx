@@ -13,8 +13,6 @@ const Profile = () => {
 
   const user = userData?.data[0];
 
-  console.log('pro-user', user)
-
   const address = user?.address
     ? `${user?.address?.street}, ${user?.address?.city}-${user?.address?.postalCode}, ${user?.address?.state}, ${user.address.country}`
     : "";

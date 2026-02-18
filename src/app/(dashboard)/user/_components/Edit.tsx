@@ -18,10 +18,9 @@ const Update = ({ user }: { user: TUserDetail }) => {
     const methods = useForm({
         resolver: zodResolver(blogUpdatedSchema),
     });
+    console.log("user", user.address)
 
     const [previewImage, setPreviewImage] = useState(user?.avatar || "");
-
-    console.log("avatar", user?.avatar)
     const [selectedImage, setSelectedImage] = useState<File | null>(null);
 
     const [updateUser] = useUpdateUserMutation();
@@ -96,7 +95,11 @@ const Update = ({ user }: { user: TUserDetail }) => {
                                     name: user?.name,
                                     email: user.email,
                                     phone: user?.phone,
-                                    address: user?.address,
+                                    street: user?.address?.street,
+                                    city: user?.address?.city,
+                                    state: user?.address?.state,
+                                    postalCode: user?.address?.postalCode,
+                                    country: user?.address?.country
                                 }}
                                 resolver={zodResolver(userValidationSchema)}
                                 onSubmit={onSubmit}
@@ -197,8 +200,9 @@ const Update = ({ user }: { user: TUserDetail }) => {
                         </FormProvider>
                     </div>
                 </dialog>
-            )}
-        </div>
+            )
+            }
+        </div >
     );
 };
 
