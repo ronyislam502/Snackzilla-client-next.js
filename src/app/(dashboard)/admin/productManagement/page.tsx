@@ -9,7 +9,7 @@ import AddFood from "./_component/AddFood";
 import SectionTitle from "@/components/shared/SectionTitle";
 import UpdateFood from "./_component/UpdateFood";
 
-const ProductManagement = () => {
+const BlogManagement = () => {
   const [page, setPage] = useState(1);
   const [limit] = useState(7);
   const { data: foods, isLoading } = useAllFoodsQuery({ page, limit });
@@ -105,4 +105,4 @@ const ProductManagement = () => {
   );
 };
 
-export default ProductManagement;
+export default BlogManagement;

@@ -3,6 +3,7 @@
 import { TUser } from "@/redux/features/auth/authSlice";
 import { useGetUserByEmailQuery } from "@/redux/features/user/userApi";
 import { useAppSelector } from "@/redux/hooks";
+import Update from "../_components/Edit";
 
 const Profile = () => {
   const loggedUser = useAppSelector((state) => state?.auth?.user) as TUser;
@@ -11,6 +12,8 @@ const Profile = () => {
   );
 
   const user = userData?.data[0];
+
+  console.log('pro-user', user)
 
   const address = user?.address
     ? `${user?.address?.street}, ${user?.address?.city}-${user?.address?.postalCode}, ${user?.address?.state}, ${user.address.country}`
@@ -55,9 +58,9 @@ const Profile = () => {
                 <h3 className="text-xl font-bold ">{address}</h3>
               </div>
             </div>
-            {/* <div>
-              <EditProfile user={user} />
-            </div> */}
+            <div>
+              <Update user={user} />
+            </div>
           </div>
         </div>
       </div>

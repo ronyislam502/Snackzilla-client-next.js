@@ -6,12 +6,10 @@ import { useGetUserByEmailQuery } from "@/redux/features/user/userApi";
 import { useAppSelector } from "@/redux/hooks";
 import { TFood } from "@/types/food";
 import { toast } from "react-toastify";
-import { useRouter } from "next/navigation";
 import { useDispatch } from "react-redux";
 import { clearCart } from "@/redux/features/order/orderSlice";
 
 const CheckOut = () => {
-  const router = useRouter();
   const [createOrder] = useCreateOrderMutation();
   const loggedUser = useAppSelector(selectCurrentUser) as TUser;
   const { data: userInfo } = useGetUserByEmailQuery(loggedUser?.email);
@@ -20,22 +18,30 @@ const CheckOut = () => {
   const cartItems = cart?.foods;
   const dispatch = useDispatch();
 
+  // console.log(loggedUser)
+
+  // console.log("user", user)
+
+
   const address = user?.address
     ? `${user?.address?.street}, ${user?.address?.city}-${user?.address?.postalCode}, ${user?.address?.state}, ${user.address.country}`
     : "";
 
   const onSubmit = async () => {
     const orderData = {
-      user: user?._id,
+      user: user._id,
       foods: cartItems?.map((food: TFood) => ({
         food: food._id,
         quantity: food.quantity,
       })),
     };
 
-    const res = await createOrder(orderData).unwrap();
+    console.log("order", orderData)
 
-    if (res?.success) {
+    const res = await createOrder(orderData).unwrap();
+    console.log("res", res)
+
+    if (res.success) {
       toast.success(res?.message);
       window.location.href = res?.data;
       dispatch(clearCart());
@@ -59,7 +65,7 @@ const CheckOut = () => {
               name="name"
               type="text"
               defaultValue={user?.name}
-              className="input input-bordered"
+              className="input input-bordered text-white"
               readOnly
             />
           </div>
@@ -73,7 +79,7 @@ const CheckOut = () => {
               name="email"
               type="email"
               defaultValue={user?.email}
-              className="input input-bordered"
+              className="input input-bordered text-white"
               readOnly
             />
           </div>
@@ -89,7 +95,7 @@ const CheckOut = () => {
               name="phone"
               type="text"
               defaultValue={user?.phone}
-              className="input input-bordered"
+              className="input input-bordered text-white"
               readOnly
             />
           </div>
@@ -103,7 +109,7 @@ const CheckOut = () => {
               name="address"
               type="text"
               defaultValue={address as string}
-              className="input input-bordered"
+              className="input input-bordered text-white"
               readOnly
             />
           </div>

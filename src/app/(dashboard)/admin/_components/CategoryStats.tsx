@@ -1,3 +1,5 @@
+"use client"
+
 import {
   Bar,
   BarChart,
@@ -7,7 +9,7 @@ import {
   YAxis,
 } from "recharts";
 
-const CategoryStats = ({ category }: { category: any }) => {
+const CategoryStats = ({ category }: { category: any[] }) => {
   const formattedData = category?.map((item: any) => ({
     category: item?.categoryName,
     totalRevenue: item?.totalRevenue,
@@ -18,7 +20,6 @@ const CategoryStats = ({ category }: { category: any }) => {
       <ResponsiveContainer
         height={300}
         width="100%"
-        //   className="text-xl font-bold"
       >
         <BarChart data={formattedData}>
           <XAxis

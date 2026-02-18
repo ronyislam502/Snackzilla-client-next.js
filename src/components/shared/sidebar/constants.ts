@@ -12,5 +12,7 @@ export const adminLinks = [
   { href: "/admin/userManagement", label: "User Management" },
   { href: "/admin/categoryManagement", label: "Category Management" },
   { href: "/admin/productManagement", label: "Food Management" },
+  { href: "/admin/blogManagement", label: "Blog Management" },
   { href: "/admin/password", label: "Change Password" },
+  { href: "/admin/dash", label: "Dash2" },
 ];

@@ -11,15 +11,16 @@ import { loginValidationSchema } from "@/schema/auth";
 import { TError } from "@/types/global";
 import { zodResolver } from "@hookform/resolvers/zod";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { FieldValues } from "react-hook-form";
 import { toast } from "react-toastify";
 import Cookies from "js-cookie";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { EyeFilledIcon, EyeSlashFilledIcon } from "@/components/shared/Icons";
 
 const Login = () => {
   const dispatch = useAppDispatch();
+  const searchParams = useSearchParams();
   const [showPassword, setShowPassword] = useState(false);
   const router = useRouter();
   const [signIn] = useLogInMutation();
@@ -50,6 +51,30 @@ const Login = () => {
       toast.error(err?.data?.message);
     }
   };
+
+  useEffect(() => {
+    const accessToken = searchParams.get("accessToken");
+    const refreshToken = searchParams.get("refreshToken");
+    const message = searchParams.get("message");
+
+    if (!accessToken) return;
+
+    const user = verifyToken(accessToken) as TUser;
+
+    dispatch(setUser({ user, token: accessToken }));
+    dispatch(setCartUser(user.email));
+
+    Cookies.set("accessToken", accessToken);
+    if (refreshToken) Cookies.set("refreshToken", refreshToken);
+
+    toast.success(message || "Login successful");
+    router.replace("/");
+  }, [searchParams, dispatch, router]);
+
+  const googleLogin = () => {
+    window.location.href = `http://localhost:5000/api/auth/google`;
+  }
+
 
   return (
     <div className="hero h-[90vh]">
@@ -105,9 +130,19 @@ const Login = () => {
               </p>
             </Link>
           </div>
+          <div className="text-center py-3">
+            <button
+              className="btn btn-outline btn-error w-2/4"
+              type="button"
+              onClick={googleLogin}
+            // onClick={() => window.open(`http://localhost:5000/api/auth/google`)}
+            >
+              Login with Google
+            </button>
+          </div>
         </div>
       </div>
-    </div>
+    </div >
   );
 };
 

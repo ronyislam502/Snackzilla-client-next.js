@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import SZProvider from "@/lib/provider/ReduxProvider";
+import AuthListener from "@/components/utilities/AuthListener";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -33,6 +34,7 @@ export default function RootLayout({
         className={`${geistSans?.variable} ${geistMono?.variable} antialiased`}
       >
         <SZProvider>
+          <AuthListener />
           <div className="max-w-[1280px] mx-auto">{children}</div>
         </SZProvider>
       </body>
