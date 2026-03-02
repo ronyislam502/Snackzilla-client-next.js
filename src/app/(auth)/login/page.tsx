@@ -77,69 +77,74 @@ const Login = () => {
 
 
   return (
-    <div className="hero h-[90vh]">
-      <div className="card bg-base-100 w-full max-w-sm shadow-2xl">
-        <div className="card-body">
-          <SZForm
-            resolver={zodResolver(loginValidationSchema)}
-            onSubmit={onSubmit}
-          >
-            <div className="py-3">
-              <SZInput label="Email" name="email" type="email" />
-            </div>
-            <div className="py-3 relative">
+    <div className="min-h-[80vh] flex items-center justify-center px-4 py-12 relative overflow-hidden">
+      {/* Background Decorative Elements */}
+      <div className="absolute top-1/4 left-1/4 w-64 h-64 bg-success/5 rounded-full blur-[100px] pointer-events-none" />
+      <div className="absolute bottom-1/4 right-1/4 w-64 h-64 bg-success/5 rounded-full blur-[100px] pointer-events-none" />
+
+      <div className="w-full max-w-sm bg-[#0a0a0a]/60 backdrop-blur-3xl border border-white/5 rounded-3xl p-8 md:p-10 relative z-10 shadow-2xl">
+        <div className="space-y-2 mb-10 text-center">
+          <h3 className="text-3xl font-black uppercase tracking-tighter italic leading-none text-white">Member <span className="text-success">Access.</span></h3>
+          <p className="text-gray-500 font-medium tracking-[0.3em] uppercase text-[8px] italic">Enter your authentication keys</p>
+        </div>
+
+        <SZForm
+          resolver={zodResolver(loginValidationSchema)}
+          onSubmit={onSubmit}
+        >
+          <div className="space-y-5">
+            <SZInput label="Email Address" name="email" type="email" placeholder="e.g. alexander@elite.com" />
+            <div className="relative">
               <SZInput
-                label="Password"
+                label="Security Key"
                 name="password"
                 type={showPassword ? "text" : "password"}
+                placeholder="••••••••"
               />
               <div
-                className="absolute right-6 top-13 cursor-pointer"
+                className="absolute right-4 top-10 cursor-pointer text-gray-500 hover:text-white transition-colors"
                 onClick={() => setShowPassword(!showPassword)}
               >
                 {showPassword ? (
-                  <span className="text-lg">
-                    <EyeSlashFilledIcon />
-                  </span>
+                  <EyeSlashFilledIcon size={18} />
                 ) : (
-                  <span className="text-lg">
-                    <EyeFilledIcon />
-                  </span>
+                  <EyeFilledIcon size={18} />
                 )}
               </div>
             </div>
-            <div>
-              <Link href="/recover" className="link link-hover">
-                Forgot password?
-              </Link>
-            </div>
-            <div className="text-center py-4">
-              <button
-                className="btn btn-outline btn-success w-2/4"
-                type="submit"
-              >
-                Login
-              </button>
-            </div>
-          </SZForm>
-          <div className="text-center">
-            <Link href="/register">
-              <p>
-                Don&lsquo;t have an account ?
-                <span className="text-blue-400"> Register</span>
-              </p>
+          </div>
+
+          <div className="mt-4 text-right">
+            <Link href="/recover" className="text-[10px] font-black text-gray-500 hover:text-success uppercase tracking-widest italic transition-colors">
+              Recover Lost Key?
             </Link>
           </div>
-          <div className="text-center py-3">
+
+          <div className="mt-8 space-y-4">
             <button
-              className="btn btn-outline btn-error w-2/4"
+              className="w-full group flex items-center justify-center gap-3 bg-success hover:bg-success/90 text-black py-4 rounded-xl text-[11px] font-black uppercase tracking-[0.25em] italic transition-all active:scale-95 shadow-[0_20px_40px_-10px_rgba(34,197,94,0.3)]"
+              type="submit"
+            >
+              Authorize Login
+            </button>
+
+            <button
+              className="w-full flex items-center justify-center gap-3 bg-white/5 border border-white/5 text-white py-3.5 rounded-xl text-[10px] font-black uppercase tracking-widest italic hover:bg-white/10 transition-all active:scale-95"
               type="button"
               onClick={googleLogin}
-            // onClick={() => window.open(`http://localhost:5000/api/auth/google`)}
             >
-              Login with Google
+              <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" className="w-4 h-4" alt="google" />
+              Gateway via Google
             </button>
           </div>
+        </SZForm>
+
+        <div className="mt-10 pt-6 border-t border-white/5 text-center">
+          <Link href="/register">
+            <p className="text-[10px] font-black text-gray-600 uppercase tracking-widest italic hover:text-white transition-colors">
+              New to the experience? <span className="text-success ml-1">Initiate Membership</span>
+            </p>
+          </Link>
         </div>
       </div>
     </div >

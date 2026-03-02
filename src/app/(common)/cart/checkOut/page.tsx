@@ -19,7 +19,7 @@ const CheckOut = () => {
   const [createOrder] = useCreateOrderMutation();
   const loggedUser = useAppSelector(selectCurrentUser) as TUser;
   const { data: userInfo } = useGetUserByEmailQuery(loggedUser?.email);
-  const user = userInfo?.data[0];
+  const user = userInfo?.data;
   const cart = useAppSelector((state) => state.cart);
   const cartItems = cart?.foods;
   const dispatch = useDispatch();
@@ -65,10 +65,8 @@ const CheckOut = () => {
         })),
       };
 
-      console.log("order", orderData);
 
       const orderRes = await createOrder(orderData).unwrap();
-      console.log("orderRes", orderRes);
 
       if (orderRes?.success) {
         toast.success(orderRes?.message);
@@ -77,15 +75,19 @@ const CheckOut = () => {
       }
     } catch (error) {
       const err = error as TError;
-      console.log(err);
       toast.error(err?.data?.message || "Something went wrong");
     }
   };
 
   return (
-    <div className="max-w-6xl mx-auto p-6 bg-white rounded-lg shadow-lg text-black">
-      <h3 className="my-4 text-3xl font-bold text-center">Checkout</h3>
-
+    <div className="max-w-6xl mx-auto p-8 md:p-10 bg-[#0a0a0a]/60 backdrop-blur-3xl rounded-3xl border border-white/5 text-white relative overflow-hidden my-10">
+      <div className="absolute inset-0 bg-gradient-to-br from-success/5 via-transparent to-transparent opacity-30" />
+      
+      <div className="relative z-10 space-y-2 mb-10 text-center">
+        <h3 className="text-3xl font-black uppercase tracking-tighter italic leading-none">Execute <span className="text-success">Checkout.</span></h3>
+        <p className="text-gray-500 font-medium tracking-[0.3em] uppercase text-[8px] italic">Finalize your culinary arrangement</p>
+      </div>
+ 
       <FormProvider {...methods}>
         <SZForm
           defaultValues={{
@@ -102,124 +104,124 @@ const CheckOut = () => {
           onSubmit={onSubmit}
         >
           {/* MAIN GRID */}
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 relative z-10">
+ 
             {/* ================= USER INFO ================= */}
-            <div>
-              <h2 className="text-xl font-semibold mb-6 text-center">
-                User Info
-              </h2>
-
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+            <div className="space-y-8">
+              <div className="space-y-1">
+                <h2 className="text-lg font-black uppercase tracking-widest italic text-success">Personal Details</h2>
+                <div className="w-10 h-0.5 bg-success/30 rounded-full" />
+              </div>
+ 
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
                 <SZInput
-                  label="Name *"
+                  label="Full Name *"
                   name="name"
                   type="text"
-                  placeholder="your name"
+                  placeholder="e.g. Alexander Pierce"
                 />
                 <SZInput
-                  label="Email *"
+                  label="Email Communications *"
                   name="email"
                   type="text"
-                  placeholder="your email"
+                  placeholder="e.g. alex@elitedine.com"
                 />
               </div>
-
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+ 
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
                 <SZInput
-                  label="Phone *"
+                  label="Contact Number *"
                   name="phone"
                   type="text"
-                  placeholder="your phone number"
+                  placeholder="e.g. +1 555 000"
                 />
                 <SZInput
-                  label="Street *"
+                  label="Street Address *"
                   name="street"
                   type="text"
-                  placeholder="your street"
+                  placeholder="e.g. 7th Avenue"
                 />
               </div>
-
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+ 
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
                 <SZInput
-                  label="City *"
+                  label="Metropolis *"
                   name="city"
                   type="text"
-                  placeholder="your city"
+                  placeholder="e.g. New York"
                 />
                 <SZInput
-                  label="State *"
+                  label="Province / State *"
                   name="state"
                   type="text"
-                  placeholder="your state"
+                  placeholder="e.g. NY"
                 />
               </div>
-
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+ 
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
                 <SZInput
-                  label="Postal Code *"
+                  label="Postal Identity *"
                   name="postalCode"
                   type="text"
-                  placeholder="your postal code"
+                  placeholder="e.g. 10001"
                 />
                 <SZInput
-                  label="Country *"
+                  label="Sovereign State *"
                   name="country"
                   type="text"
-                  placeholder="your country"
+                  placeholder="e.g. USA"
                 />
               </div>
             </div>
-
+ 
             {/* ================= ORDER SUMMARY ================= */}
-            <div>
-              <h2 className="text-xl font-semibold mb-6 text-center">
-                Order Summary
-              </h2>
-
-              <div className="overflow-x-auto mb-6">
-                <table className="table w-full">
+            <div className="space-y-8">
+               <div className="space-y-1 text-right lg:text-left">
+                <h2 className="text-lg font-black uppercase tracking-widest italic text-success">Order Manifest</h2>
+                <div className="w-10 h-0.5 bg-success/30 rounded-full ml-auto lg:ml-0" />
+              </div>
+ 
+              <div className="bg-white/5 border border-white/5 rounded-2xl overflow-hidden shadow-2xl">
+                <table className="w-full text-left border-collapse">
                   <thead>
-                    <tr className="font-bold text-black">
-                      <th>Name</th>
-                      <th className="text-center">Qty</th>
-                      <th>Price</th>
-                      <th>Tax (10%)</th>
-                      <th>Total</th>
+                    <tr className="bg-white/5">
+                      <th className="p-4 text-[10px] font-black uppercase tracking-widest italic text-gray-400">Creation</th>
+                      <th className="p-4 text-[10px] font-black uppercase tracking-widest italic text-gray-400 text-center">Qty</th>
+                      <th className="p-4 text-[10px] font-black uppercase tracking-widest italic text-gray-400 text-right">Summation</th>
                     </tr>
                   </thead>
-                  <tbody>
+                  <tbody className="divide-y divide-white/5">
                     {cartItems?.map((food: TFood) => (
-                      <tr key={food._id}>
-                        <td>{food.name}</td>
-                        <td className="text-center">{food.quantity}</td>
-                        <td>${(food.price * food.quantity).toFixed(2)}</td>
-                        <td>
-                          ${(food.price * food.quantity * 0.1).toFixed(2)}
-                        </td>
-                        <td>
-                          $
-                          {(
-                            food.price * food.quantity * 1.1
-                          ).toFixed(2)}
-                        </td>
+                      <tr key={food._id} className="hover:bg-white/[0.02] transition-colors">
+                        <td className="p-4 text-xs font-bold text-white italic">{food.name}</td>
+                        <td className="p-4 text-xs font-black text-white text-center italic">{food.quantity}</td>
+                        <td className="p-4 text-xs font-black text-success text-right italic">${(food.price * food.quantity).toFixed(2)}</td>
                       </tr>
                     ))}
                   </tbody>
                 </table>
               </div>
-
-              <div className="flex justify-between text-lg font-semibold mb-6">
-                <span>Total Tax: ${cart?.tax.toFixed(2)}</span>
-                <span>Total Pay: ${cart?.grandTotal.toFixed(2)}</span>
+ 
+              <div className="space-y-3 pt-4">
+                <div className="flex justify-between items-center text-[10px] uppercase font-black tracking-widest italic text-gray-500">
+                  <span>Allocation for Taxation</span>
+                  <span className="text-white">${cart?.tax.toFixed(2)}</span>
+                </div>
+                <div className="flex justify-between items-end pt-2">
+                  <span className="text-xs font-black uppercase tracking-[0.2em] italic text-success">Aggregate Payable</span>
+                  <span className="text-3xl font-black italic tracking-tighter text-white">
+                     <span className="text-success text-sm mr-1">$</span>
+                     {cart?.grandTotal.toFixed(2)}
+                  </span>
+                </div>
               </div>
-
-              <div className="text-right">
+ 
+              <div className="pt-6">
                 <button
                   type="submit"
-                  className="btn btn-success btn-md"
+                  className="w-full group flex items-center justify-center gap-3 bg-success hover:bg-success/90 text-black py-4 rounded-xl text-[11px] font-black uppercase tracking-[0.25em] italic transition-all active:scale-95 shadow-[0_20px_40px_-10px_rgba(34,197,94,0.3)]"
                 >
-                  Proceed to Payment
+                  Authorize Payment & Complete Order
                 </button>
               </div>
             </div>

@@ -5,26 +5,34 @@ import { PieChart, Pie, Cell, ResponsiveContainer } from 'recharts';
 
 // Data from orderStatusCounts
 const data = [
-    { name: 'Unshipped', value: 13, color: '#a855f7' }, // Purple
-    { name: 'Cancelled', value: 4, color: '#f472b6' },  // Pink
+    { name: 'Unshipped', value: 13, color: '#22c55e' }, // Green
+    { name: 'Cancelled', value: 4, color: '#ef4444' },  // Red
 ];
 
-const HomeDelivery: React.FC = () => {
+const SummaryStats = () => {
     return (
-        <div className="bg-white p-6 rounded-3xl shadow-sm border border-purple-50 flex flex-col">
-            <h3 className="text-lg font-bold text-gray-800 mb-4">Order Status</h3>
-
-            <div className="relative flex-1 flex items-center justify-center min-h-[100px]">
+        <div className="bg-neutral/40 backdrop-blur-md p-8 rounded-3xl border border-success/10 shadow-2xl hover:border-success/30 transition-all duration-500 flex flex-col h-full">
+            <h3 className="text-xl font-black text-white mb-8 tracking-tight">Order <span className="text-success italic font-serif">Status</span></h3>
+            <div className="flex flex-wrap justify-center gap-6 mb-8 mt-auto">
+                {data.map((item, idx) => (
+                    <div key={idx} className="flex items-center gap-3 bg-black/40 px-4 py-2 rounded-xl border border-white/5">
+                        <div className="w-2.5 h-2.5 rounded-full shadow-[0_0_8px_rgba(255,255,255,0.2)]" style={{ backgroundColor: item.color }} />
+                        <span className="text-xs font-bold text-gray-300 whitespace-nowrap">{item.name} <span className="text-white ml-1 font-black">{item.value}</span></span>
+                    </div>
+                ))}
+            </div>
+            <div className="relative flex-1 flex items-center justify-center min-h-[200px] mb-auto">
                 <div className="absolute inset-0">
                     <ResponsiveContainer width="100%" height="100%">
                         <PieChart>
                             <Pie
                                 data={data}
-                                innerRadius={65}
-                                outerRadius={85}
-                                paddingAngle={5}
+                                innerRadius={70}
+                                outerRadius={90}
+                                paddingAngle={8}
                                 dataKey="value"
                                 stroke="none"
+                                cornerRadius={10}
                             >
                                 {data.map((entry, index) => (
                                     <Cell key={`cell-${index}`} fill={entry.color} />
@@ -34,21 +42,12 @@ const HomeDelivery: React.FC = () => {
                     </ResponsiveContainer>
                 </div>
                 <div className="text-center">
-                    <p className="text-3xl font-extrabold text-gray-800">17</p>
-                    <p className="text-[10px] font-bold text-gray-400 uppercase tracking-widest">Total Logs</p>
+                    <p className="text-5xl font-black text-white leading-none">17</p>
+                    <p className="text-[10px] font-bold text-success uppercase tracking-[0.2em] mt-2">Total Logs</p>
                 </div>
-            </div>
-
-            <div className="flex flex-wrap justify-center gap-4 mt-4">
-                {data.map((item, idx) => (
-                    <div key={idx} className="flex items-center gap-2">
-                        <div className="w-2 h-2 rounded-full" style={{ backgroundColor: item.color }} />
-                        <span className="text-[10px] font-bold text-gray-500 whitespace-nowrap">{item.name} ({item.value})</span>
-                    </div>
-                ))}
             </div>
         </div>
     );
 };
 
-export default HomeDelivery;
+export default SummaryStats;

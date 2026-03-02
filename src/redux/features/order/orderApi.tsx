@@ -24,7 +24,7 @@ const orderApi = baseApi.injectEndpoints({
       providesTags: ["order"],
       transformResponse: (response: TResponseRedux<TOrder[]>) => {
         return {
-          data: response.data,
+          data: response?.data,
           meta: response?.meta,
         };
       },
@@ -56,7 +56,137 @@ const orderApi = baseApi.injectEndpoints({
       providesTags: ["order"],
       transformResponse: (response: TResponseRedux<TOrder[]>) => {
         return {
-          data: response.data,
+          data: response?.data,
+          meta: response?.meta,
+        };
+      },
+    }),
+    updateOrder: builder.mutation({
+      query: (args) => ({
+        url: `/orders/update/${args.id}`,
+        method: "PATCH",
+        body: args.data,
+      }),
+      invalidatesTags: ["order"],
+    }),
+    singleOrder: builder.query({
+      query: (id) => ({
+        url: `/orders/order/${id}`,
+        method: "GET",
+      }),
+      providesTags: ["order"],
+    }),
+    pendingOrders: builder.query({
+      query: ({ page, limit }) => {
+        const params = new URLSearchParams();
+        if (page) {
+          params.append("page", page.toString());
+        } 
+        if (limit) {
+          params.append("limit", limit.toString());
+        }
+        return {
+          url: `/orders/pending`,
+          method: "GET",
+          params,
+        };
+      },
+      providesTags: ["order"],
+      transformResponse: (response: TResponseRedux<TOrder[]>) => {
+        return {
+          data: response?.data,
+          meta: response?.meta,
+        };
+      },
+    }),
+    unshippedOrders: builder.query({
+      query: ({ page, limit }) => {
+        const params = new URLSearchParams();
+        if (page) {
+          params.append("page", page.toString());
+        }
+        if (limit) {
+          params.append("limit", limit.toString());
+        }
+        return {
+          url: `/orders/unshipped`,
+          method: "GET",
+          params,
+        };
+      },
+      providesTags: ["order"],
+      transformResponse: (response: TResponseRedux<TOrder[]>) => {
+        return {
+          data: response?.data,
+          meta: response?.meta,
+        };
+      },
+    }),
+    shippedOrders: builder.query({
+      query: ({ page, limit }) => {
+        const params = new URLSearchParams();
+        if (page) {
+          params.append("page", page.toString());
+        }
+        if (limit) {
+          params.append("limit", limit.toString());
+        }
+        return {
+          url: `/orders/shipped`,
+          method: "GET",
+          params,
+        };
+      },
+      providesTags: ["order"],
+      transformResponse: (response: TResponseRedux<TOrder[]>) => {
+        return {
+          data: response?.data,
+          meta: response?.meta,
+        };
+      },
+    }),
+    cancelOrders: builder.query({
+      query: ({ page, limit }) => {
+        const params = new URLSearchParams();
+        if (page) {
+          params.append("page", page.toString());
+        }
+        if (limit) {
+          params.append("limit", limit.toString());
+        }
+        return {
+          url: `/orders/cancel`,
+          method: "GET",
+          params,
+        };
+      },
+      providesTags: ["order"],
+      transformResponse: (response: TResponseRedux<TOrder[]>) => {
+        return {
+          data: response?.data,
+          meta: response?.meta,
+        };
+      },
+    }),
+    deliveredOrders: builder.query({
+      query: ({ page, limit }) => {
+        const params = new URLSearchParams();
+        if (page) {
+          params.append("page", page.toString());
+        }
+        if (limit) {
+          params.append("limit", limit.toString());
+        }
+        return {
+          url: `/orders/delivered`,
+          method: "GET",
+          params,
+        };
+      },
+      providesTags: ["order"],
+      transformResponse: (response: TResponseRedux<TOrder[]>) => {
+        return {
+          data: response?.data,
           meta: response?.meta,
         };
       },
@@ -64,5 +194,15 @@ const orderApi = baseApi.injectEndpoints({
   }),
 });
 
-export const { useAllOrdersQuery, useCreateOrderMutation, useMyOrdersQuery } =
-  orderApi;
+export const { 
+  useAllOrdersQuery, 
+  useCreateOrderMutation, 
+  useMyOrdersQuery,
+  useUpdateOrderMutation,
+  useSingleOrderQuery,
+  usePendingOrdersQuery,
+  useUnshippedOrdersQuery,
+  useShippedOrdersQuery,
+  useCancelOrdersQuery,
+  useDeliveredOrdersQuery
+} = orderApi;

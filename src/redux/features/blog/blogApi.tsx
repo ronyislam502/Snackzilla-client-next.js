@@ -1,6 +1,6 @@
 import { TResponseRedux } from "@/types/global";
 import { baseApi } from "../../api/baseApi";
-import { TFood } from "@/types/food";
+import { TBlog } from "@/types/blog";
 
 const blogApi = baseApi.injectEndpoints({
   endpoints: (builder) => ({
@@ -22,7 +22,7 @@ const blogApi = baseApi.injectEndpoints({
         };
       },
       providesTags: ["blog"],
-      transformResponse: (response: TResponseRedux<TFood[]>) => {
+      transformResponse: (response: TResponseRedux<TBlog[]>) => {
         return {
           data: response.data,
           meta: response.meta,

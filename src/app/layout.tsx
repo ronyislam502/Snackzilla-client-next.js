@@ -29,13 +29,13 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" suppressHydrationWarning>
+    <html lang="en" data-theme="black" suppressHydrationWarning>
       <body
         className={`${geistSans?.variable} ${geistMono?.variable} antialiased`}
       >
         <SZProvider>
           <AuthListener />
-          <div className="max-w-[1280px]  mx-auto">{children}</div>
+          <div className="max-w-[1480px] mx-auto">{children}</div>
         </SZProvider>
       </body>
     </html>

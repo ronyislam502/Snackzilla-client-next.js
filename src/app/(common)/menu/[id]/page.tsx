@@ -24,9 +24,12 @@ const FoodDetails = ({ params }: { params: Promise<{ id: string }> }) => {
   return (
     <div>
       <FoodDetail food={food?.data} />
-      <div className="mt-20">
-        <h2 className="font-bold text-4xl mb-6">Related Category Foods</h2>
-        <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-6">
+      <div className="mt-16">
+        <h2 className="font-black text-3xl text-white uppercase tracking-tighter italic mb-6 leading-none">
+          Related <br />
+          <span className="text-success text-xl tracking-widest">Creations.</span>
+        </h2>
+        <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-8">
           {foods?.map((food: TFood) => (
             <FoodCard key={food?._id} food={food} />
           ))}

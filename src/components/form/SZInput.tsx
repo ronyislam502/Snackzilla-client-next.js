@@ -1,7 +1,10 @@
 import { IInput } from "@/types/global";
 import { useFormContext } from "react-hook-form";
+import { ReactNode } from "react";
 
-interface IProps extends IInput {}
+interface IProps extends IInput {
+  icon?: ReactNode;
+}
 
 const SZInput = ({
   name,
@@ -9,6 +12,7 @@ const SZInput = ({
   type = "text",
   placeholder = "",
   disabled,
+  icon,
 }: IProps) => {
   const {
     register,
@@ -16,22 +20,34 @@ const SZInput = ({
   } = useFormContext();
 
   return (
-    <div className="form-control">
-      <label className="label">
-        <span className="label-text text-xl font-medium text-success">
+    <div className="form-control w-full">
+      <label className="label mb-1">
+        <span className="text-[9px] font-black text-success uppercase tracking-widest italic group-hover:text-blue-400 transition-colors duration-300">
           {label}
         </span>
       </label>
-      <input
-        type={type}
-        placeholder={placeholder}
-        disabled={disabled}
-        // {...register(name)}
-        {...register(name, type === "number" ? { valueAsNumber: true } : {})}
-        className="input input-bordered input-success bg-transparent"
-      />
+      <div className="relative group">
+        {icon && (
+          <div className="absolute left-4 top-1/2 -translate-y-1/2 text-success group-focus-within:text-blue-400 transition-colors duration-300">
+            {icon}
+          </div>
+        )}
+        <input
+          type={type}
+          placeholder={placeholder}
+          disabled={disabled}
+          {...register(name, type === "number" ? { valueAsNumber: true } : {})}
+          className={`w-full bg-success/5 border border-success/30 rounded-2xl py-4
+            ${icon ? "pl-12" : "px-6"} pr-6
+            text-white font-bold placeholder:text-gray-500 outline-none
+            hover:border-blue-500/40 hover:bg-blue-500/5
+            focus:border-blue-500/60 focus:bg-blue-500/8
+            transition-all duration-300
+            disabled:opacity-50 disabled:cursor-not-allowed`}
+        />
+      </div>
       {errors[name] && (
-        <p className="text-red-500 text-sm">
+        <p className="text-error text-[10px] font-bold mt-2 uppercase tracking-wide">
           {errors[name]?.message as string}
         </p>
       )}

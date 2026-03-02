@@ -12,8 +12,8 @@ const FeatureFoods = () => {
 
   return (
     <div className="my-4">
-      <SectionTitle subHeading="" heading="Feature Foods" />
-      <div className="max-w-5xl mx-auto grid lg:grid-cols-3 gap-6 my-6">
+      <SectionTitle subHeading="Signature dishes you can’t miss" heading="Feature Foods" />
+      <div className="max-w-5xl mx-auto grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 my-8">
         {isLoading ? (
           <CardSkeleton count={6} />
         ) : foods?.data?.slice(0, 6).length ? (
@@ -21,14 +21,15 @@ const FeatureFoods = () => {
             .slice(0, 6)
             .map((food: TFood) => <FoodCard key={food._id} food={food} />)
         ) : (
-          <p className="text-center col-span-3">No foods available</p>
+          <p className="text-center col-span-3 text-gray-500 font-bold italic text-xs uppercase tracking-widest">No culinary creations found</p>
         )}
       </div>
-      <div className="text-center my-4">
+      <div className="text-center mb-10">
         <Link href="/menu">
-          <button className="btn btn-outline btn-success lg:w-1/12 rounded-lg">
-            See More
-          </button></Link>
+          <button className="px-8 py-2.5 bg-white/5 border border-white/10 text-white rounded-xl text-[10px] font-black uppercase tracking-[0.2em] hover:bg-success hover:border-success hover:text-black transition-all active:scale-95 italic">
+            Behold All Creations
+          </button>
+        </Link>
       </div>
     </div>
   );

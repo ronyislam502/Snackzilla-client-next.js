@@ -20,7 +20,7 @@ const Category = () => {
   if (isLoading) return <CategorySkeleton />;
 
   // Zoom animation for category images
-  const zoomInVariants:any = {
+  const zoomInVariants: any = {
     hidden: { scale: 1 },
     visible: {
       scale: 1.1,
@@ -34,14 +34,14 @@ const Category = () => {
   };
 
   return (
-    <div className="my-8">
-      <SectionTitle subHeading="" heading="Our Categories" />
+    <div className="my-10">
+      <SectionTitle subHeading="Handpicked categories for every taste" heading="Our Categories" />
       <div className="px-3 sm:px-6 md:px-10">
         <Swiper
           breakpoints={{
-            320: { slidesPerView: 1, spaceBetween: 10 },
+            320: { slidesPerView: 1, spaceBetween: 15 },
             640: { slidesPerView: 2, spaceBetween: 20 },
-            1024: { slidesPerView: 4, spaceBetween: 30 },
+            1024: { slidesPerView: 4, spaceBetween: 25 },
           }}
           centeredSlides={true}
           pagination={{ clickable: true }}
@@ -58,7 +58,7 @@ const Category = () => {
               onClick={() => router.push(`/menu?category=${category._id}`)}
               className="cursor-pointer select-none"
             >
-              <div className="relative overflow-hidden rounded-xl h-56 sm:h-64 md:h-72">
+              <div className="relative overflow-hidden rounded-2xl h-48 sm:h-56 md:h-60 border border-white/5">
                 <motion.div
                   variants={zoomInVariants}
                   initial="hidden"
@@ -72,13 +72,13 @@ const Category = () => {
                     sizes="(max-width: 640px) 100vw,
                            (max-width: 1024px) 50vw,
                            25vw"
-                    className="object-cover rounded-xl"
+                    className="object-cover brightness-75 transition-all duration-700 hover:brightness-100"
                   />
                 </motion.div>
 
                 {/* Overlay Text */}
-                <div className="absolute inset-0 flex items-end justify-center bg-gradient-to-t from-black/60 to-transparent rounded-xl">
-                  <h3 className="text-lg sm:text-2xl md:text-3xl font-bold uppercase text-white py-4 px-2 text-center">
+                <div className="absolute inset-0 flex items-end justify-center bg-gradient-to-t from-black/80 via-black/20 to-transparent">
+                  <h3 className="text-xl sm:text-2xl font-black uppercase text-white pb-6 px-4 text-center tracking-tighter italic leading-none">
                     {category?.name}
                   </h3>
                 </div>

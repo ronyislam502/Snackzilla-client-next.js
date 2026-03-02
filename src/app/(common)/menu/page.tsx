@@ -72,37 +72,46 @@ const Menu = () => {
 
   // ==== UI ====
   return (
-    <div className="max-w-[1280px] mx-auto">
-      <SectionTitle subHeading="" heading="Foods" />
-      <div className="grid lg:grid-cols-7 gap-2">
+    <div className="px-4 py-6">
+      <SectionTitle subHeading="Explore our culinary library" heading="The Menu" />
+      
+      <div className="grid grid-cols-1 lg:grid-cols-6 gap-8">
         {/* ===== Sidebar Filters ===== */}
-        <div className="col-span-1 p-2 mt-10">
+        <aside className="lg:col-span-1 space-y-10">
           {/* Search */}
-          <div className="my-2 mt-10">
-            <h2 className="text-2xl font-bold text-success">Search</h2>
-            <input
-              className="input input-success"
-              type="text"
-              placeholder="search"
-              value={search}
-              onChange={(e) => setSearch(e.target.value)}
-            />
+          <div className="space-y-4">
+            <div className="space-y-1">
+              <h2 className="text-lg font-black text-white uppercase tracking-tighter italic leading-none">Search.</h2>
+              <div className="w-8 h-0.5 bg-success/30 rounded-full" />
+            </div>
+            <div className="relative">
+               <input
+                className="w-full bg-[#0a0a0a]/40 border border-white/5 rounded-xl px-4 py-2.5 text-xs text-white placeholder:text-gray-600 focus:border-success/30 focus:outline-none transition-all italic font-medium"
+                type="text"
+                placeholder="Find a creation..."
+                value={search}
+                onChange={(e) => setSearch(e.target.value)}
+              />
+            </div>
           </div>
-
+ 
           {/* Price Range */}
-          <div className="my-2">
-            <h3 className="font-semibold">Price</h3>
-            <p className="mb-2">
-              ${minPrice} – ${maxPrice}+
+          <div className="space-y-4">
+             <div className="space-y-1">
+              <h2 className="text-lg font-black text-white uppercase tracking-tighter italic leading-none">Valuation.</h2>
+              <div className="w-8 h-0.5 bg-success/30 rounded-full" />
+            </div>
+            <p className="text-[11px] font-black text-success uppercase tracking-widest italic">
+              ${minPrice} — ${maxPrice}+
             </p>
-            <div className="flex items-center gap-2">
+            <div className="space-y-4 pt-2">
               <input
                 type="range"
                 min={10}
                 max={1000}
                 value={minPrice}
                 onChange={handleMinChange}
-                className="w-full accent-teal-700"
+                className="w-full h-1 bg-white/5 rounded-lg appearance-none cursor-pointer accent-success transition-all"
               />
               <input
                 type="range"
@@ -110,54 +119,66 @@ const Menu = () => {
                 max={1000}
                 value={maxPrice}
                 onChange={handleMaxChange}
-                className="w-full accent-teal-700"
+                className="w-full h-1 bg-white/5 rounded-lg appearance-none cursor-pointer accent-success transition-all"
               />
             </div>
           </div>
-
+ 
           {/* Category Filter */}
-          <div className="my-2">
-            <h2 className="text-2xl font-bold text-success">Category</h2>
-            <button
-              onClick={clearSelection}
-              className="text-blue-600 text-sm mb-2"
-            >
-              Clear
-            </button>
-            <div>
+          <div className="space-y-4">
+            <div className="flex items-center justify-between">
+               <div className="space-y-1">
+                <h2 className="text-lg font-black text-white uppercase tracking-tighter italic leading-none">Class.</h2>
+                <div className="w-8 h-0.5 bg-success/30 rounded-full" />
+              </div>
+              <button
+                onClick={clearSelection}
+                className="text-[9px] font-black text-gray-500 hover:text-white uppercase tracking-widest italic transition-colors"
+              >
+                Reset
+              </button>
+            </div>
+            <div className="space-y-2">
               {categories?.data?.map((category: TCategory) => (
                 <label
                   key={category?._id}
-                  className="flex items-center gap-2 mb-1"
+                  className={`flex items-center gap-3 p-2 rounded-xl border border-transparent cursor-pointer transition-all duration-300 ${selectedCategory === category._id ? 'bg-success/5 border-success/20 text-success' : 'hover:bg-white/5 text-gray-500'}`}
                 >
                   <input
                     type="radio"
+                    className="hidden"
                     name="category"
                     checked={selectedCategory === category._id}
                     onChange={() => handleCategoryChange(category?._id)}
                   />
-                  <span>{category?.name}</span>
+                  <span className="text-[11px] font-black uppercase tracking-widest italic">{category?.name}</span>
                 </label>
               ))}
             </div>
           </div>
-        </div>
-
+        </aside>
+ 
         {/* ===== Food Cards ===== */}
-        <div className="col-span-6">
-          <div className="text-end my-2 w-1/2 ml-auto">
-            <h2 className="text-2xl font-bold text-white">Sort by Price</h2>
-            <select
-              className="select select-success ml-2 w-1/4"
-              value={sort}
-              onChange={(e) => setSort(e.target.value)}
-            >
-              <option value="">ALL</option>
-              <option value="price">Low to High</option>
-              <option value="-price">High to Low</option>
-            </select>
+        <div className="lg:col-span-5 space-y-8">
+          <div className="flex items-center justify-between border-b border-white/5 pb-6">
+            <div className="hidden md:block">
+              <p className="text-[10px] font-black text-gray-500 uppercase tracking-widest italic">Showing {foods?.data?.length || 0} results</p>
+            </div>
+            <div className="flex items-center gap-4">
+              <h2 className="text-xs font-black text-white uppercase tracking-tighter italic">Order By:</h2>
+              <select
+                className="bg-[#0a0a0a]/40 border border-white/5 rounded-xl px-4 py-2 text-[10px] text-white font-black uppercase tracking-widest italic cursor-pointer focus:border-success/30 focus:outline-none transition-all"
+                value={sort}
+                onChange={(e) => setSort(e.target.value)}
+              >
+                <option value="">Standard</option>
+                <option value="price">Valuation ↓</option>
+                <option value="-price">Valuation ↑</option>
+              </select>
+            </div>
           </div>
-          <div className="grid lg:grid-cols-3 gap-4">
+
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
             {isLoading ? (
               <CardSkeleton count={limit} />
             ) : foods?.data?.length ? (
@@ -165,29 +186,36 @@ const Menu = () => {
                 <FoodCard key={food._id} food={food} />
               ))
             ) : (
-              <p className="col-span-3 text-7xl text-center">No foods found</p>
+              <div className="col-span-full py-20 text-center space-y-4">
+                 <p className="text-4xl font-black text-white/5 uppercase italic tracking-tighter">No Creations Found</p>
+                 <button onClick={clearSelection} className="text-xs font-black text-success uppercase tracking-widest italic">Reset Parameters</button>
+              </div>
             )}
           </div>
+
           {(foods?.meta?.total as number) > limit && (
-            <div className="flex gap-2 mx-auto text-center md:w-2/12 my-8">
+            <div className="flex items-center justify-center gap-6 py-10 border-t border-white/5">
               <button
-                className="btn btn-outline btn-primary text-success btn-sm"
+                className="p-3 rounded-xl bg-white/5 border border-white/5 text-white hover:bg-success hover:text-black transition-all active:scale-90 disabled:opacity-20"
                 disabled={page <= 1}
                 onClick={() => setPage((prev: number) => Math.max(prev - 1, 1))}
               >
-                Prev
+                <span className="text-[10px] font-black uppercase tracking-widest italic px-4">Previous Arrangement</span>
               </button>
-              <span className="text-success">
-                {page} / {totalPages}
-              </span>
+              <div className="text-center">
+                <p className="text-[10px] font-black text-gray-500 uppercase tracking-widest italic mb-1">Portfolio Page</p>
+                <span className="text-lg font-black text-white italic tracking-tighter">
+                  {page} <span className="text-success mx-1">/</span> {totalPages}
+                </span>
+              </div>
               <button
-                className="btn btn-outline btn-primary text-success btn-sm"
+                className="p-3 rounded-xl bg-white/5 border border-white/5 text-white hover:bg-success hover:text-black transition-all active:scale-90 disabled:opacity-20"
                 disabled={page >= totalPages}
                 onClick={() =>
                   setPage((prev: number) => Math.min(prev + 1, totalPages))
                 }
               >
-                Next
+                 <span className="text-[10px] font-black uppercase tracking-widest italic px-4">Next Sequence</span>
               </button>
             </div>
           )}

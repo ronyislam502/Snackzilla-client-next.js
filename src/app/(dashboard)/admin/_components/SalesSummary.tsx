@@ -12,67 +12,65 @@ const data = [
 
 const SalesSummary = ({ salesData }: any) => {
     return (
-        <div className="bg-white p-6 rounded-3xl shadow-sm border border-purple-50 h-full">
-            <div className="flex justify-between items-center mb-8">
+        <div className="bg-neutral/40 backdrop-blur-md p-8 rounded-3xl border border-success/10 shadow-2xl hover:border-success/30 transition-all duration-500">
+            <div className="flex justify-between items-start mb-10">
                 <div>
-                    <h3 className="text-lg font-bold text-gray-800">Revenue Summary</h3>
-                    <p className="text-xs text-gray-400 font-medium">Daily Tracking 2025</p>
+                    <h3 className="text-xl font-black text-white tracking-tight">Revenue <span className="text-success italic font-serif">Summary</span></h3>
+                    <p className="text-[10px] text-gray-500 font-bold uppercase tracking-widest mt-1">Daily Tracking 2026</p>
                 </div>
                 <div className="text-right">
-                    <p className="text-2xl font-bold text-gray-800">$4,672.80</p>
-                    <div className="h-1 w-full bg-purple-100 rounded-full mt-1">
-                        <div className="h-full bg-purple-600 w-[92%] rounded-full" />
+                    <p className="text-3xl font-black text-white">$4,672.80</p>
+                    <div className="h-1.5 w-32 bg-success/10 rounded-full mt-2 overflow-hidden">
+                        <div className="h-full bg-success w-[92%] rounded-full shadow-[0_0_10px_rgba(34,197,94,0.5)]" />
                     </div>
                 </div>
             </div>
 
             <div className="h-64">
                 <ResponsiveContainer width="100%" height="100%">
-                    <AreaChart data={data}>
+                    <AreaChart data={data} margin={{ top: 10, right: 10, left: -20, bottom: 0 }}>
                         <defs>
                             <linearGradient id="colorValue" x1="0" y1="0" x2="0" y2="1">
-                                <stop offset="5%" stopColor="#8b5cf6" stopOpacity={0.3} />
-                                <stop offset="95%" stopColor="#8b5cf6" stopOpacity={0} />
+                                <stop offset="5%" stopColor="#22c55e" stopOpacity={0.3} />
+                                <stop offset="95%" stopColor="#22c55e" stopOpacity={0} />
                             </linearGradient>
                         </defs>
-                        <CartesianGrid vertical={false} stroke="#f3f4f6" />
+                        <CartesianGrid vertical={false} stroke="rgba(255,255,255,0.03)" />
                         <XAxis
                             dataKey="name"
                             axisLine={false}
                             tickLine={false}
-                            tick={{ fill: '#9ca3af', fontSize: 10 }}
+                            tick={{ fill: '#6b7280', fontSize: 10, fontWeight: '600' }}
                             dy={10}
                         />
                         <YAxis
                             axisLine={false}
                             tickLine={false}
-                            tick={{ fill: '#9ca3af', fontSize: 10 }}
+                            tick={{ fill: '#6b7280', fontSize: 10, fontWeight: '600' }}
                             tickFormatter={(value) => `$${value}`}
                         />
                         <Tooltip
                             formatter={(value: number) => [`$${value.toFixed(2)}`, 'Revenue']}
-                            contentStyle={{ borderRadius: '16px', border: 'none', boxShadow: '0 10px 15px -3px rgb(0 0 0 / 0.1)' }}
+                            contentStyle={{ 
+                                backgroundColor: '#171717', 
+                                border: '1px solid rgba(34, 197, 94, 0.2)', 
+                                borderRadius: '12px',
+                                color: '#fff'
+                            }}
+                            itemStyle={{ color: '#22c55e' }}
                         />
                         <Area
                             type="monotone"
                             dataKey="value"
-                            stroke="#8b5cf6"
-                            strokeWidth={3}
+                            stroke="#22c55e"
+                            strokeWidth={4}
                             fillOpacity={1}
                             fill="url(#colorValue)"
-                            dot={{ r: 4, fill: '#8b5cf6', strokeWidth: 2, stroke: '#fff' }}
-                            activeDot={{ r: 6, strokeWidth: 0 }}
+                            dot={{ r: 4, fill: '#22c55e', strokeWidth: 0 }}
+                            activeDot={{ r: 6, fill: '#22c55e', strokeWidth: 3, stroke: '#fff' }}
                         />
                     </AreaChart>
                 </ResponsiveContainer>
-            </div>
-
-            <div className="flex justify-between mt-4 px-4">
-                {['Aug 17', 'Aug 19', 'Oct 10'].map((label, idx) => (
-                    <span key={idx} className={`text-xs font-bold ${idx === 0 ? 'text-purple-600' : 'text-gray-400'}`}>
-                        {label}
-                    </span>
-                ))}
             </div>
         </div>
     );

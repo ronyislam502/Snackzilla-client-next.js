@@ -11,5 +11,8 @@ export const userValidationSchema = z.object({
         .string()
         .optional(),
     country: z.string().optional(),
+    oldPassword: z.string().optional(),
+    newPassword: z.string().optional(),
+    confirmPassword: z.string().optional(),
 });
 

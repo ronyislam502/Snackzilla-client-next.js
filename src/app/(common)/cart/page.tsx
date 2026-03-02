@@ -10,21 +10,23 @@ const Cart = () => {
   const foods = useAppSelector((state) => state.cart.foods) as TFood[];
 
   return (
-    <div className="grid grid-cols-1 lg:grid-cols-6 gap-6 items-center">
-      <div className="col-span-4">
-        {foods.length ? (
-          foods.map((food: TFood) => (
-            <CartDetails key={food?._id} food={food} />
-          ))
-        ) : (
-          <p className="text-2xl text-red-500 text-center">
-            {" "}
-            not product found
-          </p>
-        )}
-      </div>
-      <div className="col-span-2">
-        <OrderSummary />
+    <div className="px-4 py-8">
+      <div className="grid grid-cols-1 lg:grid-cols-6 gap-6 items-center">
+        <div className="col-span-4">
+          {foods.length ? (
+            foods.map((food: TFood) => (
+              <CartDetails key={food?._id} food={food} />
+            ))
+          ) : (
+            <p className="text-2xl text-red-500 text-center">
+              {" "}
+              not product found
+            </p>
+          )}
+        </div>
+        <div className="col-span-2">
+          <OrderSummary />
+        </div>
       </div>
     </div>
   );

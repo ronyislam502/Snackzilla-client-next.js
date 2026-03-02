@@ -13,8 +13,8 @@ const FeatureBlogs = () => {
 
     return (
         <div className="my-4">
-            <SectionTitle subHeading="" heading="Our Blogs" />
-            <div className="grid lg:grid-cols-3 gap-6 my-6">
+            <SectionTitle subHeading="Curated articles to inspire your cooking journey" heading="Our Blogs" />
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 my-8">
                 {isLoading ? (
                     <CardSkeleton count={3} />
                 ) : blogs?.data?.slice(0, 3).length ? (
@@ -22,14 +22,15 @@ const FeatureBlogs = () => {
                         .slice(0, 3)
                         .map((blog: any) => <BlogCard key={blog._id} blog={blog} />)
                 ) : (
-                    <p className="text-center col-span-3">No blogs available</p>
+                    <p className="text-center col-span-3 text-gray-500 font-bold italic text-xs uppercase tracking-widest">No culinary chronicles found</p>
                 )}
             </div>
-            <div className="text-center my-4">
+            <div className="text-center mb-10">
                 <Link href="/blogs">
-                    <button className="btn btn-outline btn-success lg:w-1/12 rounded-lg">
-                        See More
-                    </button></Link>
+                    <button className="px-8 py-2.5 bg-white/5 border border-white/10 text-white rounded-xl text-[10px] font-black uppercase tracking-[0.2em] hover:bg-white/10 hover:border-white/20 transition-all active:scale-95 italic">
+                        Explore Full Library
+                    </button>
+                </Link>
             </div>
         </div>
     );

@@ -1,5 +1,5 @@
 import { IInput } from "@/types/global";
-import { useFormContext, useWatch } from "react-hook-form";
+import { useFormContext } from "react-hook-form";
 
 interface IProps extends IInput {
   options: {
@@ -13,33 +13,35 @@ const SZSelect = ({ name, label, options }: IProps) => {
     register,
     formState: { errors },
   } = useFormContext();
-  const currentValue = useWatch({ name });
 
   return (
-    <div className="form-control">
-      <label className="label">
-        <span className="label-text text-xl font-medium text-success">
+    <div className="form-control w-full">
+      <label className="label mb-1">
+        <span className="text-[9px] font-black text-success uppercase tracking-widest italic">
           {label}
         </span>
       </label>
       <select
         {...register(name)}
-        className={`select text-info w-full select-bordered ${
-          errors[name] ? "select-error" : "select-success"
-        }`}
-        value={currentValue || ""}
+        className={`w-full bg-success/5 border rounded-2xl px-6 py-4
+          text-white font-bold outline-none
+          hover:border-blue-500/40 hover:bg-blue-500/5
+          focus:border-blue-500/60 focus:bg-blue-500/8
+          transition-all duration-300 appearance-none cursor-pointer
+          ${errors[name] ? "border-red-500/40" : "border-success/30"}
+        `}
       >
-        <option value="" disabled>
+        <option value="" disabled className="bg-[#0a0a0a] text-gray-500">
           Select {label}
         </option>
         {options.map((option) => (
-          <option key={option.key} value={option.key}>
+          <option key={option.key} value={option.key} className="bg-[#0a0a0a] text-white">
             {option.label}
           </option>
         ))}
       </select>
       {errors[name] && (
-        <p className="text-red-500 text-sm mt-1">
+        <p className="text-error text-[10px] font-bold mt-2 uppercase tracking-wide">
           {errors[name]?.message as string}
         </p>
       )}

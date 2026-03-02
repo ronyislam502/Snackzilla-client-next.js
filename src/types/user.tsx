@@ -17,6 +17,7 @@ export type TUserDetail = {
   role: string;
   status: string;
   address: TAddress;
+  hasPassword: boolean;
   isDeleted: boolean;
   createdAt: string;
   updatedAt: string;

@@ -24,6 +24,9 @@ export type TOrder = {
   status: string;
   paymentStatus: string;
   transactionId: string;
+  invoiceLink?: string;
+  dueDate?: string;
+  po?: string;
   createdAt: string;
   updatedAt: string;
 };

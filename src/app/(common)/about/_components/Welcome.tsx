@@ -1,3 +1,5 @@
+"use client"
+
 import Image from "next/image";
 
 
@@ -5,43 +7,52 @@ const Welcome = () => {
 
 
     return (
-        <section className="max-w-7xl mx-auto px-6 py-20 grid md:grid-cols-2 gap-12 items-center">
+        <section className="max-w-7xl mx-auto px-6 py-16 grid md:grid-cols-2 gap-16 items-center">
             {/* LEFT CONTENT */}
-            <div>
-                <p className="font-[cursive] text-[#b08a5a] text-2xl mb-2">
-                    Welcome to
+            <div className="space-y-8">
+                <div className="space-y-2">
+                    <p className="font-black text-success uppercase tracking-[0.4em] text-[10px] italic">
+                        Genesis
+                    </p>
+                    <h1 className="text-4xl md:text-5xl font-black text-white uppercase tracking-tighter italic leading-none">
+                        SnackZilla <br />
+                        <span className="text-success">Establishment.</span>
+                    </h1>
+                </div>
+                
+                <p className="text-gray-400 leading-relaxed text-sm font-medium italic">
+                    SnackZilla is a modern culinary destination built for those who crave bold flavors and meticulously crafted bites. We believe great food should be an immersive experience, fresh and unforgettable every single time.
+                    <br /><br />
+                    From precision-grilled signatures to crispy artisanal snacks, every element is prepared using superior ingredients and heritage-inspired recipes. Our menu is engineered to excite the palate and redefine casual dining.
                 </p>
-                <h1 className="text-4xl md:text-5xl font-bold text-blue-700 mb-6">
-                    SnackZilla Restaurant
-                </h1>
-                <p className="text-gray-100 leading-7 text-justify mb-8">
-                    SnackZilla is a modern restaurant built for snack lovers who crave bold flavors and fast, satisfying bites. We believe great food should be delicious, fresh, and fun every single time.
-                    From juicy burgers and cheesy pizzas to crispy fries and mouth-watering snacks, every item at SnackZilla is prepared using quality ingredients and carefully crafted recipes. Our menu is designed to excite your taste buds and keep you coming back for more.
-                    Whether you’re dining in with friends or ordering online for a quick treat, SnackZilla delivers a memorable food experience with friendly service and a vibrant atmosphere.
-                </p>
-                <button className="bg-[#9b846a] text-white px-8 py-3 font-medium hover:bg-[#846d54] transition">
-                    Read More
+
+                <button className="group flex items-center gap-3 bg-success hover:bg-success/90 text-black px-10 py-4 rounded-xl text-[11px] font-black uppercase tracking-[0.25em] italic transition-all active:scale-95 shadow-[0_20px_40px_-10px_rgba(34,197,94,0.3)]">
+                    Explore Our Heritage
                 </button>
             </div>
+
             {/* RIGHT IMAGES */}
-            <div className="relative flex justify-end mt-16 md:mt-0">
+            <div className="relative flex justify-end">
+                {/* Decorative background element */}
+                <div className="absolute -top-10 -right-10 w-64 h-64 bg-success/5 rounded-full blur-3xl" />
+                
                 {/* Top Image */}
-                <div className="relative w-[420px] h-[260px]">
+                <div className="relative w-full max-w-[420px] aspect-[4/3] z-10">
                     <Image
                         src="https://i.postimg.cc/F1XNNZ1L/welcome-1.jpg"
                         alt="Restaurant wine glass"
                         fill
-                        className="object-cover rounded-xl"
+                        className="object-cover rounded-3xl border border-white/5 shadow-2xl"
                         priority
                     />
                 </div>
                 {/* Bottom Overlapping Image */}
-                <div className="absolute -bottom-20 left-0 w-[420px] h-[260px] shadow-xl">
+                <div className="absolute -bottom-12 -left-8 w-[280px] aspect-square shadow-2xl z-20 hidden lg:block">
                     <Image
                         src="https://i.postimg.cc/9QGtmFgP/welcome-2.jpg"
                         alt="Dessert"
                         fill
-                        className="object-cover rounded-xl"
+                        className="object-cover rounded-3xl border border-white/10"
                     />
                 </div>
             </div>

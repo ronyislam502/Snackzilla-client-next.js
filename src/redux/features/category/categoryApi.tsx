@@ -18,10 +18,11 @@ const categoryApi = baseApi.injectEndpoints({
     }),
     createCategory: builder.mutation({
       query: (categoryInfo) => ({
-        url: "/categories/category-foods/:categoryId",
+        url: "/categories/create-category",
         method: "POST",
         body: categoryInfo,
       }),
+      invalidatesTags: ["category"],
     }),
   }),
 });

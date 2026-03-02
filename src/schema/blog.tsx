@@ -11,5 +11,8 @@ export const blogUpdatedSchema = z.object({
     user: z.string().optional(),
     title: z.string().optional(),
     description: z.string().optional(),
-    tags: z.array(z.string().optional()),
+    tags: z
+        .string()
+        .optional()
+        .transform((val) => (val ? val.split(",").map((t) => t.trim()) : [])),
 });
