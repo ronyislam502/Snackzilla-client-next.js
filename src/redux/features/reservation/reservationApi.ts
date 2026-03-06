@@ -3,32 +3,26 @@ import { baseApi } from "../../api/baseApi";
 const reservationApi = baseApi.injectEndpoints({
   endpoints: (builder) => ({
     createReservation: builder.mutation({
-      query: (reservationData) => ({
+      query: (data) => ({
         url: "/reservations/create-reservation",
         method: "POST",
-        body: reservationData,
+        body: data,
       }),
       invalidatesTags: ["reservation"],
     }),
-    getAllReservations: builder.query({
-      query: () => ({
-        url: "/reservations",
-        method: "GET",
-      }),
+    getMyReservations: builder.query({
+      query: () => ({ url: "/reservations/my-reservations" }),
       providesTags: ["reservation"],
     }),
-    getMyReservations: builder.query({
-      query: () => ({
-        url: "/reservations/my-reservations",
-        method: "GET",
-      }),
+    getAllReservations: builder.query({
+      query: () => ({ url: "/reservations" }),
       providesTags: ["reservation"],
     }),
     updateReservationStatus: builder.mutation({
-      query: ({ id, status }) => ({
+      query: ({ id, data }) => ({
         url: `/reservations/${id}`,
         method: "PATCH",
-        body: { status },
+        body: data,
       }),
       invalidatesTags: ["reservation"],
     }),
@@ -44,8 +38,8 @@ const reservationApi = baseApi.injectEndpoints({
 
 export const {
   useCreateReservationMutation,
-  useGetAllReservationsQuery,
   useGetMyReservationsQuery,
+  useGetAllReservationsQuery,
   useUpdateReservationStatusMutation,
   useDeleteReservationMutation,
 } = reservationApi;

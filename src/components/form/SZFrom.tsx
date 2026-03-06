@@ -1,25 +1,25 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import { ReactNode } from "react";
-import { FormProvider, SubmitHandler, useForm } from "react-hook-form";
+import { FormProvider, FieldValues, SubmitHandler, useForm, Resolver } from "react-hook-form";
 
 interface formConfig {
-  defaultValues?: Record<string, any>;
+  defaultValues?: Record<string, unknown>;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   resolver?: any;
 }
 
 interface IProps extends formConfig {
   children: ReactNode;
-  onSubmit: SubmitHandler<any>;
+  onSubmit: SubmitHandler<FieldValues>;
 }
 
 const SZForm = ({ children, onSubmit, defaultValues, resolver }: IProps) => {
   const formConfig: formConfig = {};
 
-  if (!!defaultValues as any) {
+  if (defaultValues) {
     formConfig["defaultValues"] = defaultValues;
   }
 
-  if (!!resolver as any) {
+  if (resolver) {
     formConfig["resolver"] = resolver;
   }
 

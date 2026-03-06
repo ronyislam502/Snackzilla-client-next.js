@@ -13,7 +13,7 @@ import "swiper/css/autoplay";
 
 const FoodDetails = ({ params }: { params: Promise<{ id: string }> }) => {
   const { id } = use(params);
-  const { data: food, isLoading } = useSingleFoodQuery(id);
+  const { data: food } = useSingleFoodQuery(id);
   const categoryId = food?.data?.category?._id;
   const { data: relatedFoods } = useAllFoodsByCategoriesQuery(categoryId);
 

@@ -1,7 +1,7 @@
 "use client";
 
 import Image from "next/image";
-import { motion } from "framer-motion";
+import { motion, Variants } from "framer-motion";
 import SectionTitle from "@/components/shared/SectionTitle";
 
 const Special = () => {
@@ -29,7 +29,7 @@ const Special = () => {
     },
   ];
 
-  const motionVariants: Record<string, any> = {
+  const motionVariants: Record<string, Variants> = {
     zoomIn: {
       hidden: { scale: 1 },
       visible: {
@@ -68,10 +68,13 @@ const Special = () => {
         {items.map((item, index) => (
           <motion.div
             key={index}
-            className="group relative bg-[#0a0a0a]/40 backdrop-blur-2xl border border-white/5 rounded-2xl p-2.5 transition-all duration-500 hover:border-success/30 hover:shadow-[0_0_40px_rgba(34,197,94,0.1)] overflow-hidden"
+            className="group relative bg-[#0a0a0a]/60 backdrop-blur-3xl border border-success/20 rounded-3xl p-2.5 transition-all duration-500 hover:border-blue-500/40 hover:shadow-[0_0_50px_rgba(59,130,246,0.15)] overflow-hidden"
           >
+            <div className="absolute inset-0 bg-gradient-to-tr from-success/8 via-success/3 to-transparent transition-opacity duration-700 group-hover:opacity-0 pointer-events-none z-20" />
+            <div className="absolute inset-0 bg-gradient-to-tr from-blue-500/10 via-blue-500/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-700 pointer-events-none z-20" />
+            
             {/* Image */}
-            <div className="relative aspect-[4/3] w-full overflow-hidden rounded-xl border border-white/5">
+            <div className="relative aspect-[4/3] w-full overflow-hidden rounded-2xl border border-success/20 group-hover:border-blue-500/40 transition-colors duration-500 z-10">
               <motion.div
                 className="absolute inset-0"
                 variants={motionVariants[item.motionType]}
@@ -88,9 +91,8 @@ const Special = () => {
               </motion.div>
             </div>
 
-            {/* Content */}
-            <div className="mt-5 p-2 space-y-2">
-              <h3 className="text-lg font-black text-white uppercase tracking-tighter italic group-hover:text-success transition-colors leading-tight">
+            <div className="mt-5 p-2 space-y-2 relative z-30">
+              <h3 className="text-lg font-black text-white uppercase tracking-tighter italic group-hover:text-blue-400 transition-colors leading-tight">
                 {item.title}
               </h3>
               <p className="text-gray-400 text-[12px] font-medium leading-relaxed italic line-clamp-3">

@@ -11,16 +11,16 @@ import { loginValidationSchema } from "@/schema/auth";
 import { TError } from "@/types/global";
 import { zodResolver } from "@hookform/resolvers/zod";
 import Link from "next/link";
-import { useRouter, useSearchParams } from "next/navigation";
+import Image from "next/image";
+import { useRouter } from "next/navigation";
 import { FieldValues } from "react-hook-form";
 import { toast } from "react-toastify";
 import Cookies from "js-cookie";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { EyeFilledIcon, EyeSlashFilledIcon } from "@/components/shared/Icons";
 
 const Login = () => {
   const dispatch = useAppDispatch();
-  const searchParams = useSearchParams();
   const [showPassword, setShowPassword] = useState(false);
   const router = useRouter();
   const [signIn] = useLogInMutation();
@@ -52,27 +52,9 @@ const Login = () => {
     }
   };
 
-  useEffect(() => {
-    const accessToken = searchParams.get("accessToken");
-    const refreshToken = searchParams.get("refreshToken");
-    const message = searchParams.get("message");
-
-    if (!accessToken) return;
-
-    const user = verifyToken(accessToken) as TUser;
-
-    dispatch(setUser({ user, token: accessToken }));
-    dispatch(setCartUser(user.email));
-
-    Cookies.set("accessToken", accessToken);
-    if (refreshToken) Cookies.set("refreshToken", refreshToken);
-
-    toast.success(message || "Login successful");
-    router.replace("/");
-  }, [searchParams, dispatch, router]);
 
   const googleLogin = () => {
-    window.location.href = `http://localhost:5000/api/auth/google`;
+    window.location.href = `https://snackzilla-server.vercel.app/api/auth/google`;
   }
 
 
@@ -82,9 +64,12 @@ const Login = () => {
       <div className="absolute top-1/4 left-1/4 w-64 h-64 bg-success/5 rounded-full blur-[100px] pointer-events-none" />
       <div className="absolute bottom-1/4 right-1/4 w-64 h-64 bg-success/5 rounded-full blur-[100px] pointer-events-none" />
 
-      <div className="w-full max-w-sm bg-[#0a0a0a]/60 backdrop-blur-3xl border border-white/5 rounded-3xl p-8 md:p-10 relative z-10 shadow-2xl">
-        <div className="space-y-2 mb-10 text-center">
-          <h3 className="text-3xl font-black uppercase tracking-tighter italic leading-none text-white">Member <span className="text-success">Access.</span></h3>
+      <div className="w-full max-w-sm bg-[#0a0a0a]/60 backdrop-blur-3xl border border-success/20 rounded-3xl p-8 md:p-10 relative z-10 shadow-[0_0_50px_rgba(0,0,0,0.5)] group hover:border-blue-500/40 hover:shadow-[0_0_50px_rgba(59,130,246,0.15)] transition-all duration-500">
+        <div className="absolute inset-0 bg-gradient-to-tr from-success/8 via-success/3 to-transparent opacity-100 group-hover:opacity-0 transition-opacity duration-700 pointer-events-none rounded-3xl"></div>
+        <div className="absolute inset-0 bg-gradient-to-tr from-blue-500/10 via-blue-500/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-700 pointer-events-none rounded-3xl" />
+
+        <div className="space-y-2 mb-10 text-center relative z-10">
+          <h3 className="text-3xl font-black uppercase tracking-tighter italic leading-none text-white">Member <span className="text-success group-hover:text-blue-400 transition-colors duration-500">Access.</span></h3>
           <p className="text-gray-500 font-medium tracking-[0.3em] uppercase text-[8px] italic">Enter your authentication keys</p>
         </div>
 
@@ -93,13 +78,13 @@ const Login = () => {
           onSubmit={onSubmit}
         >
           <div className="space-y-5">
-            <SZInput label="Email Address" name="email" type="email" placeholder="e.g. alexander@elite.com" />
+            <SZInput label="Email Address" name="email" type="email" placeholder="Enter your email" />
             <div className="relative">
               <SZInput
                 label="Security Key"
                 name="password"
                 type={showPassword ? "text" : "password"}
-                placeholder="••••••••"
+                placeholder="Enter your password"
               />
               <div
                 className="absolute right-4 top-10 cursor-pointer text-gray-500 hover:text-white transition-colors"
@@ -133,7 +118,7 @@ const Login = () => {
               type="button"
               onClick={googleLogin}
             >
-              <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" className="w-4 h-4" alt="google" />
+              <Image src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" width={16} height={16} className="w-4 h-4" alt="google" />
               Gateway via Google
             </button>
           </div>

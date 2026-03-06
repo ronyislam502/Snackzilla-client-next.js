@@ -5,7 +5,7 @@ import "swiper/css";
 import "swiper/css/pagination";
 import "swiper/css/autoplay";
 import { Pagination, Autoplay } from "swiper/modules";
-import { motion } from "framer-motion";
+import { motion, Variants } from "framer-motion";
 import { useAllCategoriesQuery } from "@/redux/features/category/categoryApi";
 import SectionTitle from "@/components/shared/SectionTitle";
 import Image from "next/image";
@@ -20,7 +20,7 @@ const Category = () => {
   if (isLoading) return <CategorySkeleton />;
 
   // Zoom animation for category images
-  const zoomInVariants: any = {
+  const zoomInVariants: Variants = {
     hidden: { scale: 1 },
     visible: {
       scale: 1.1,
@@ -58,7 +58,10 @@ const Category = () => {
               onClick={() => router.push(`/menu?category=${category._id}`)}
               className="cursor-pointer select-none"
             >
-              <div className="relative overflow-hidden rounded-2xl h-48 sm:h-56 md:h-60 border border-white/5">
+              <div className="relative overflow-hidden rounded-3xl h-48 sm:h-56 md:h-60 border border-success/20 bg-[#0a0a0a]/60 backdrop-blur-3xl group hover:border-blue-500/40 hover:shadow-[0_0_50px_rgba(59,130,246,0.15)] transition-all duration-500">
+                <div className="absolute inset-0 bg-gradient-to-tr from-success/8 via-success/3 to-transparent transition-opacity duration-700 group-hover:opacity-0 pointer-events-none z-20" />
+                <div className="absolute inset-0 bg-gradient-to-tr from-blue-500/10 via-blue-500/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-700 pointer-events-none z-20" />
+                
                 <motion.div
                   variants={zoomInVariants}
                   initial="hidden"
@@ -72,13 +75,13 @@ const Category = () => {
                     sizes="(max-width: 640px) 100vw,
                            (max-width: 1024px) 50vw,
                            25vw"
-                    className="object-cover brightness-75 transition-all duration-700 hover:brightness-100"
+                    className="object-cover brightness-[0.6] transition-all duration-700 group-hover:brightness-75"
                   />
                 </motion.div>
 
                 {/* Overlay Text */}
-                <div className="absolute inset-0 flex items-end justify-center bg-gradient-to-t from-black/80 via-black/20 to-transparent">
-                  <h3 className="text-xl sm:text-2xl font-black uppercase text-white pb-6 px-4 text-center tracking-tighter italic leading-none">
+                <div className="absolute inset-0 flex items-end justify-center bg-gradient-to-t from-black/80 via-black/20 to-transparent z-30">
+                  <h3 className="text-xl sm:text-2xl font-black uppercase text-white pb-6 px-4 text-center tracking-tighter italic leading-none group-hover:text-blue-400 transition-colors duration-500">
                     {category?.name}
                   </h3>
                 </div>

@@ -20,7 +20,7 @@ const FeatureBlogs = () => {
                 ) : blogs?.data?.slice(0, 3).length ? (
                     blogs.data
                         .slice(0, 3)
-                        .map((blog: any) => <BlogCard key={blog._id} blog={blog} />)
+                        .map((blog: TBlog) => <BlogCard key={blog._id} blog={blog} />)
                 ) : (
                     <p className="text-center col-span-3 text-gray-500 font-bold italic text-xs uppercase tracking-widest">No culinary chronicles found</p>
                 )}

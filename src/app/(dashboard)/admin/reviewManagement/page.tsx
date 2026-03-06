@@ -1,21 +1,30 @@
 "use client"
 
 import { useAllReviewsQuery, useDeleteReviewMutation } from "@/redux/features/review/reviewApi";
+import { useGetAllServiceReviewsQuery } from "@/redux/features/serviceReview/serviceReviewApi";
 import { motion, AnimatePresence } from "framer-motion";
+import { useState } from "react";
 import { 
     StarIcon, 
     UserIcon, 
     ClockIcon, 
     DeleteIcon,
     MailIcon,
-    SearchIcon
+    SearchIcon,
+    ShieldCheckIcon
 } from "@/components/shared/Icons";
 import { toast } from "react-toastify";
 import { FaStar } from "react-icons/fa";
 import { TError } from "@/types/global";
 
 const AdminReviewManagement = () => {
-    const { data: reviews, isLoading } = useAllReviewsQuery({});
+    const [activeTab, setActiveTab] = useState<"food" | "service">("food");
+    const { data: reviews, isLoading: isReviewsLoading } = useAllReviewsQuery({}, { skip: activeTab !== "food" });
+    const { data: serviceReviews, isLoading: isServiceLoading } = useGetAllServiceReviewsQuery({}, { skip: activeTab !== "service" });
+    
+    const isLoading = activeTab === "food" ? isReviewsLoading : isServiceLoading;
+    const currentData = activeTab === "food" ? reviews?.data : serviceReviews?.data;
+
     const [deleteReview, { isLoading: isDeleting }] = useDeleteReviewMutation();
 
     const handleDelete = async (id: string) => {
@@ -48,8 +57,11 @@ const AdminReviewManagement = () => {
     return (
         <div className="p-4 md:p-8 space-y-10 lg:max-w-7xl mx-auto">
             {/* Header Section */}
-            <div className="flex flex-col md:flex-row md:items-end justify-between gap-8 bg-[#0a0a0a]/60 backdrop-blur-3xl p-6 md:p-8 rounded-3xl border border-white/5 relative overflow-hidden group">
-                <div className="absolute top-0 right-0 w-64 h-64 bg-success/5 rounded-full blur-3xl -mr-32 -mt-32 group-hover:bg-success/10 transition-colors duration-700"></div>
+            <div className="flex flex-col md:flex-row md:items-end justify-between gap-8 bg-[#0a0a0a]/60 backdrop-blur-3xl p-6 md:p-8 rounded-3xl border border-success/20 relative overflow-hidden group hover:border-blue-500/40 hover:shadow-[0_0_50px_rgba(59,130,246,0.15)] transition-all duration-500">
+                <div className="absolute inset-0 bg-gradient-to-tr from-success/8 via-success/3 to-transparent transition-opacity duration-700 group-hover:opacity-0 pointer-events-none" />
+                <div className="absolute inset-0 bg-gradient-to-tr from-blue-500/10 via-blue-500/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-700 pointer-events-none" />
+                
+                <div className="absolute top-0 right-0 w-64 h-64 bg-success/5 rounded-full blur-3xl -mr-32 -mt-32 group-hover:bg-blue-500/10 transition-colors duration-700 pointer-events-none"></div>
                 
                 <div className="space-y-1 relative z-10">
                     <h2 className="text-2xl md:text-3xl font-black text-white uppercase tracking-tighter italic leading-none">
@@ -67,33 +79,52 @@ const AdminReviewManagement = () => {
                 <div className="px-6 py-4 bg-white/[0.02] border border-white/5 rounded-2xl relative z-10 group-hover:bg-white/[0.04] transition-colors">
                      <p className="text-[8px] font-black text-gray-600 uppercase tracking-widest mb-0.5 italic">Total Entries</p>
                      <p className="text-2xl font-black text-white italic tracking-tighter">
-                        {String(reviews?.data?.length || 0).padStart(2, '0')}
+                        {String(currentData?.length || 0).padStart(2, '0')}
                      </p>
                 </div>
+            </div>
+
+            {/* Tab Switched */}
+            <div className="flex gap-4 p-1.5 bg-white/[0.02] border border-white/5 rounded-2xl w-fit backdrop-blur-3xl relative z-10 mx-auto">
+                <button
+                    onClick={() => setActiveTab("food")}
+                    className={`px-8 py-3 rounded-xl text-[10px] font-black uppercase tracking-widest italic transition-all duration-300 ${activeTab === "food" ? 'bg-success text-black shadow-[0_0_20px_rgba(34,197,94,0.3)]' : 'text-gray-500 hover:text-white hover:bg-white/5'}`}
+                >
+                    Food Analytics
+                </button>
+                <button
+                    onClick={() => setActiveTab("service")}
+                    className={`px-8 py-3 rounded-xl text-[10px] font-black uppercase tracking-widest italic transition-all duration-300 ${activeTab === "service" ? 'bg-blue-500 text-black shadow-[0_0_20px_rgba(59,130,246,0.3)]' : 'text-gray-500 hover:text-white hover:bg-white/5'}`}
+                >
+                    Operational Intel
+                </button>
             </div>
 
             {/* Grid Section */}
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                 <AnimatePresence mode="popLayout">
-                    {reviews?.data?.map((review: any, idx: number) => (
+                    {currentData?.map((review: { _id: string; user?: { name: string; email: string }; rating: number; createdAt: string; feedback: string; order?: { _id: string } | string }, idx: number) => (
                         <motion.div 
                             key={review._id}
                             initial={{ opacity: 0, scale: 0.98 }}
                             animate={{ opacity: 1, scale: 1 }}
                             exit={{ opacity: 0, scale: 0.98 }}
                             transition={{ duration: 0.4, delay: idx * 0.05 }}
-                            className="group/card bg-[#0a0a0a]/40 backdrop-blur-3xl border border-white/5 rounded-[2rem] p-8 space-y-6 relative overflow-hidden flex flex-col justify-between hover:border-success/20 transition-all duration-500 shadow-2xl"
+                            className={`group/card bg-[#0a0a0a]/60 backdrop-blur-3xl border rounded-[2rem] p-8 space-y-6 relative overflow-hidden flex flex-col justify-between transition-all duration-500 shadow-[0_0_50px_rgba(0,0,0,0.5)] ${activeTab === 'food' ? 'border-success/20 hover:border-blue-500/40 hover:shadow-[0_0_50px_rgba(59,130,246,0.15)]' : 'border-blue-500/20 hover:border-success/40 hover:shadow-[0_0_50px_rgba(34,197,94,0.15)]'}`}
                         >
-                            <div className="absolute top-0 right-0 w-32 h-32 bg-success/5 rounded-full blur-[60px] opacity-0 group-hover/card:opacity-100 transition-opacity duration-1000" />
+                            <div className={`absolute inset-0 bg-gradient-to-tr from-success/5 via-success/2 to-transparent transition-opacity duration-700 pointer-events-none ${activeTab === 'food' ? 'group-hover/card:opacity-0' : 'opacity-0 group-hover/card:opacity-100'}`} />
+                            <div className={`absolute inset-0 bg-gradient-to-tr from-blue-500/10 via-blue-500/5 to-transparent transition-opacity duration-700 pointer-events-none ${activeTab === 'food' ? 'opacity-0 group-hover/card:opacity-100' : 'group-hover/card:opacity-0'}`} />
+                            
+                            <div className={`absolute top-0 right-0 w-32 h-32 rounded-full blur-[60px] transition-colors duration-1000 ${activeTab === 'food' ? 'bg-success/5 group-hover/card:bg-blue-500/10' : 'bg-blue-500/5 group-hover/card:bg-success/10'}`} />
                             
                             <div className="space-y-6 relative z-10">
                                 <div className="flex items-start justify-between">
                                     <div className="flex items-center gap-4">
-                                        <div className="w-10 h-10 rounded-xl bg-white/[0.02] flex items-center justify-center border border-white/5 text-gray-600 group-hover/card:text-success transition-all overflow-hidden relative shadow-inner">
-                                            <UserIcon size={18} className="relative z-10" />
+                                        <div className="w-10 h-10 rounded-xl bg-white/[0.02] flex items-center justify-center border border-white/5 text-gray-600 transition-all overflow-hidden relative shadow-inner">
+                                            {activeTab === 'food' ? <UserIcon size={18} className="relative z-10" /> : <ShieldCheckIcon size={18} className="relative z-10 text-blue-400" />}
                                         </div>
                                         <div className="space-y-0.5">
-                                            <p className="text-[11px] font-black text-white uppercase tracking-widest italic">
+                                            <p className={`text-[11px] font-black text-white uppercase tracking-widest italic transition-colors duration-300 ${activeTab === 'food' ? 'group-hover/card:text-blue-400' : 'group-hover/card:text-success'}`}>
                                                 {review?.user?.name || "Anonymous UNIT"}
                                             </p>
                                             {renderStars(review?.rating)}
@@ -106,21 +137,26 @@ const AdminReviewManagement = () => {
 
                                 <div className="relative">
                                     <div className="p-4 bg-white/[0.01] border border-white/5 rounded-xl group-hover/card:bg-white/[0.03] transition-colors relative h-full min-h-[80px]">
-                                        <div className="absolute -left-[1px] top-3 w-0.5 h-4 bg-success/30 rounded-full" />
+                                        <div className={`absolute -left-[1px] top-3 w-0.5 h-4 rounded-full ${activeTab === 'food' ? 'bg-success/30' : 'bg-blue-500/30'}`} />
                                         <p className="text-[11px] font-bold text-gray-400 leading-relaxed italic uppercase tracking-wider line-clamp-4">
                                             "{review?.feedback}"
                                         </p>
                                     </div>
+                                    {activeTab === 'service' && review?.order && (
+                                        <div className="mt-2 text-[7px] font-black text-gray-600 uppercase tracking-widest italic">
+                                            Linked to Mission: <span className="text-blue-500">{(review?.order as { _id?: string })?._id || review.order as string}</span>
+                                        </div>
+                                    )}
                                 </div>
                             </div>
 
                             <div className="flex items-center justify-between relative z-10 pt-4 border-t border-white/[0.03] mt-auto">
-                                <div className="flex items-center gap-2 text-[8px] font-black text-gray-600 uppercase tracking-[0.2em] italic group-hover/card:text-success/70 transition-colors truncate max-w-[150px]">
+                                <div className={`flex items-center gap-2 text-[8px] font-black text-gray-600 uppercase tracking-[0.2em] italic transition-colors truncate max-w-[150px] ${activeTab === 'food' ? 'group-hover/card:text-success/70' : 'group-hover/card:text-blue-500/70'}`}>
                                     {review?.user?.email || "ENCRYPTED_ID"}
                                 </div>
                                 <button 
                                     onClick={() => handleDelete(review?._id)}
-                                    disabled={isDeleting}
+                                    disabled={activeTab === 'service' || isDeleting}
                                     className="p-2.5 bg-red-500/5 text-gray-600 rounded-lg hover:bg-red-500 hover:text-white transition-all border border-red-500/10 active:scale-95 disabled:opacity-30 disabled:pointer-events-none group/delete shadow-lg"
                                 >
                                     <DeleteIcon size={14} className="group-hover/delete:rotate-12 transition-transform" />
@@ -132,7 +168,7 @@ const AdminReviewManagement = () => {
             </div>
 
             {/* Empty/Loading States */}
-            {(isLoading || reviews?.data?.length === 0) && (
+            {(isLoading || currentData?.length === 0) && (
                 <div className="py-24 text-center">
                     {isLoading ? (
                         <div className="flex flex-col items-center gap-6">

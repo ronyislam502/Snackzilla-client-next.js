@@ -1,6 +1,7 @@
 import React from "react";
 import { formatDate, orderTime, TimeAgo } from "../utilities/Date";
 import { TOrder } from "@/types/order";
+import Image from "next/image";
 
 const PendingOrder = ({ order }: { order: TOrder }) => {
     console.log("or", order)
@@ -28,14 +29,15 @@ const PendingOrder = ({ order }: { order: TOrder }) => {
             </td>
             <td className="px-8 py-5">
                 <div className="flex flex-col gap-3">
-                    {order?.foods?.map((item: any, index: number) => (
+                    {order?.foods?.map((item, index: number) => (
                         <div className="flex items-center gap-3 group/item" key={item?.food?._id || `food-${index}`}>
                             <div className="relative w-10 h-10 shrink-0">
                                 {item?.food?.image ? (
-                                    <img 
+                                    <Image 
                                         src={item?.food?.image} 
                                         alt={item?.food?.name || "Food Item"}
-                                        className="w-full h-full object-cover rounded-xl border border-white/10 relative z-10 brightness-75 group-hover/item:brightness-100 transition-all bg-[#0a0a0a]" 
+                                        fill
+                                        className="object-cover rounded-xl border border-white/10 relative z-10 brightness-75 group-hover/item:brightness-100 transition-all bg-[#0a0a0a]" 
                                     />
                                 ) : (
                                     <div className="w-full h-full rounded-xl border border-white/10 relative z-10 bg-white/5 flex items-center justify-center text-center">
@@ -56,10 +58,22 @@ const PendingOrder = ({ order }: { order: TOrder }) => {
                     ))}
                 </div>
             </td>
-            <td className="px-8 py-5 text-right">
-                <span className="px-3 py-1.5 rounded-full text-[8px] font-black uppercase tracking-widest bg-blue-500/10 text-blue-400 border border-blue-500/20 shadow-[0_0_20px_rgba(59,130,246,0.1)] animate-pulse italic">
-                    PENDING SETTLEMENT
-                </span>
+            <td className="px-8 py-5 text-right relative group/actions">
+                <div className="flex flex-col items-end gap-2">
+                    <span className="px-3 py-1.5 rounded-full text-[8px] font-black uppercase tracking-widest bg-blue-500/10 text-blue-400 border border-blue-500/20 shadow-[0_0_20px_rgba(59,130,246,0.1)] animate-pulse italic group-hover/actions:opacity-0 transition-opacity">
+                        PENDING SETTLEMENT
+                    </span>
+                    
+                    <div className="absolute inset-y-0 right-8 flex items-center opacity-0 group-hover/actions:opacity-100 transition-all duration-300 translate-x-4 group-hover/actions:translate-x-0">
+                        <a
+                            href={`http://localhost:5000/api/v1/orders/invoice/${order._id}`}
+                            download={`invoice-${order.transactionId}.html`}
+                            className="px-4 py-2 bg-blue-600 text-white rounded-xl text-[9px] font-black uppercase tracking-widest shadow-[0_0_20px_rgba(59,130,246,0.3)] hover:scale-105 active:scale-95 transition-all italic flex items-center gap-2"
+                        >
+                            RECEIPT_DOWNLOAD
+                        </a>
+                    </div>
+                </div>
             </td>
         </>
     );

@@ -5,9 +5,12 @@ import { TOrder } from "@/types/order";
 const orderApi = baseApi.injectEndpoints({
   endpoints: (builder) => ({
     allOrders: builder.query({
-      query: ({ user, page, limit }) => {
+      query: ({ search, page, limit }) => {
         const params = new URLSearchParams();
 
+        if (search) {
+          params.append("searchTerm", search);
+        }
         if (page) {
           params.append("page", page);
         }

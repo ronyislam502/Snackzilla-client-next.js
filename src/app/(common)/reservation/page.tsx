@@ -33,8 +33,9 @@ const ReservationPage = () => {
                 toast.success(res?.message || "Reservation requested successfully!", { autoClose: 1000 });
                 methods.reset();
             }
-        } catch (error: any) {
-            toast.error(error?.data?.message || "Something went wrong", { autoClose: 1000 });
+        } catch (error) {
+            const err = error as { data?: { message?: string } };
+            toast.error(err?.data?.message || "Something went wrong", { autoClose: 1000 });
         }
     };
 
@@ -80,10 +81,13 @@ const ReservationPage = () => {
                 <motion.div 
                     initial={{ opacity: 0, x: 30 }}
                     animate={{ opacity: 1, x: 0 }}
-                    className="lg:w-1/2 w-full"
+                    className="lg:w-1/2 w-full group/form"
                 >
-                    <div className="bg-[#0a0a0a]/60 backdrop-blur-3xl border border-white/5 p-8 md:p-10 rounded-3xl shadow-2xl relative overflow-hidden">
-                        <div className="absolute -top-10 -right-10 opacity-[0.03] pointer-events-none rotate-12">
+                    <div className="bg-[#0a0a0a]/60 backdrop-blur-3xl border border-success/20 p-8 md:p-10 rounded-3xl shadow-[0_0_50px_rgba(0,0,0,0.5)] relative overflow-hidden hover:border-blue-500/40 hover:shadow-[0_0_50px_rgba(59,130,246,0.15)] transition-all duration-500">
+                        <div className="absolute inset-0 bg-gradient-to-tr from-success/5 via-success/2 to-transparent transition-opacity duration-700 group-hover/form:opacity-0 pointer-events-none" />
+                        <div className="absolute inset-0 bg-gradient-to-tr from-blue-500/10 via-blue-500/5 to-transparent opacity-0 group-hover/form:opacity-100 transition-opacity duration-700 pointer-events-none" />
+                        
+                        <div className="absolute -top-10 -right-10 opacity-[0.03] pointer-events-none rotate-12 group-hover/form:text-blue-500 group-hover/form:opacity-[0.05] transition-all duration-700">
                             <CalendarIcon size={200} />
                         </div>
  

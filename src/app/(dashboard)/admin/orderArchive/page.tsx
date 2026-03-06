@@ -12,14 +12,15 @@ import Link from "next/link";
 const OrderHistory = () => {
     const [page, setPage] = useState(1);
     const [limit] = useState(10);
-    const { data: orders, isLoading } = useAllOrdersQuery({ page, limit });
+    const [search, setSearch] = useState("");
+    const { data: orders, isLoading } = useAllOrdersQuery({ page, limit, search });
     const totalPages = orders?.meta?.totalPage || 1;
     const totalRecords = orders?.meta?.total || 0;
 
     return (
     <div className="p-4 md:p-8 space-y-8 lg:max-w-7xl mx-auto">
       {/* Header Section */}
-      <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 bg-[#0a0a0a]/60 backdrop-blur-3xl p-6 md:p-8 rounded-3xl border border-white/5 relative overflow-hidden group">
+      <div className="flex flex-col md:flex-row md:items-center justify-between gap-6 bg-[#0a0a0a]/60 backdrop-blur-3xl p-6 md:p-8 rounded-[2.5rem] border border-white/5 relative overflow-hidden group">
           <div className="absolute top-0 right-0 w-64 h-64 bg-success/5 rounded-full blur-3xl -mr-32 -mt-32 group-hover:bg-success/10 transition-colors duration-700"></div>
           
           <div className="space-y-1 relative z-10">
@@ -31,6 +32,19 @@ const OrderHistory = () => {
                       {totalRecords} TOTAL RECORDS
                   </span>
               </div>
+          </div>
+
+          <div className="relative z-10 w-full md:w-80 group/search">
+            <input 
+                type="text" 
+                placeholder="QUERY_PROTOCOL..."
+                value={search}
+                onChange={(e) => setSearch(e.target.value)}
+                className="w-full bg-white/[0.02] border border-white/10 rounded-2xl py-3.5 pl-12 pr-4 text-[11px] font-black text-white outline-none focus:border-success/30 transition-all italic placeholder:text-gray-700"
+            />
+            <div className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-700 group-focus-within/search:text-success transition-colors">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+            </div>
           </div>
       </div>
 

@@ -5,7 +5,7 @@ import { TBlog } from "@/types/blog";
 const blogApi = baseApi.injectEndpoints({
   endpoints: (builder) => ({
     allBlogs: builder.query({
-      query: ({ search, sort, page, limit, category, minPrice, maxPrice }) => {
+      query: ({ page, limit }) => {
         const params = new URLSearchParams();
 
         if (page) {

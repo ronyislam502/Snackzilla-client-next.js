@@ -1,13 +1,15 @@
 "use client";
 
 import React, { useState } from "react";
-import SectionTitle from "@/components/shared/SectionTitle";
+
 import TableSkeleton from "@/components/ui/skeleton/TableSkeleton";
 import AddBlog from "./_component/createBlog";
 import { useAllBlogsQuery } from "@/redux/features/blog/blogApi";
 import UpdateBlog from "./_component/UpdateBlog";
 import DeleteBlog from "./_component/DeleteBlog";
 import { motion, AnimatePresence } from "framer-motion";
+import { TBlog } from "@/types/blog";
+import Image from "next/image";
 
 const truncateText = (text: string, length = 30) => {
     if (!text) return "";
@@ -24,8 +26,11 @@ const BlogManagement = () => {
     return (
     <div className="p-4 md:p-8 space-y-8 lg:max-w-7xl mx-auto">
       {/* Header Section */}
-      <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 bg-[#0a0a0a]/60 backdrop-blur-3xl p-6 md:p-8 rounded-3xl border border-white/5 relative overflow-hidden group">
-          <div className="absolute top-0 right-0 w-64 h-64 bg-success/5 rounded-full blur-3xl -mr-32 -mt-32 group-hover:bg-success/10 transition-colors duration-700"></div>
+      <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 bg-[#0a0a0a]/60 backdrop-blur-3xl p-6 md:p-8 rounded-3xl border border-success/20 relative overflow-hidden group hover:border-blue-500/40 hover:shadow-[0_0_50px_rgba(59,130,246,0.15)] transition-all duration-500">
+          <div className="absolute inset-0 bg-gradient-to-tr from-success/8 via-success/3 to-transparent transition-opacity duration-700 group-hover:opacity-0 pointer-events-none" />
+          <div className="absolute inset-0 bg-gradient-to-tr from-blue-500/10 via-blue-500/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-700 pointer-events-none" />
+          
+          <div className="absolute top-0 right-0 w-64 h-64 bg-success/5 rounded-full blur-3xl -mr-32 -mt-32 group-hover:bg-blue-500/10 transition-colors duration-700 pointer-events-none"></div>
           
           <div className="space-y-1 relative z-10">
               <h2 className="text-2xl md:text-3xl font-black text-white uppercase tracking-tighter italic leading-none">Insights <span className="text-success">Hub.</span></h2>
@@ -43,8 +48,9 @@ const BlogManagement = () => {
           </div>
       </div>
 
-      <div className="bg-[#0a0a0a]/40 backdrop-blur-3xl border border-white/5 rounded-3xl overflow-hidden shadow-2xl relative group">
-          <div className="absolute inset-0 bg-gradient-to-b from-success/[0.01] to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-700 pointer-events-none"></div>
+      <div className="bg-[#0a0a0a]/60 backdrop-blur-3xl border border-success/20 rounded-3xl overflow-hidden shadow-[0_0_50px_rgba(0,0,0,0.5)] relative group hover:border-blue-500/40 hover:shadow-[0_0_50px_rgba(59,130,246,0.15)] transition-all duration-500">
+          <div className="absolute inset-0 bg-gradient-to-tr from-success/5 to-transparent transition-opacity duration-700 group-hover:opacity-0 pointer-events-none" />
+          <div className="absolute inset-0 bg-gradient-to-tr from-blue-500/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-700 pointer-events-none" />
           
           <div className="overflow-x-auto">
               <table className="w-full text-left border-collapse">
@@ -61,7 +67,7 @@ const BlogManagement = () => {
                           <TableSkeleton columns={4} rows={limit} />
                       ) : (
                           <AnimatePresence mode="popLayout">
-                              {blogs?.data?.map((blog: any, index: number) => (
+                              {blogs?.data?.map((blog: TBlog, index: number) => (
                                   <motion.tr 
                                       key={blog?._id}
                                       initial={{ opacity: 0, scale: 0.98 }}
@@ -73,10 +79,11 @@ const BlogManagement = () => {
                                       <td className="px-8 py-4">
                                           <div className="flex items-center gap-4">
                                               <div className="relative w-8 h-8 shrink-0">
-                                                  <img
+                                                  <Image
                                                       src={blog?.user?.avatar || "/avatar.png"}
                                                       alt="author"
-                                                      className="w-full h-full object-cover rounded-xl border border-white/10 group-hover/row:border-success/30 transition-colors"
+                                                      fill
+                                                      className="object-cover rounded-xl border border-white/10 group-hover/row:border-success/30 transition-colors"
                                                   />
                                               </div>
                                               <p className="text-[10px] font-black text-white uppercase tracking-widest italic group-hover/row:text-success transition-all">
@@ -87,10 +94,11 @@ const BlogManagement = () => {
                                       <td className="px-8 py-4">
                                           <div className="flex items-center gap-4">
                                               <div className="relative w-12 h-9 shrink-0">
-                                                  <img
+                                                  <Image
                                                       src={blog?.image || "/placeholder.png"}
                                                       alt="blog"
-                                                      className="w-full h-full object-cover rounded-lg border border-white/10 brightness-75 group-hover/row:brightness-100 transition-all"
+                                                      fill
+                                                      className="object-cover rounded-lg border border-white/10 brightness-75 group-hover/row:brightness-100 transition-all"
                                                   />
                                               </div>
                                               <div className="space-y-0.5">

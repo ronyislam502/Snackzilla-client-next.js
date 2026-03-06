@@ -16,8 +16,9 @@ const OrderSummary = () => {
   };
 
   return (
-    <div className="w-full bg-[#0a0a0a]/40 backdrop-blur-3xl border border-white/5 p-6 rounded-3xl shadow-2xl relative overflow-hidden">
-      <div className="absolute inset-0 bg-gradient-to-br from-success/5 via-transparent to-transparent opacity-50" />
+    <div className="w-full bg-[#0a0a0a]/60 backdrop-blur-3xl border border-success/20 p-6 rounded-3xl shadow-[0_0_50px_rgba(0,0,0,0.5)] relative overflow-hidden group hover:border-blue-500/40 hover:shadow-[0_0_50px_rgba(59,130,246,0.15)] transition-all duration-500">
+      <div className="absolute inset-0 bg-gradient-to-br from-success/5 via-transparent to-transparent transition-opacity duration-700 group-hover:opacity-0 pointer-events-none" />
+      <div className="absolute inset-0 bg-gradient-to-br from-blue-500/10 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-700 pointer-events-none" />
       
       {/* Order Summary Title */}
       <div className="mb-6 space-y-1">

@@ -19,7 +19,7 @@ const BlogDetails = ({ params }: { params: Promise<{ id: string }> }) => {
   if (!blog?.data) return <p className="text-center my-8 text-white">Blog not found</p>;
 
   // Filter out the current blog from all blogs
-  const otherBlogs = allBlogs?.data?.filter((b: any) => b._id !== id) || [];
+  const otherBlogs = allBlogs?.data?.filter((b: TBlog) => b._id !== id) || [];
   const blogData = blog.data;
 
   return (
@@ -51,7 +51,7 @@ const BlogDetails = ({ params }: { params: Promise<{ id: string }> }) => {
         
         <div className="flex items-center gap-4 pt-4 border-t border-white/5">
           <div className="relative w-10 h-10 rounded-full overflow-hidden border border-success/30 shadow-xl">
-             <img src={blogData?.user?.avatar || "https://i.pravatar.cc/150"} alt={blogData?.user?.name} className="object-cover w-full h-full" />
+             <Image src={blogData?.user?.avatar || "https://i.pravatar.cc/150"} alt={blogData?.user?.name} fill className="object-cover" />
           </div>
           <div>
             <p className="text-[11px] font-black text-white uppercase tracking-widest italic leading-none">{blogData?.user?.name || "Anonymous Author"}</p>

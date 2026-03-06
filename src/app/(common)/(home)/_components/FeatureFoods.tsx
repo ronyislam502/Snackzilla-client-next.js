@@ -10,6 +10,8 @@ import Link from "next/link";
 const FeatureFoods = () => {
   const { data: foods, isLoading } = useAllFoodsQuery({});
 
+  console.log("foods", foods)
+
   return (
     <div className="my-4">
       <SectionTitle subHeading="Signature dishes you can’t miss" heading="Feature Foods" />
@@ -17,9 +19,9 @@ const FeatureFoods = () => {
         {isLoading ? (
           <CardSkeleton count={6} />
         ) : foods?.data?.slice(0, 6).length ? (
-          foods.data
+          foods?.data
             .slice(0, 6)
-            .map((food: TFood) => <FoodCard key={food._id} food={food} />)
+            ?.map((food: TFood) => <FoodCard key={food._id} food={food} />)
         ) : (
           <p className="text-center col-span-3 text-gray-500 font-bold italic text-xs uppercase tracking-widest">No culinary creations found</p>
         )}

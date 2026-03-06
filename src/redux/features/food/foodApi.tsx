@@ -39,8 +39,8 @@ const foodApi = baseApi.injectEndpoints({
       providesTags: ["food"],
       transformResponse: (response: TResponseRedux<TFood[]>) => {
         return {
-          data: response.data,
-          meta: response.meta,
+          data: response?.data,
+          meta: response?.meta,
         };
       },
     }),

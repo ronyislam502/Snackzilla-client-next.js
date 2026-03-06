@@ -52,7 +52,7 @@ const Navbar = () => {
             className="sticky top-0 z-[100] px-4 py-3"
         >
             <div className="">
-                <div className="bg-[#0a0a0a]/40 backdrop-blur-3xl border border-success/15 rounded-2xl px-5 py-1.5 flex items-center justify-between shadow-2xl relative hover:border-blue-500/30 transition-colors duration-500">
+                <div className="bg-[#0a0a0a]/40 backdrop-blur-3xl border border-success/20   rounded-2xl px-5 py-1.5 flex items-center justify-between shadow-2xl relative hover:border-blue-500/30 transition-colors duration-500">
                     {/* Default: success gradient */}
                     <div className="absolute inset-0 bg-gradient-to-r from-success/8 via-transparent to-transparent opacity-100 group-hover:opacity-0 transition-opacity duration-500 rounded-2xl pointer-events-none" />
                     {/* Hover: blue gradient */}

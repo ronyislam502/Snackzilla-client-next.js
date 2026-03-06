@@ -7,6 +7,7 @@ import {
 } from "@/redux/features/order/orderSlice";
 import { useAppDispatch } from "@/redux/hooks";
 import { TCartItem } from "@/types/order";
+import Image from "next/image";
 
 type TProps = {
   food: TCartItem;
@@ -24,10 +25,12 @@ const CartDetails = ({ food }: TProps) => {
   };
 
   return (
-    <div className="flex items-center justify-between gap-6 bg-[#0a0a0a]/40 backdrop-blur-3xl border border-white/5 rounded-2xl p-4 transition-all duration-500 hover:border-success/30 hover:shadow-[0_0_50px_rgba(34,197,94,0.1)] mb-4">
+    <div className="flex items-center justify-between gap-6 bg-[#0a0a0a]/60 backdrop-blur-3xl border border-success/20 rounded-2xl p-4 transition-all duration-500 hover:border-blue-500/40 shadow-[0_0_50px_rgba(0,0,0,0.5)] hover:shadow-[0_0_50px_rgba(59,130,246,0.15)] mb-4 group/cart-item relative overflow-hidden">
+      <div className="absolute inset-0 bg-gradient-to-tr from-success/5 via-success/2 to-transparent transition-opacity duration-700 group-hover/cart-item:opacity-0 pointer-events-none" />
+      <div className="absolute inset-0 bg-gradient-to-tr from-blue-500/10 via-blue-500/5 to-transparent opacity-0 group-hover/cart-item:opacity-100 transition-opacity duration-700 pointer-events-none" />
       {/* Product Image */}
       <div className="relative w-14 h-14 rounded-xl overflow-hidden border border-white/10 shadow-xl group">
-        <img src={food.image || ""} alt={food.name} className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" />
+        <Image src={food.image || ""} alt={food.name} fill className="object-cover transition-transform duration-700 group-hover:scale-110" />
       </div>
 
       {/* Product Info */}

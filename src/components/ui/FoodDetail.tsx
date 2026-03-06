@@ -6,6 +6,7 @@ import { MinusIcon, PlusIcon, ShoppingCartIcon, ClockIcon, StarIcon } from "../s
 import { toast } from "react-toastify";
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
+import FoodReviewSection from "./FoodReviewSection";
 
 const FoodDetail = ({ food }: { food: TFood }) => {
     const dispatch = useAppDispatch();
@@ -141,6 +142,11 @@ const FoodDetail = ({ food }: { food: TFood }) => {
                         </button>
                     </div>
                 </div>
+            </div>
+
+            {/* Cinematic Review Section */}
+            <div className="mt-16">
+                <FoodReviewSection foodId={food?._id} />
             </div>
         </motion.div>
     );

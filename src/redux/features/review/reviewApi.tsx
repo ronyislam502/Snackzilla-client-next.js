@@ -4,6 +4,13 @@ import { TFood } from "@/types/food";
 
 const reviewApi = baseApi.injectEndpoints({
   endpoints: (builder) => ({
+    getReviewsByFoodId: builder.query({
+      query: (foodId) => ({
+        url: `/reviews/food/${foodId}`,
+        method: "GET",
+      }),
+      providesTags: ["review"],
+    }),
     allReviews: builder.query({
       query: ({ search, sort, page, limit, category, minPrice, maxPrice }) => {
         const params = new URLSearchParams();
@@ -71,6 +78,7 @@ const reviewApi = baseApi.injectEndpoints({
 });
 
 export const {
+  useGetReviewsByFoodIdQuery,
   useAllReviewsQuery,
   useCreateReviewMutation,
   useUpdateReviewMutation,

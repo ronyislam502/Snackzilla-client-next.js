@@ -157,6 +157,30 @@ export const Logo: React.FC<IconSvgProps> = ({
   </svg>
 );
 
+export const ChevronUpIcon = ({ strokeWidth = 1.5, ...otherProps }) => {
+  return (
+    <svg
+      aria-hidden="true"
+      fill="none"
+      focusable="false"
+      height="1em"
+      role="presentation"
+      viewBox="0 0 24 24"
+      width="1em"
+      {...otherProps}
+    >
+      <path
+        d="m19.92 15.05-6.52-6.52c-.77-.77-2.03-.77-2.8 0L4.08 15.05"
+        stroke="currentColor"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        strokeMiterlimit={10}
+        strokeWidth={strokeWidth}
+      />
+    </svg>
+  );
+};
+
 export const TwitterIcon: React.FC<IconSvgProps> = ({
   size = 24,
   width,
@@ -781,5 +805,23 @@ export const TrashIcon: React.FC<IconSvgProps> = ({ size = 24, ...props }) => (
     <path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2" />
     <line x1="10" x2="10" y1="11" y2="17" />
     <line x1="14" x2="14" y1="11" y2="17" />
+  </svg>
+);
+
+export const DownloadIcon: React.FC<IconSvgProps> = ({ size = 24, ...props }) => (
+  <svg
+    width={size}
+    height={size}
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    strokeWidth="2"
+    strokeLinecap="round"
+    strokeLinejoin="round"
+    {...props}
+  >
+    <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v4" />
+    <polyline points="7 10 12 15 17 10" />
+    <line x1="12" x2="12" y1="15" y2="3" />
   </svg>
 );

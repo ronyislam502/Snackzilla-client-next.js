@@ -4,33 +4,33 @@ const chatApi = baseApi.injectEndpoints({
   endpoints: (builder) => ({
     getOrCreateChat: builder.mutation({
       query: (data) => ({
-        url: "/chat/get-chat",
+        url: "/chats/get-chat",
         method: "POST",
         body: data,
       }),
-      invalidatesTags: ["chat" as any],
+      invalidatesTags: ["chat"],
     }),
     sendMessage: builder.mutation({
       query: (data) => ({
-        url: "/chat/send-message",
+        url: "/chats/send-message",
         method: "POST",
         body: data,
       }),
-      invalidatesTags: ["chat" as any],
+      invalidatesTags: ["chat"],
     }),
     getAllChats: builder.query({
       query: () => ({
-        url: "/chat/all-chats",
+        url: "/chats/all-chats",
         method: "GET",
       }),
-      providesTags: ["chat" as any],
+      providesTags: ["chat"],
     }),
     getMessagesByChatId: builder.query({
       query: (chatId) => ({
-        url: `/chat/messages/${chatId}`,
+        url: `/chats/messages/${chatId}`,
         method: "GET",
       }),
-      providesTags: ["chat" as any],
+      providesTags: ["chat"],
     }),
   }),
 });

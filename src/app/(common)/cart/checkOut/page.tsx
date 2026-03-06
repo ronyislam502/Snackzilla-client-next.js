@@ -46,14 +46,11 @@ const CheckOut = () => {
 
         formData.append("data", JSON.stringify(userData));
 
-        const updateRes = await updateUser({
+        await updateUser({
           id: user?._id,
           data: formData,
         }).unwrap();
 
-        if (updateRes?.success) {
-          toast.success("Profile updated successfully!");
-        }
       }
 
       // Custom login user অথবা Google login পরেও order create
@@ -69,7 +66,7 @@ const CheckOut = () => {
       const orderRes = await createOrder(orderData).unwrap();
 
       if (orderRes?.success) {
-        toast.success(orderRes?.message);
+        // toast.success(orderRes?.message);
         window.location.href = orderRes?.data; // payment page redirect
         dispatch(clearCart());
       }
@@ -82,12 +79,12 @@ const CheckOut = () => {
   return (
     <div className="max-w-6xl mx-auto p-8 md:p-10 bg-[#0a0a0a]/60 backdrop-blur-3xl rounded-3xl border border-white/5 text-white relative overflow-hidden my-10">
       <div className="absolute inset-0 bg-gradient-to-br from-success/5 via-transparent to-transparent opacity-30" />
-      
+
       <div className="relative z-10 space-y-2 mb-10 text-center">
         <h3 className="text-3xl font-black uppercase tracking-tighter italic leading-none">Execute <span className="text-success">Checkout.</span></h3>
         <p className="text-gray-500 font-medium tracking-[0.3em] uppercase text-[8px] italic">Finalize your culinary arrangement</p>
       </div>
- 
+
       <FormProvider {...methods}>
         <SZForm
           defaultValues={{
@@ -105,14 +102,14 @@ const CheckOut = () => {
         >
           {/* MAIN GRID */}
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 relative z-10">
- 
+
             {/* ================= USER INFO ================= */}
             <div className="space-y-8">
               <div className="space-y-1">
                 <h2 className="text-lg font-black uppercase tracking-widest italic text-success">Personal Details</h2>
                 <div className="w-10 h-0.5 bg-success/30 rounded-full" />
               </div>
- 
+
               <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
                 <SZInput
                   label="Full Name *"
@@ -127,7 +124,7 @@ const CheckOut = () => {
                   placeholder="e.g. alex@elitedine.com"
                 />
               </div>
- 
+
               <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
                 <SZInput
                   label="Contact Number *"
@@ -142,7 +139,7 @@ const CheckOut = () => {
                   placeholder="e.g. 7th Avenue"
                 />
               </div>
- 
+
               <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
                 <SZInput
                   label="Metropolis *"
@@ -157,7 +154,7 @@ const CheckOut = () => {
                   placeholder="e.g. NY"
                 />
               </div>
- 
+
               <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
                 <SZInput
                   label="Postal Identity *"
@@ -173,14 +170,14 @@ const CheckOut = () => {
                 />
               </div>
             </div>
- 
+
             {/* ================= ORDER SUMMARY ================= */}
             <div className="space-y-8">
-               <div className="space-y-1 text-right lg:text-left">
+              <div className="space-y-1 text-right lg:text-left">
                 <h2 className="text-lg font-black uppercase tracking-widest italic text-success">Order Manifest</h2>
                 <div className="w-10 h-0.5 bg-success/30 rounded-full ml-auto lg:ml-0" />
               </div>
- 
+
               <div className="bg-white/5 border border-white/5 rounded-2xl overflow-hidden shadow-2xl">
                 <table className="w-full text-left border-collapse">
                   <thead>
@@ -201,7 +198,7 @@ const CheckOut = () => {
                   </tbody>
                 </table>
               </div>
- 
+
               <div className="space-y-3 pt-4">
                 <div className="flex justify-between items-center text-[10px] uppercase font-black tracking-widest italic text-gray-500">
                   <span>Allocation for Taxation</span>
@@ -210,12 +207,12 @@ const CheckOut = () => {
                 <div className="flex justify-between items-end pt-2">
                   <span className="text-xs font-black uppercase tracking-[0.2em] italic text-success">Aggregate Payable</span>
                   <span className="text-3xl font-black italic tracking-tighter text-white">
-                     <span className="text-success text-sm mr-1">$</span>
-                     {cart?.grandTotal.toFixed(2)}
+                    <span className="text-success text-sm mr-1">$</span>
+                    {cart?.grandTotal.toFixed(2)}
                   </span>
                 </div>
               </div>
- 
+
               <div className="pt-6">
                 <button
                   type="submit"

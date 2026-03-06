@@ -5,8 +5,9 @@ import { FacebookIcon, TwitterIcon, MailIcon, MapPinIcon, PhoneIcon } from "./Ic
 const Footer = () => {
   return (
     <footer className="mt-10 px-4 pb-10">
-      <div className=" bg-[#0a0a0a]/60 backdrop-blur-3xl border border-white/5 rounded-3xl p-8 md:p-10 overflow-hidden relative">
-        <div className="absolute inset-0 bg-gradient-to-tr from-success/5 via-transparent to-transparent opacity-30" />
+      <div className="bg-[#0a0a0a]/60 backdrop-blur-3xl border border-success/20 rounded-3xl p-8 md:p-10 overflow-hidden relative group hover:border-blue-500/40 hover:shadow-[0_0_50px_rgba(59,130,246,0.15)] transition-all duration-500">
+        <div className="absolute inset-0 bg-gradient-to-tr from-success/8 via-success/3 to-transparent transition-opacity duration-700 group-hover:opacity-0 pointer-events-none" />
+        <div className="absolute inset-0 bg-gradient-to-tr from-blue-500/10 via-blue-500/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-700 pointer-events-none" />
         
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-10 relative z-10">
           {/* Brand Identity */}

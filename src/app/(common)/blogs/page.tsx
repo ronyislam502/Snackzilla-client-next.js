@@ -5,6 +5,7 @@ import { useState } from 'react';
 import { useAllBlogsQuery } from '@/redux/features/blog/blogApi';
 import CardSkeleton from '@/components/ui/skeleton/CardSkeleton';
 import BlogCard from '@/components/ui/BlogCard';
+import { TBlog } from '@/types/blog';
 
 const Blogs = () => {
     const [limit] = useState(6);
@@ -25,7 +26,7 @@ const Blogs = () => {
         {isLoading ? (
           <CardSkeleton count={limit} />
         ) : blogs?.data?.length ? (
-          blogs.data.map((blog: any) => (
+          blogs.data.map((blog: TBlog) => (
             <BlogCard key={blog._id} blog={blog} />
           ))
         ) : (

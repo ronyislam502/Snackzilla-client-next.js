@@ -1,7 +1,7 @@
 "use client";
 
 import Image from "next/image";
-import { motion } from "framer-motion";
+import { motion, Variants } from "framer-motion";
 import SectionTitle from "@/components/shared/SectionTitle";
 
 const Team = () => {
@@ -33,7 +33,7 @@ const Team = () => {
     ];
 
 
-    const motionVariants: Record<string, any> = {
+    const motionVariants: Record<string, Variants> = {
         zoomIn: {
             hidden: { scale: 1 },
             visible: {
@@ -75,7 +75,7 @@ const Team = () => {
                         initial={{ opacity: 0, y: 20 }}
                         whileInView={{ opacity: 1, y: 0 }}
                         transition={{ duration: 0.5, delay: index * 0.1 }}
-                        className="group bg-[#0a0a0a]/60 backdrop-blur-3xl border border-white/5 rounded-3xl p-4 transition-all duration-300 hover:border-success/20 shadow-2xl"
+                        className="group bg-[#0a0a0a]/60 backdrop-blur-3xl border border-success/20 rounded-3xl p-4 transition-all duration-300 hover:border-blue-500/40 shadow-[0_0_50px_rgba(0,0,0,0.5)] hover:shadow-[0_0_50px_rgba(59,130,246,0.15)]"
                     >
                         {/* Image Container */}
                         <div className="relative aspect-[4/5] overflow-hidden rounded-2xl mb-6 border border-white/5">
@@ -103,7 +103,7 @@ const Team = () => {
                                 <p className="text-[10px] font-black text-success uppercase tracking-[0.3em] italic">
                                     {item?.designation}
                                 </p>
-                                <h3 className="text-xl font-black text-white uppercase tracking-tighter italic">
+                                <h3 className="text-xl font-black text-white uppercase tracking-tighter italic group-hover:text-blue-400 transition-colors duration-300">
                                     {item?.name}
                                 </h3>
                             </div>

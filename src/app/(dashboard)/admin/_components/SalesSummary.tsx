@@ -10,7 +10,7 @@ const data = [
     { name: 'Oct 11', value: 5000.5 },
 ];
 
-const SalesSummary = ({ salesData }: any) => {
+const SalesSummary = ({ salesData }: { salesData?: unknown }) => {
     return (
         <div className="bg-neutral/40 backdrop-blur-md p-8 rounded-3xl border border-success/10 shadow-2xl hover:border-success/30 transition-all duration-500">
             <div className="flex justify-between items-start mb-10">

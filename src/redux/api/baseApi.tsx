@@ -12,7 +12,7 @@ import { toast } from "react-toastify";
 import { RootState } from "../store";
 
 const baseQuery = fetchBaseQuery({
-  baseUrl: "http://localhost:5000/api",
+  baseUrl: "https://snackzilla-server.vercel.app/api",
   credentials: "include",
   prepareHeaders: (headers, { getState }) => {
     const token = (getState() as RootState).auth.token;
@@ -72,6 +72,6 @@ const baseQueryWithRefreshToken: BaseQueryFn<
 export const baseApi = createApi({
   reducerPath: "baseApi",
   baseQuery: baseQueryWithRefreshToken,
-  tagTypes: ["food", "blog", "category", "user", "order", "dashboard", "review", "reservation", "chat"],
+  tagTypes: ["food", "blog", "category", "user", "order", "dashboard", "review", "reservation", "chat", "serviceReview"],
   endpoints: () => ({}),
 });

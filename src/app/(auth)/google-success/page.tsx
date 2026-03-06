@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import Cookies from "js-cookie";
 import { toast } from "react-toastify";
@@ -15,7 +15,11 @@ const GoogleSuccess = () => {
     const router = useRouter();
     const dispatch = useAppDispatch();
 
+    const [isProcessing, setIsProcessing] = useState(false);
+
     useEffect(() => {
+        if (isProcessing) return;
+
         const accessToken = searchParams.get("accessToken");
         const refreshToken = searchParams.get("refreshToken");
         const message = searchParams.get("message");
@@ -25,6 +29,7 @@ const GoogleSuccess = () => {
             return;
         }
 
+        setIsProcessing(true);
         const user = verifyToken(accessToken) as TUser;
 
         dispatch(setUser({ user, token: accessToken }));
@@ -35,9 +40,9 @@ const GoogleSuccess = () => {
             Cookies.set("refreshToken", refreshToken);
         }
 
-        toast.success(message || "Google login successful");
+        toast.success(message || "Google login successful", { autoClose: 1000 });
         router.replace("/");
-    }, [searchParams, router, dispatch]);
+    }, [searchParams, router, dispatch, isProcessing]);
 
     return (
         <div className="h-screen flex items-center justify-center">

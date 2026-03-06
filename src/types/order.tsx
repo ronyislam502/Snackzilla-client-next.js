@@ -16,7 +16,7 @@ export type TCartState = {
 export type TOrder = {
   _id: string;
   user: TUser;
-  foods: TFood[];
+  foods: { food: TFood; quantity: number }[];
   tax: number;
   totalPrice: number;
   totalQuantity: number;
@@ -27,6 +27,7 @@ export type TOrder = {
   invoiceLink?: string;
   dueDate?: string;
   po?: string;
+  statusHistory?: { status: string; updatedAt: string }[];
   createdAt: string;
   updatedAt: string;
 };

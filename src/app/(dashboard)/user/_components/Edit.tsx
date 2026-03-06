@@ -11,6 +11,7 @@ import { useUpdateUserMutation } from "@/redux/features/user/userApi";
 import { useChangePasswordMutation } from "@/redux/features/auth/authApi";
 import { userValidationSchema } from "@/schema/user";
 import { motion, AnimatePresence } from "framer-motion";
+import Image from "next/image";
 
 const Update = ({ user }: { user: TUserDetail }) => {
     const [isOpen, setIsOpen] = useState(false);
@@ -37,7 +38,7 @@ const Update = ({ user }: { user: TUserDetail }) => {
         try {
             const formData = new FormData();
 
-            const userData: any = {
+            const userData: Record<string, unknown> = {
                 name: data.name,
                 phone: data.phone,
                 address: {
@@ -61,7 +62,7 @@ const Update = ({ user }: { user: TUserDetail }) => {
                     return toast.error("Passwords do not match");
                 }
 
-                const passwordData: any = {
+                const passwordData: Record<string, string> = {
                     newPassword: data.newPassword,
                 };
 
@@ -119,7 +120,7 @@ const Update = ({ user }: { user: TUserDetail }) => {
                             animate={{ opacity: 1 }}
                             exit={{ opacity: 0 }}
                             onClick={() => setIsOpen(false)}
-                            className="absolute inset-0 bg-black/80 backdrop-blur-xl"
+                            className="absolute inset-0 bg-black/40 backdrop-blur-md"
                         />
 
                         {/* Modal Content */}
@@ -127,11 +128,15 @@ const Update = ({ user }: { user: TUserDetail }) => {
                             initial={{ opacity: 0, scale: 0.95, y: 30 }}
                             animate={{ opacity: 1, scale: 1, y: 0 }}
                             exit={{ opacity: 0, scale: 0.95, y: 30 }}
-                            className="relative w-full max-w-4xl bg-[#0a0a0a]/90 border border-white/5 rounded-[2.5rem] shadow-2xl overflow-hidden"
+                            className="relative w-full max-w-4xl bg-[#0a0a0a]/60 backdrop-blur-3xl border border-success/20 rounded-3xl shadow-2xl overflow-hidden group hover:border-blue-500/40 hover:shadow-[0_0_50px_rgba(59,130,246,0.15)] transition-all duration-500"
                         >
-                            <div className="overflow-hidden relative min-h-[600px] flex flex-col md:flex-row h-full">
+                            {/* Background Gradients */}
+                            <div className="absolute inset-0 bg-gradient-to-tr from-success/8 via-success/3 to-transparent transition-opacity duration-700 group-hover:opacity-0 pointer-events-none" />
+                            <div className="absolute inset-0 bg-gradient-to-tr from-blue-500/10 via-blue-500/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-700 pointer-events-none" />
+
+                            <div className="overflow-hidden relative min-h-[600px] flex flex-col md:flex-row h-full z-10">
                                     {/* Sidebar Navigation */}
-                                    <div className="w-full md:w-64 bg-black/40 border-r border-white/5 p-8 flex flex-col gap-8">
+                                    <div className="w-full md:w-64 bg-black/20 border-r border-white/5 p-8 flex flex-col gap-8">
                                         <div className="space-y-1">
                                             <h3 className="text-xl font-black text-white uppercase tracking-tighter italic">Settings.</h3>
                                             <p className="text-[9px] text-gray-600 font-bold uppercase tracking-widest leading-relaxed italic">System configuration module.</p>
@@ -183,9 +188,9 @@ const Update = ({ user }: { user: TUserDetail }) => {
                                             </div>
                                             <button 
                                                 onClick={() => setIsOpen(false)}
-                                                className="p-2.5 rounded-xl bg-white/5 border border-white/10 text-gray-500 hover:text-white hover:bg-white/10 transition-all duration-300"
+                                                className="absolute top-6 right-6 p-2 rounded-lg bg-white/5 text-gray-400 hover:text-white hover:bg-white/10 transition-all border border-white/5"
                                             >
-                                                <XIcon size={20} />
+                                                <XIcon size={18} />
                                             </button>
                                         </div>
 
@@ -217,10 +222,11 @@ const Update = ({ user }: { user: TUserDetail }) => {
                                                                     <div className="relative group">
                                                                         <div className="w-32 h-32 rounded-[2rem] overflow-hidden bg-neutral-900 border border-dashed border-success/30 relative flex items-center justify-center group-hover:border-success transition-all duration-700">
                                                                             {previewImage ? (
-                                                                                <img
+                                                                                <Image
                                                                                     src={previewImage}
                                                                                     alt="Preview"
-                                                                                    className="w-full h-full object-cover transform group-hover:scale-110 transition-transform duration-700"
+                                                                                    fill
+                                                                                    className="object-cover transform group-hover:scale-110 transition-transform duration-700"
                                                                                 />
                                                                             ) : (
                                                                                 <UserIcon size={48} className="text-white/5" />

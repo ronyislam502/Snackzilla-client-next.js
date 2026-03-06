@@ -9,8 +9,8 @@ export const userLinks = [
 
 export const adminLinks = [
   { href: "/admin", label: "Insights" },
-  { href: "/admin/orderManagement/liveOrders", label: "Live Orders" },
-  { href: "/admin/orderManagement/orderArchive", label: "Order Archive" },
+  { href: "/admin/liveOrder", label: "Live Orders" },
+  { href: "/admin/orderArchive", label: "Order Archive" },
   { href: "/admin/userManagement", label: "Staff & Users" },
   { href: "/admin/categoryManagement", label: "Menu Categories" },
   { href: "/admin/productManagement", label: "Dish Control" },

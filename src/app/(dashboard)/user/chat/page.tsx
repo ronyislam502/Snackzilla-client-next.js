@@ -7,6 +7,7 @@ import { useAppSelector } from "@/redux/hooks";
 import { TUser } from "@/redux/features/auth/authSlice";
 import { useGetOrCreateChatMutation, useGetMessagesByChatIdQuery } from "@/redux/features/chat/chatApi";
 import { SendIcon, UserIcon, ClockIcon } from "@/components/shared/Icons";
+import { TUserDetail } from "@/types/user";
 
 const UserChatPage = () => {
     const user = useAppSelector((state) => state.auth.user) as TUser;
@@ -20,23 +21,27 @@ const UserChatPage = () => {
     const { data: initialMessages } = useGetMessagesByChatIdQuery(chatId, { skip: !chatId });
 
     useEffect(() => {
+        if (!user?.user) return;
+
         const initChat = async () => {
             try {
-                const res = await getOrCreateChat({}).unwrap();
-                if (res.success) {
-                    setChatId(res.data._id);
-                    socket.emit("join-chat", res.data._id);
+                const res = await getOrCreateChat({ 
+                    userId: user.user
+                }).unwrap();
+                if (res?.success) {
+                    setChatId(res?.data._id);
+                    socket.emit("join-chat", res?.data._id);
                 }
             } catch (error) {
                 console.error("Failed to init chat:", error);
             }
         };
         initChat();
-    }, [getOrCreateChat, socket]);
+    }, [getOrCreateChat, socket, user?.user]);
 
     useEffect(() => {
         if (initialMessages?.data) {
-            setMessages(initialMessages.data);
+            setMessages(initialMessages?.data);
         }
     }, [initialMessages]);
 
@@ -109,17 +114,17 @@ const UserChatPage = () => {
                           key={msg._id || idx}
                           initial={{ opacity: 0, scale: 0.98, y: 10 }}
                           animate={{ opacity: 1, scale: 1, y: 0 }}
-                          className={`flex ${msg.senderId === ((user as any)?._id || (user as any)?.user) ? 'justify-end' : 'justify-start'}`}
+                          className={`flex ${(msg.sender?._id || msg.sender) === ((user as any)?._id || (user as any)?.user) ? 'justify-end' : 'justify-start'}`}
                       >
                           <div className={`max-w-[75%] space-y-1.5`}>
                               <div className={`p-4 px-6 rounded-2xl shadow-xl border ${
-                                  msg.senderId === ((user as any)?._id || (user as any)?.user) 
+                                  (msg.sender?._id || msg.sender) === ((user as any)?._id || (user as any)?.user) 
                                   ? 'bg-success/90 text-black border-success/20 rounded-tr-sm' 
                                   : 'bg-white/[0.03] text-white border-white/5 rounded-tl-sm backdrop-blur-md'
                               }`}>
                                   <p className="font-bold leading-relaxed text-xs italic tracking-tight">{msg.content}</p>
                               </div>
-                              <div className={`flex items-center gap-2 ${msg.senderId === ((user as any)?._id || (user as any)?.user) ? 'justify-end' : 'justify-start'} opacity-40 group-hover:opacity-100 transition-opacity`}>
+                              <div className={`flex items-center gap-2 ${(msg.sender?._id || msg.sender) === ((user as any)?._id || (user as any)?.user) ? 'justify-end' : 'justify-start'} opacity-40 group-hover:opacity-100 transition-opacity`}>
                                   <ClockIcon size={8} className="text-gray-500" />
                                   <span className="text-[7px] font-black text-gray-500 uppercase tracking-[0.2em] italic">
                                       {new Date(msg.createdAt || Date.now()).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}

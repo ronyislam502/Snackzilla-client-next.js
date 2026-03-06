@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState, useMemo } from "react";
 import { io, Socket } from "socket.io-client";
 
 export const useSocket = (url: string) => {
@@ -28,17 +28,25 @@ export const useSocket = (url: string) => {
         };
     }, [url]);
 
-    const emit = (event: string, data: any) => {
+    const emit = (event: string, data: unknown) => {
         socketRef.current?.emit(event, data);
     };
 
-    const on = (event: string, callback: (...args: any[]) => void) => {
+    const on = (event: string, callback: (...args: unknown[]) => void) => {
         socketRef.current?.on(event, callback);
     };
 
-    const off = (event: string, callback?: (...args: any[]) => void) => {
+    const off = (event: string, callback?: (...args: unknown[]) => void) => {
         socketRef.current?.off(event, callback);
     };
 
-    return { isConnected, emit, on, off, socket: socketRef.current };
+    const result = useMemo(() => ({
+        isConnected,
+        emit,
+        on,
+        off,
+        socket: socketRef.current
+    }), [isConnected]);
+
+    return result;
 };

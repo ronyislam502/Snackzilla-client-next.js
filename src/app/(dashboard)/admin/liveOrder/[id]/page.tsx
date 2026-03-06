@@ -41,7 +41,7 @@ const SingleOrderPage = () => {
     const [selectedStatus, setSelectedStatus] = useState<OrderStatus | "">("");
 
     const order = data?.data;
-    const user = order?.user as any;
+    const user = order?.user as { avatar?: string; name?: string; email?: string; phone?: string; address?: string };
 
     const handleUpdateStatus = async () => {
         if (!selectedStatus) return;
@@ -141,7 +141,7 @@ const SingleOrderPage = () => {
                         <div className="flex items-center gap-4">
                             <div className="relative w-14 h-14 rounded-2xl border border-success/20 overflow-hidden flex-shrink-0">
                                 {user?.avatar ? (
-                                    <Image src={user.avatar} fill alt="avatar" className="object-cover" sizes="56px" />
+                                    <Image src={user.avatar as string} fill alt="avatar" className="object-cover" sizes="56px" />
                                 ) : (
                                     <div className="w-full h-full bg-success/10 flex items-center justify-center text-success font-black text-lg">
                                         {user?.name?.[0] ?? "?"}
@@ -208,7 +208,7 @@ const SingleOrderPage = () => {
                         </div>
                         <div className="divide-y divide-white/[0.03]">
                             <AnimatePresence>
-                                {(order.foods as any[])?.map((item: any, i: number) => {
+                                {(order.foods as { quantity: number; food: any }[])?.map((item: { quantity: number; food: { image?: string; name?: string; price?: number; category?: { name?: string } } }, i: number) => {
                                     const food = item.food;
                                     return (
                                         <motion.div
@@ -221,7 +221,7 @@ const SingleOrderPage = () => {
                                             {/* Food image */}
                                             <div className="relative w-14 h-14 rounded-xl border border-white/10 overflow-hidden flex-shrink-0 bg-white/5">
                                                 {food?.image ? (
-                                                    <Image src={food.image} fill alt={food.name} className="object-cover" sizes="56px" />
+                                                    <Image src={food.image as string} fill alt={food.name || "Food"} className="object-cover" sizes="56px" />
                                                 ) : (
                                                     <div className="w-full h-full flex items-center justify-center text-2xl">🍽</div>
                                                 )}

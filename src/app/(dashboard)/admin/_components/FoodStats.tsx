@@ -1,7 +1,7 @@
 import { Cell, Pie, PieChart, ResponsiveContainer, Tooltip } from "recharts";
 const COLORS = ["#22c55e", "#10b981", "#059669", "#047857", "#064e3b"];
 
-const FoodStats = ({ foodData }: { foodData: any[] }) => {
+const FoodStats = ({ foodData }: { foodData: { foodName: string; totalRevenue: number }[] }) => {
   return (
     <div className="bg-neutral/40 backdrop-blur-md p-8 rounded-3xl border border-success/10 shadow-2xl flex flex-col h-full hover:border-success/30 transition-all duration-500">
       <h3 className="text-xl font-black text-white mb-8 tracking-tight">Food-wise <span className="text-success italic font-serif text-sm ml-2">Popularity</span></h3>

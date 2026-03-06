@@ -2,12 +2,14 @@
 
 import { LineChart, Line, ResponsiveContainer } from "recharts";
 
-const StatCard = ({ stats }: { stats: any }) => (
-    <div className="bg-[#0a0a0a]/60 backdrop-blur-3xl p-6 rounded-3xl border border-success/20 shadow-2xl flex flex-col h-full group hover:border-blue-500/40 transition-all duration-500 relative overflow-hidden">
+interface TStat { title?: string; value?: string | number; change?: string | number; trend?: string; data?: { v: number }[] }
+
+const StatCard = ({ stats }: { stats: TStat }) => (
+    <div className="bg-[#0a0a0a]/60 backdrop-blur-3xl p-6 rounded-3xl border border-success/20 shadow-2xl flex flex-col h-full group hover:border-blue-500/40 hover:shadow-[0_0_50px_rgba(59,130,246,0.15)] transition-all duration-500 relative overflow-hidden">
         {/* Default success glow */}
-        <div className="absolute inset-0 bg-gradient-to-br from-success/8 via-success/3 to-transparent transition-opacity duration-500 group-hover:opacity-0 pointer-events-none" />
+        <div className="absolute inset-0 bg-gradient-to-tr from-success/8 via-success/3 to-transparent transition-opacity duration-500 group-hover:opacity-0 pointer-events-none" />
         {/* Hover blue glow */}
-        <div className="absolute inset-0 bg-gradient-to-br from-blue-500/8 via-blue-500/3 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none" />
+        <div className="absolute inset-0 bg-gradient-to-tr from-blue-500/10 via-blue-500/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none" />
 
         <div className="absolute top-0 right-0 w-20 h-20 bg-success/10 group-hover:bg-blue-500/10 rounded-full blur-2xl -mr-10 -mt-10 transition-colors duration-500" />
 

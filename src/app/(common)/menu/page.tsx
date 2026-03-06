@@ -8,7 +8,7 @@ import { useAllCategoriesQuery } from "@/redux/features/category/categoryApi";
 import { useAllFoodsQuery } from "@/redux/features/food/foodApi";
 import { TCategory, TFood } from "@/types/food";
 import { useRouter, useSearchParams } from "next/navigation";
-import { useEffect, useState, useRef } from "react";
+import { useEffect, useState } from "react";
 
 const Menu = () => {
   const searchParams = useSearchParams();
@@ -17,10 +17,10 @@ const Menu = () => {
   // ==== States ====
   const [selectedCategory, setSelectedCategory] =
     useState<string>(categoryFromQuery);
-  const [minPrice, setMinPrice] = useState<number>(10);
+  const [minPrice, setMinPrice] = useState<number>(0);
   const [maxPrice, setMaxPrice] = useState<number>(1000);
   const [search, setSearch] = useState<string>("");
-  const [limit] = useState(6);
+  const [limit] = useState(9);
   const [sort, setSort] = useState("");
   const [page, setPage] = useState(1);
   const debouncedSearch = useDebounce(search, 500);
@@ -32,7 +32,7 @@ const Menu = () => {
   }, [categoryFromQuery]);
 
   // ==== Fetch Categories ====
-  const { data: categories, isLoading: categoryLoading } =
+  const { data: categories } =
     useAllCategoriesQuery({});
 
   // ==== Fetch Foods (single category filter) ====
@@ -61,11 +61,17 @@ const Menu = () => {
 
   const clearSelection = () => {
     setSelectedCategory("");
+    setMinPrice(0);
+    setMaxPrice(1000);
+    setSearch("");
+    setSort("");
+    setPage(1);
     router.replace("/menu", { scroll: false });
   };
 
   const handleCategoryChange = (id: string) => {
     setSelectedCategory(id);
+    console.log('se',id)
     setPage(1);
     router.replace("/menu", { scroll: false });
   };
@@ -86,7 +92,7 @@ const Menu = () => {
             </div>
             <div className="relative">
                <input
-                className="w-full bg-[#0a0a0a]/40 border border-white/5 rounded-xl px-4 py-2.5 text-xs text-white placeholder:text-gray-600 focus:border-success/30 focus:outline-none transition-all italic font-medium"
+                className="w-full bg-[#0a0a0a]/60 border border-white/5 rounded-xl px-4 py-2.5 text-xs text-white placeholder:text-gray-600 focus:border-success/30 focus:outline-none transition-all italic font-medium hover:border-blue-500/30"
                 type="text"
                 placeholder="Find a creation..."
                 value={search}
@@ -107,7 +113,7 @@ const Menu = () => {
             <div className="space-y-4 pt-2">
               <input
                 type="range"
-                min={10}
+                min={0}
                 max={1000}
                 value={minPrice}
                 onChange={handleMinChange}
@@ -148,7 +154,7 @@ const Menu = () => {
                     type="radio"
                     className="hidden"
                     name="category"
-                    checked={selectedCategory === category._id}
+                    checked={selectedCategory === category?._id}
                     onChange={() => handleCategoryChange(category?._id)}
                   />
                   <span className="text-[11px] font-black uppercase tracking-widest italic">{category?.name}</span>
@@ -167,7 +173,7 @@ const Menu = () => {
             <div className="flex items-center gap-4">
               <h2 className="text-xs font-black text-white uppercase tracking-tighter italic">Order By:</h2>
               <select
-                className="bg-[#0a0a0a]/40 border border-white/5 rounded-xl px-4 py-2 text-[10px] text-white font-black uppercase tracking-widest italic cursor-pointer focus:border-success/30 focus:outline-none transition-all"
+                className="bg-[#0a0a0a]/60 border border-white/5 rounded-xl px-4 py-2 text-[10px] text-white font-black uppercase tracking-widest italic cursor-pointer focus:border-success/30 focus:outline-none transition-all hover:border-blue-500/30"
                 value={sort}
                 onChange={(e) => setSort(e.target.value)}
               >
@@ -194,29 +200,67 @@ const Menu = () => {
           </div>
 
           {(foods?.meta?.total as number) > limit && (
-            <div className="flex items-center justify-center gap-6 py-10 border-t border-white/5">
-              <button
-                className="p-3 rounded-xl bg-white/5 border border-white/5 text-white hover:bg-success hover:text-black transition-all active:scale-90 disabled:opacity-20"
-                disabled={page <= 1}
-                onClick={() => setPage((prev: number) => Math.max(prev - 1, 1))}
-              >
-                <span className="text-[10px] font-black uppercase tracking-widest italic px-4">Previous Arrangement</span>
-              </button>
-              <div className="text-center">
-                <p className="text-[10px] font-black text-gray-500 uppercase tracking-widest italic mb-1">Portfolio Page</p>
-                <span className="text-lg font-black text-white italic tracking-tighter">
-                  {page} <span className="text-success mx-1">/</span> {totalPages}
-                </span>
+            <div className="flex flex-col items-center justify-center gap-4 py-10 border-t border-white/5">
+              <div className="flex items-center gap-2">
+                {/* Previous Button */}
+                <button
+                  className="w-10 h-10 flex items-center justify-center rounded-xl bg-white/5 border border-white/5 text-white hover:bg-success hover:text-black transition-all active:scale-90 disabled:opacity-20 disabled:cursor-not-allowed group"
+                  disabled={page <= 1}
+                  onClick={() => setPage((prev) => Math.max(prev - 1, 1))}
+                  title="Previous Arrangement"
+                >
+                  <span className="text-lg font-black italic">‹</span>
+                </button>
+
+                {/* Page Numbers */}
+                <div className="flex items-center gap-2">
+                  {[...Array(totalPages)].map((_, index) => {
+                    const pageNumber = index + 1;
+                    const isSelected = page === pageNumber;
+                    
+                    // Logic to show only a few pages if there are many
+                    if (
+                      totalPages > 7 &&
+                      pageNumber !== 1 &&
+                      pageNumber !== totalPages &&
+                      Math.abs(pageNumber - page) > 1
+                    ) {
+                      if (pageNumber === 2 || pageNumber === totalPages - 1) {
+                         return <span key={pageNumber} className="text-gray-600 px-1 font-black">...</span>;
+                      }
+                      return null;
+                    }
+
+                    return (
+                      <button
+                        key={pageNumber}
+                        onClick={() => setPage(pageNumber)}
+                        className={`w-10 h-10 flex items-center justify-center rounded-xl font-black italic transition-all active:scale-90 ${
+                          isSelected
+                            ? "bg-success text-black border border-success"
+                            : "bg-white/5 border border-white/5 text-gray-500 hover:text-white hover:bg-white/10"
+                        }`}
+                      >
+                        {pageNumber}
+                      </button>
+                    );
+                  })}
+                </div>
+
+                {/* Next Button */}
+                <button
+                  className="w-10 h-10 flex items-center justify-center rounded-xl bg-white/5 border border-white/5 text-white hover:bg-success hover:text-black transition-all active:scale-90 disabled:opacity-20 disabled:cursor-not-allowed group"
+                  disabled={page >= totalPages}
+                  onClick={() => setPage((prev) => Math.min(prev + 1, totalPages))}
+                  title="Next Sequence"
+                >
+                  <span className="text-lg font-black italic">›</span>
+                </button>
               </div>
-              <button
-                className="p-3 rounded-xl bg-white/5 border border-white/5 text-white hover:bg-success hover:text-black transition-all active:scale-90 disabled:opacity-20"
-                disabled={page >= totalPages}
-                onClick={() =>
-                  setPage((prev: number) => Math.min(prev + 1, totalPages))
-                }
-              >
-                 <span className="text-[10px] font-black uppercase tracking-widest italic px-4">Next Sequence</span>
-              </button>
+              
+              <p className="text-[10px] font-black text-gray-500 uppercase tracking-widest italic">
+                Sequence <span className="text-white">{page}</span> of <span className="text-white">{totalPages}</span> Arrangements
+              </p>
             </div>
           )}
         </div>

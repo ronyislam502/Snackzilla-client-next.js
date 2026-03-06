@@ -27,7 +27,7 @@ const ResetPassword = () => {
     if (token) {
       dispatch(setToken(token));
     }
-  }, [token]);
+  }, [token, dispatch]);
 
   // useEffect(() => {
   //   if (!token) return;

@@ -80,10 +80,10 @@ const Excellence = () => {
                                 initial={{ opacity: 0, y: 20 }}
                                 whileInView={{ opacity: 1, y: 0 }}
                                 transition={{ duration: 0.5, delay: index * 0.1 }}
-                                whileHover={{ scale: 1.02, backgroundColor: "rgba(34,197,94,0.05)", borderColor: "rgba(34,197,94,0.2)" }}
-                                className="bg-[#0a0a0a]/60 backdrop-blur-3xl border border-white/5 rounded-2xl p-6 flex items-center justify-center text-center cursor-default min-h-[100px]"
+                                whileHover={{ scale: 1.02, backgroundColor: "rgba(59,130,246,0.05)", borderColor: "rgba(59,130,246,0.4)" }}
+                                className="bg-[#0a0a0a]/60 backdrop-blur-3xl border border-success/20 rounded-2xl p-6 flex items-center justify-center text-center cursor-default min-h-[100px] transition-all duration-300 group hover:shadow-[0_0_50px_rgba(59,130,246,0.15)]"
                             >
-                                <p className="text-gray-400 font-black uppercase tracking-widest italic text-[11px] leading-tight">{award}</p>
+                                <p className="text-gray-400 font-black uppercase tracking-widest italic text-[11px] leading-tight group-hover:text-blue-400 transition-colors duration-500">{award}</p>
                             </motion.div>
                         ))}
                     </div>

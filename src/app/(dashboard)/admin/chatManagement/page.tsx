@@ -8,22 +8,37 @@ import { TUser } from "@/redux/features/auth/authSlice";
 import { useGetAllChatsQuery, useGetMessagesByChatIdQuery } from "@/redux/features/chat/chatApi";
 import { SendIcon, UserIcon, ClockIcon, SearchIcon, MailIcon } from "@/components/shared/Icons";
 
+import { useAllUsersQuery } from "@/redux/features/user/userApi";
+import { useGetOrCreateChatMutation } from "@/redux/features/chat/chatApi";
+import { toast } from "react-toastify";
+import Image from "next/image";
+
+interface TParticipant { role: string; avatar?: string; name?: string; email?: string; }
+interface TChat { _id: string; participants?: TParticipant[]; lastMessage?: string; }
+interface TCustomer { _id: string; role: string; avatar?: string; name: string; email: string; }
+interface TMessage { _id?: string; chatId?: string; sender?: { _id: string } | string; content?: string; createdAt?: string | Date; }
+
 const AdminChatManagement = () => {
     const user = useAppSelector((state) => state.auth.user) as TUser;
     const socket = useSocket("http://localhost:5000");
-    const [selectedChat, setSelectedChat] = useState<any>(null);
-    const [messages, setMessages] = useState<any[]>([]);
+    const [selectedChat, setSelectedChat] = useState<TChat | null>(null);
+    const [messages, setMessages] = useState<TMessage[]>([]);
     const [input, setInput] = useState("");
+    const [activeTab, setActiveTab] = useState<"CHATS" | "CUSTOMERS">("CHATS");
     const chatEndRef = useRef<HTMLDivElement>(null);
 
     const { data: allChats } = useGetAllChatsQuery({});
     const { data: initialMessages } = useGetMessagesByChatIdQuery(selectedChat?._id, { skip: !selectedChat });
+    const { data: usersData } = useAllUsersQuery({ limit: 100 });
+    const [getOrCreateChat] = useGetOrCreateChatMutation();
+
+    const customers = usersData?.data?.filter((u: TCustomer) => u.role === "USER") || [];
 
     useEffect(() => {
-        if (selectedChat) {
+        if (selectedChat && socket) {
             socket.emit("join-chat", selectedChat._id);
         }
-    }, [selectedChat, socket]);
+    }, [selectedChat, socket, user?.user]);
 
     useEffect(() => {
         if (initialMessages?.data) {
@@ -32,7 +47,7 @@ const AdminChatManagement = () => {
     }, [initialMessages]);
 
     useEffect(() => {
-        socket.on("receive-message", (message: any) => {
+        socket.on("receive-message", (message: TMessage) => {
             if (message.chatId === selectedChat?._id) {
                 setMessages((prev) => [...prev, message]);
             }
@@ -48,11 +63,28 @@ const AdminChatManagement = () => {
         if (!input.trim() || !selectedChat) return;
         const messageData = {
             chatId: selectedChat._id,
-            senderId: (user as any)?._id || (user as any)?.user,
+            senderId: (user as { _id?: string; user?: string })?._id || (user as { _id?: string; user?: string })?.user,
             content: input.trim(),
         };
         socket.emit("send-message", messageData);
         setInput("");
+    };
+
+    const handleStartChat = async (customerId: string) => {
+        try {
+            const res = await getOrCreateChat({
+                userId: customerId,
+                adminId: (user as { _id?: string; user?: string })?._id || (user as { _id?: string; user?: string })?.user
+            }).unwrap();
+            
+            if (res.success) {
+                setSelectedChat(res.data);
+                setActiveTab("CHATS");
+                toast.success("CHANNEL_SYNCHRONIZED");
+            }
+        } catch {
+            toast.error("SYNCHRONIZATION_FAILURE");
+        }
     };
 
     return (
@@ -64,10 +96,10 @@ const AdminChatManagement = () => {
                         Support <span className="text-success">Hub.</span>
                     </h2>
                     <div className="flex items-center gap-2">
-                        <span className="text-gray-500 font-bold tracking-[0.2em] uppercase text-[8px] italic">Active Intelligence</span>
+                        <span className="text-gray-500 font-bold tracking-[0.2em] uppercase text-[8px] italic">Protocol {activeTab}</span>
                         <div className="h-px w-4 bg-success/20"></div>
                         <span className="text-gray-600 font-bold text-[7px] uppercase tracking-widest italic opacity-60">
-                            LIVE STREAM
+                            v2.4.0_SECURE
                         </span>
                     </div>
                 </div>
@@ -75,48 +107,116 @@ const AdminChatManagement = () => {
                 <div className="flex-1 bg-[#0a0a0a]/60 backdrop-blur-3xl border border-white/5 rounded-[2rem] overflow-hidden flex flex-col shadow-2xl relative group">
                     <div className="absolute inset-0 bg-gradient-to-b from-success/[0.01] to-transparent pointer-events-none"></div>
                     
-                    <div className="p-5 border-b border-white/5 relative z-10">
+                    {/* Tabs */}
+                    <div className="grid grid-cols-2 p-2 gap-2 bg-white/[0.02] border-b border-white/5 relative z-10">
+                        <button 
+                            onClick={() => setActiveTab("CHATS")}
+                            className={`py-2.5 rounded-xl text-[9px] font-black uppercase tracking-widest transition-all italic ${
+                                activeTab === "CHATS" 
+                                ? "bg-success text-black shadow-[0_0_20px_rgba(34,197,94,0.3)]" 
+                                : "text-gray-500 hover:text-white hover:bg-white/5"
+                            }`}
+                        >
+                            Active Nodes
+                        </button>
+                        <button 
+                            onClick={() => setActiveTab("CUSTOMERS")}
+                            className={`py-2.5 rounded-xl text-[9px] font-black uppercase tracking-widest transition-all italic ${
+                                activeTab === "CUSTOMERS" 
+                                ? "bg-success text-black shadow-[0_0_20px_rgba(34,197,94,0.3)]" 
+                                : "text-gray-500 hover:text-white hover:bg-white/5"
+                            }`}
+                        >
+                            Customer Base
+                        </button>
+                    </div>
+                    
+                    <div className="p-4 border-b border-white/5 relative z-10">
                         <div className="relative group/search">
                             <SearchIcon size={12} className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-600 group-focus-within/search:text-success transition-colors" />
                             <input 
                                 type="text" 
-                                placeholder="IDENTIFY_TRANSMISSION..."
+                                placeholder={activeTab === "CHATS" ? "IDENTIFY_TRANSMISSION..." : "QUERY_SUBJECT..."}
                                 className="w-full bg-white/[0.02] border border-white/5 rounded-xl py-3 pl-10 pr-4 text-[10px] font-black text-white outline-none focus:border-success/20 transition-all italic placeholder:text-gray-700"
                             />
                         </div>
                     </div>
                     
                     <div className="flex-1 overflow-y-auto p-3 space-y-1.5 scrollbar-hide relative z-10">
-                        {allChats?.data?.map((chat: any) => (
-                            <button 
-                                key={chat._id}
-                                onClick={() => setSelectedChat(chat)}
-                                className={`w-full p-4 rounded-2xl text-left transition-all border group/item ${
-                                    selectedChat?._id === chat._id 
-                                    ? 'bg-success text-black border-success shadow-lg scale-[1.02]' 
-                                    : 'bg-white/[0.01] text-white border-white/5 hover:bg-white/[0.03] hover:border-white/10'
-                                }`}
-                            >
-                                <div className="flex items-center gap-4">
-                                    <div className={`w-10 h-10 rounded-xl flex items-center justify-center border transition-all ${
-                                        selectedChat?._id === chat._id ? 'bg-black/10 border-black/20' : 'bg-white/5 border-white/5 group-hover/item:border-success/20'
-                                    }`}>
-                                        <UserIcon size={18} className={selectedChat?._id === chat._id ? 'text-black' : 'text-gray-600 group-hover/item:text-success'} />
-                                    </div>
-                                    <div className="flex-1 overflow-hidden">
-                                        <p className="font-black uppercase tracking-tight truncate text-[12px] italic">{chat?.user?.name || chat?.userId?.name || 'Customer'}</p>
-                                        <div className="flex items-center gap-1.5 mt-0.5">
-                                            <div className={`w-1 h-1 rounded-full animate-pulse ${selectedChat?._id === chat._id ? 'bg-black' : 'bg-success'}`} />
-                                            <p className={`text-[8px] font-bold uppercase tracking-widest italic truncate ${
-                                                selectedChat?._id === chat._id ? 'text-black/60' : 'text-gray-500'
-                                            }`}>
-                                                Transmitting Signal
-                                            </p>
+                        {activeTab === "CHATS" ? (
+                            allChats?.data?.map((chat: TChat) => (
+                                <button 
+                                    key={chat._id}
+                                    onClick={() => setSelectedChat(chat)}
+                                    className={`w-full p-4 rounded-2xl text-left transition-all border group/item ${
+                                        selectedChat?._id === chat._id 
+                                        ? 'bg-success text-black border-success shadow-lg scale-[1.02]' 
+                                        : 'bg-white/[0.01] text-white border-white/5 hover:bg-white/[0.03] hover:border-white/10'
+                                    }`}
+                                >
+                                    <div className="flex items-center gap-4">
+                                        <div className={`w-10 h-10 rounded-xl flex items-center justify-center border transition-all overflow-hidden ${
+                                            selectedChat?._id === chat._id ? 'bg-black/10 border-black/20' : 'bg-white/5 border-white/5 group-hover/item:border-success/20'
+                                        }`}>
+                                            {chat?.participants?.find((p: TParticipant) => p.role === 'USER')?.avatar ? (
+                                                <Image 
+                                                    src={chat?.participants?.find((p: TParticipant) => p.role === 'USER')?.avatar as string} 
+                                                    alt="" 
+                                                    fill
+                                                    className="object-cover opacity-80 group-hover:opacity-100 transition-opacity"
+                                                />
+                                            ) : (
+                                                <UserIcon size={18} className={selectedChat?._id === chat._id ? 'text-black' : 'text-gray-600 group-hover/item:text-success'} />
+                                            )}
+                                        </div>
+                                        <div className="flex-1 overflow-hidden">
+                                            <div className="flex justify-between items-start">
+                                                <p className="font-black uppercase tracking-tight truncate text-[12px] italic">
+                                                    {chat?.participants?.find((p: TParticipant) => p.role === 'USER')?.name || 'Customer Node'}
+                                                </p>
+                                                {chat?.participants?.find((p: TParticipant) => p.role === 'ADMIN') && (
+                                                    <span className={`text-[7px] font-black px-1.5 py-0.5 rounded border ${
+                                                        selectedChat?._id === chat._id ? 'border-black/20 bg-black/5 text-black' : 'border-success/20 bg-success/5 text-success'
+                                                    }`}>
+                                                        STAFF_ACTIVE
+                                                    </span>
+                                                )}
+                                            </div>
+                                            <div className="flex items-center gap-1.5 mt-0.5">
+                                                <div className={`w-1 h-1 rounded-full animate-pulse ${selectedChat?._id === chat._id ? 'bg-black' : 'bg-success'}`} />
+                                                <p className={`text-[8px] font-bold uppercase tracking-widest italic truncate ${
+                                                    selectedChat?._id === chat._id ? 'text-black/60' : 'text-gray-500'
+                                                }`}>
+                                                    {chat?.lastMessage || 'Channel Initialized'}
+                                                </p>
+                                            </div>
                                         </div>
                                     </div>
-                                </div>
-                            </button>
-                        ))}
+                                </button>
+                            ))
+                        ) : (
+                            customers.map((cust: TCustomer) => (
+                                <button 
+                                    key={cust._id}
+                                    onClick={() => handleStartChat(cust._id)}
+                                    className="w-full p-4 rounded-2xl text-left transition-all border bg-white/[0.01] text-white border-white/5 hover:bg-white/[0.03] hover:border-white/10 group/item"
+                                >
+                                    <div className="flex items-center gap-4">
+                                        <div className="w-10 h-10 rounded-xl bg-white/5 border border-white/5 flex items-center justify-center text-gray-600 group-hover/item:border-success/20 group-hover/item:text-success transition-all">
+                                            {cust.avatar ? (
+                                                <Image fill src={cust.avatar} alt="" className="object-cover rounded-xl opacity-70 group-hover/item:opacity-100 transition-all" />
+                                            ) : (
+                                                <UserIcon size={18} />
+                                            )}
+                                        </div>
+                                        <div className="flex-1 overflow-hidden">
+                                            <p className="font-black uppercase tracking-tight truncate text-[12px] italic">{cust.name}</p>
+                                            <p className="text-[8px] font-bold text-gray-500 uppercase tracking-widest italic truncate">{cust.email}</p>
+                                        </div>
+                                    </div>
+                                </button>
+                            ))
+                        )}
                     </div>
                 </div>
             </div>
@@ -137,13 +237,22 @@ const AdminChatManagement = () => {
                             {/* Header */}
                             <div className="p-6 border-b border-white/5 bg-white/[0.01] flex items-center justify-between backdrop-blur-3xl">
                                 <div className="flex items-center gap-5">
-                                    <div className="w-12 h-12 rounded-[1.25rem] bg-success/10 flex items-center justify-center text-success border border-success/20 shadow-[0_0_30px_rgba(34,197,94,0.1)] relative group/avatar">
+                                    <div className="w-12 h-12 rounded-[1.25rem] bg-success/10 flex items-center justify-center text-success border border-success/20 shadow-[0_0_30px_rgba(34,197,94,0.1)] relative group/avatar overflow-hidden">
                                         <div className="absolute inset-0 bg-success/20 blur-xl opacity-0 group-hover/avatar:opacity-100 transition-opacity"></div>
-                                        <UserIcon size={22} className="relative z-10" />
+                                        {selectedChat?.participants?.find((p: TParticipant) => p.role === 'USER')?.avatar ? (
+                                            <Image 
+                                                src={selectedChat?.participants?.find((p: TParticipant) => p.role === 'USER')?.avatar as string} 
+                                                alt="" 
+                                                fill
+                                                className="object-cover relative z-10"
+                                            />
+                                        ) : (
+                                            <UserIcon size={22} className="relative z-10" />
+                                        )}
                                     </div>
                                     <div>
                                         <h3 className="text-xl font-black text-white uppercase tracking-tighter italic leading-none group-hover/main:text-success transition-colors">
-                                            {selectedChat?.user?.name || selectedChat?.userId?.name || 'Customer'}
+                                            {selectedChat?.participants?.find((p: TParticipant) => p.role === 'USER')?.name || 'Customer Node'}
                                         </h3>
                                         <div className="flex items-center gap-3 mt-1.5">
                                             <div className="flex items-center gap-1.5">
@@ -153,7 +262,7 @@ const AdminChatManagement = () => {
                                             <div className="h-px w-4 bg-white/10"></div>
                                             <div className="text-[8px] font-black text-gray-600 uppercase tracking-widest italic flex items-center gap-1.5">
                                                 <MailIcon size={10} className="text-success/50" />
-                                                {selectedChat?.user?.email || selectedChat?.userId?.email}
+                                                {selectedChat?.participants?.find((p: TParticipant) => p.role === 'USER')?.email}
                                             </div>
                                         </div>
                                     </div>
@@ -163,7 +272,7 @@ const AdminChatManagement = () => {
                             {/* Messages */}
                             <div className="flex-1 overflow-y-auto p-8 space-y-6 scrollbar-hide">
                                 {messages.map((msg, idx) => {
-                                    const isMe = msg.senderId === ((user as any)?._id || (user as any)?.user);
+                                    const isMe = ((msg.sender as { _id?: string })?._id || msg.sender) === ((user as { _id?: string; user?: string })?._id || (user as { _id?: string; user?: string })?.user);
                                     return (
                                         <motion.div 
                                             key={msg._id || idx}

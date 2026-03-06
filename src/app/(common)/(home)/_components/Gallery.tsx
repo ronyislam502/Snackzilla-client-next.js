@@ -1,7 +1,7 @@
 "use client";
 
 import Image from "next/image";
-import { motion } from "framer-motion";
+import { motion, Variants } from "framer-motion";
 import SectionTitle from "@/components/shared/SectionTitle";
 
 const Gallery = () => {
@@ -18,7 +18,7 @@ const Gallery = () => {
         { image: "https://i.postimg.cc/GtSS828R/14.jpg", motionType: "zoomOut" },
     ];
 
-    const motionVariants: Record<string, any> = {
+    const motionVariants: Record<string, Variants> = {
         zoomIn: {
             hidden: { scale: 1 },
             visible: {
@@ -58,7 +58,7 @@ const Gallery = () => {
                 {items.map((item, index) => (
                     <motion.div
                         key={index}
-                        className="group relative rounded-2xl overflow-hidden border border-white/5 transition-all duration-500 hover:border-success/30"
+                        className="group relative rounded-3xl overflow-hidden border border-success/20 bg-[#0a0a0a]/60 backdrop-blur-3xl transition-all duration-500 hover:border-blue-500/40 hover:shadow-[0_0_50px_rgba(59,130,246,0.15)]"
                     >
                         <div className="relative aspect-[4/3] w-full overflow-hidden">
                             <motion.div

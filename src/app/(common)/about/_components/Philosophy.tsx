@@ -51,8 +51,8 @@ const Philosophy = () => {
                             initial={{ opacity: 0, y: 30 }}
                             whileInView={{ opacity: 1, y: 0 }}
                             transition={{ duration: 0.6, delay: item.delay }}
-                            whileHover={{ y: -5, borderColor: "rgba(34, 197, 94, 0.3)" }}
-                            className="bg-[#0a0a0a]/40 backdrop-blur-3xl p-8 rounded-2xl border border-white/5 text-left group transition-all duration-300"
+                            whileHover={{ y: -5, borderColor: "rgba(59, 130, 246, 0.4)" }}
+                            className="bg-[#0a0a0a]/60 backdrop-blur-3xl p-8 rounded-2xl border border-success/20 text-left group transition-all duration-300 hover:shadow-[0_0_50px_rgba(59,130,246,0.15)]"
                         >
                             <div className="w-12 h-12 bg-white/5 border border-white/5 rounded-xl flex items-center justify-center mb-6 group-hover:bg-success group-hover:text-black transition-all duration-500 text-success">
                                 {item.icon}

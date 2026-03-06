@@ -9,8 +9,8 @@ import {
   YAxis,
 } from "recharts";
 
-const CategoryStats = ({ category }: { category: any[] }) => {
-  const formattedData = category?.map((item: any) => ({
+const CategoryStats = ({ category }: { category: { categoryName: string; totalRevenue: number }[] }) => {
+  const formattedData = category?.map((item: { categoryName: string; totalRevenue: number }) => ({
     category: item?.categoryName,
     totalRevenue: item?.totalRevenue,
   }));

@@ -8,37 +8,54 @@ import DeleteFood from "./_component/DeleteFood";
 import AddFood from "./_component/AddFood";
 import UpdateFood from "./_component/UpdateFood";
 import { motion, AnimatePresence } from "framer-motion";
+import Image from "next/image";
 
 const FoodManagement = () => {
     const [page, setPage] = useState(1);
     const [limit] = useState(10);
-    const { data: foods, isLoading } = useAllFoodsQuery({ page, limit });
+    const [search, setSearch] = useState("");
+    const { data: foods, isLoading } = useAllFoodsQuery({ page, limit, search });
     const totalPages = foods?.meta?.totalPage || 1;
 
     return (
         <div className="p-2 md:p-6 space-y-6">
             {/* Header Section */}
-            <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 bg-neutral/20 p-6 rounded-3xl border border-white/5 backdrop-blur-sm relative overflow-hidden group">
-                <div className="absolute top-0 right-0 w-64 h-64 bg-success/5 rounded-full blur-3xl -mr-32 -mt-32 group-hover:bg-success/10 transition-colors duration-700"></div>
+            <div className="flex flex-col md:flex-row md:items-center justify-between gap-6 bg-[#0a0a0a]/60 p-6 rounded-[2rem] border border-white/5 backdrop-blur-3xl relative overflow-hidden group">
+                <div className="absolute top-0 right-0 w-64 h-64 bg-success/5 rounded-full blur-3xl -mr-32 -mt-32 group-hover:bg-blue-500/10 transition-colors duration-700"></div>
                 
                 <div className="space-y-1 relative z-10">
                     <h2 className="text-3xl font-black text-white uppercase tracking-tighter italic">Dish Gallery</h2>
                     <div className="flex items-center gap-3">
-                        <span className="text-success font-medium text-[10px] tracking-[0.2em] uppercase">Inventory Overview</span>
+                        <span className="text-success font-medium text-[10px] tracking-[0.2em] uppercase italic">Inventory Overview</span>
                         <div className="h-px w-12 bg-success/30"></div>
-                        <span className="bg-success text-black px-3 py-0.5 rounded-full text-[9px] font-black uppercase tracking-wider shadow-[0_0_15px_rgba(34,197,94,0.3)]">
+                        <span className="bg-success/10 text-success border border-success/20 px-3 py-0.5 rounded-full text-[9px] font-black uppercase tracking-wider italic">
                             {foods?.meta?.total || 0} Total Dishes
                         </span>
                     </div>
                 </div>
-            </div>
-             <div className="relative z-10 -top-20 right-0 bottom-140 left-240">
+
+                <div className="relative z-10 flex flex-col md:flex-row items-center gap-4 w-full md:w-auto">
+                    <div className="relative group/search w-full md:w-80">
+                        <input 
+                            type="text" 
+                            placeholder="IDENTIFY_SPECIMEN..."
+                            value={search}
+                            onChange={(e) => setSearch(e.target.value)}
+                            className="w-full bg-white/[0.02] border border-white/10 rounded-2xl py-3.5 pl-12 pr-4 text-[11px] font-black text-white outline-none focus:border-success/30 transition-all italic placeholder:text-gray-700"
+                        />
+                        <div className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-700 group-focus-within/search:text-success transition-colors">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+                        </div>
+                    </div>
                     <AddFood />
+                </div>
             </div>
 
             {/* Table Section */}
-            <div className="bg-neutral/10 rounded-3xl border border-white/5 overflow-hidden shadow-2xl backdrop-blur-sm shadow-inner">
-                <div className="overflow-x-auto">
+            <div className="bg-[#0a0a0a]/60 rounded-3xl border border-white/5 overflow-hidden shadow-[0_0_50px_rgba(0,0,0,0.5)] backdrop-blur-3xl group hover:border-blue-500/40 hover:shadow-[0_0_50px_rgba(59,130,246,0.15)] transition-all duration-500 relative">
+                <div className="absolute inset-0 bg-gradient-to-tr from-success/8 via-success/3 to-transparent transition-opacity duration-700 group-hover:opacity-0 pointer-events-none" />
+                <div className="absolute inset-0 bg-gradient-to-tr from-blue-500/10 via-blue-500/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-700 pointer-events-none" />
+                <div className="relative z-10 overflow-x-auto">
                     <table className="table w-full border-separate border-spacing-y-2 px-4">
                         <thead>
                             <tr className="text-gray-500 uppercase text-[9px] font-black tracking-[0.2em] border-none">
@@ -61,57 +78,66 @@ const FoodManagement = () => {
                                             initial={{ opacity: 0, y: 10 }}
                                             animate={{ opacity: 1, y: 0 }}
                                             transition={{ delay: index * 0.05 }}
-                                            className="group bg-[#0f0f0f] hover:bg-neutral/40 transition-all duration-300 rounded-xl shadow-sm border border-white/5"
+                                            className="group relative bg-[#0f0f0f]/40 hover:bg-[#0a0a0a]/60 transition-all duration-500 rounded-xl border border-white/5 hover:border-blue-500/40 hover:shadow-[0_0_30px_rgba(59,130,246,0.1)]"
                                         >
-                                            <td className="pl-6 py-4 rounded-l-xl border-none">
-                                                <div className="flex items-center gap-4">
+                                            <td className="pl-6 py-5 rounded-l-2xl border-none relative overflow-hidden group/cell">
+                                                <div className="absolute inset-x-0 bottom-0 h-0.5 bg-gradient-to-r from-success/0 via-success/30 to-success/0 opacity-0 group-hover:opacity-100 transition-opacity" />
+                                                <div className="flex items-center gap-4 relative z-10">
                                                     <div className="relative w-12 h-12 shrink-0">
-                                                        <div className="absolute inset-0 bg-success/20 rounded-xl blur-md opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
-                                                        <img 
-                                                            src={food?.image} 
-                                                            alt={food?.name}
-                                                            className="w-full h-full object-cover rounded-xl border border-white/10 relative z-10 shadow-lg group-hover:scale-105 transition-transform duration-500" 
+                                                        <div className="absolute inset-0 bg-success/10 rounded-xl blur-lg opacity-0 group-hover:opacity-100 transition-opacity duration-700"></div>
+                                                        <Image 
+                                                            src={food?.image || "/placeholder.png"} 
+                                                            alt={food?.name || "Dish image"}
+                                                            fill
+                                                            className="object-cover rounded-xl border border-white/10 relative z-10 shadow-2xl group-hover:scale-110 group-hover:rotate-3 transition-all duration-700" 
                                                         />
                                                     </div>
                                                 </div>
                                             </td>
-                                            <td className="border-none py-4">
-                                                <div className="space-y-0.5">
-                                                    <p className="font-black text-white text-sm group-hover:text-success transition-colors duration-300 uppercase tracking-tighter italic">
+                                            <td className="border-none py-5 relative group/cell">
+                                                <div className="absolute inset-x-0 bottom-0 h-0.5 bg-gradient-to-r from-blue-500/0 via-blue-500/30 to-blue-500/0 opacity-0 group-hover:opacity-100 transition-opacity" />
+                                                <div className="space-y-1 relative z-10">
+                                                    <p className="font-black text-white text-sm group-hover:text-blue-400 transition-colors duration-500 uppercase tracking-tighter italic leading-none">
                                                         {food?.name}
                                                     </p>
-                                                    <p className="text-gray-500 text-[9px] line-clamp-1 font-medium max-w-xs uppercase tracking-widest leading-relaxed">
+                                                    <p className="text-success text-[10px] line-clamp-1 font-bold tracking-widest leading-relaxed opacity-60 group-hover:opacity-100 transition-opacity">
                                                         {food?.description}
                                                     </p>
                                                 </div>
                                             </td>
-                                            <td className="border-none py-4 text-center font-black text-white tracking-tighter text-sm italic">
-                                                ${food?.price?.toFixed(2)}
+                                            <td className="border-none py-5 text-center relative group/cell">
+                                                <div className="absolute inset-x-0 bottom-0 h-0.5 bg-gradient-to-r from-success/0 via-success/30 to-success/0 opacity-0 group-hover:opacity-100 transition-opacity" />
+                                                <span className="relative z-10 font-black text-white tracking-tighter text-[13px] italic bg-white/5 px-2 py-1 rounded-lg border border-white/5 group-hover:border-success/20 group-hover:bg-success/5 transition-all">
+                                                    ${food?.price?.toFixed(2)}
+                                                </span>
                                             </td>
-                                            <td className="border-none py-4 text-center">
-                                                <span className="px-2.5 py-0.5 bg-white/5 border border-white/5 rounded-md text-gray-400 text-[9px] font-black uppercase tracking-widest group-hover:bg-white/10 transition-colors italic">
+                                            <td className="border-none py-5 text-center relative group/cell">
+                                                <div className="absolute inset-x-0 bottom-0 h-0.5 bg-gradient-to-r from-blue-500/0 via-blue-500/30 to-blue-500/0 opacity-0 group-hover:opacity-100 transition-opacity" />
+                                                <span className="relative z-10 px-3 py-1 bg-white/[0.02] border border-white/5 rounded-full text-gray-500 text-[9px] font-black uppercase tracking-widest group-hover:text-blue-400 group-hover:border-blue-500/20 transition-all italic">
                                                     {food?.category?.name}
                                                 </span>
                                             </td>
-                                            <td className="border-none py-4 text-center">
-                                                <div className="flex justify-center">
+                                            <td className="border-none py-5 text-center relative group/cell">
+                                                <div className="absolute inset-x-0 bottom-0 h-0.5 bg-gradient-to-r from-success/0 via-success/30 to-success/0 opacity-0 group-hover:opacity-100 transition-opacity" />
+                                                <div className="relative z-10 flex justify-center">
                                                     {food?.isDeleted ? (
-                                                        <span className="flex items-center gap-1 text-error font-black uppercase tracking-[0.15em] text-[8px]">
-                                                            <div className="w-1 h-1 rounded-full bg-error animate-pulse"></div>
-                                                            Deleted
+                                                        <span className="flex items-center gap-1.5 text-error px-3 py-1 bg-error/5 border border-error/10 rounded-full font-black uppercase tracking-[0.2em] text-[8px] italic">
+                                                            <div className="w-1.5 h-1.5 rounded-full bg-error shadow-[0_0_8px_rgba(239,68,68,0.5)]"></div>
+                                                            OFFLINE
                                                         </span>
                                                     ) : (
-                                                        <span className="flex items-center gap-1 text-success font-black uppercase tracking-[0.15em] text-[8px]">
-                                                            <div className="w-1 h-1 rounded-full bg-success"></div>
-                                                            Active
+                                                        <span className="flex items-center gap-1.5 text-success px-3 py-1 bg-success/5 border border-success/10 rounded-full font-black uppercase tracking-[0.2em] text-[8px] italic shadow-[0_0_15px_rgba(34,197,94,0.1)]">
+                                                            <div className="w-1.5 h-1.5 rounded-full bg-success shadow-[0_0_8px_rgba(34,197,94,0.5)]"></div>
+                                                            ACTIVE
                                                         </span>
                                                     )}
                                                 </div>
                                             </td>
-                                            <td className="rounded-r-xl border-none pr-6 py-4 text-right">
-                                                <div className="flex justify-end items-center gap-2">
-                                                    <UpdateFood food={food} />
-                                                    <DeleteFood food={food} />
+                                            <td className="rounded-r-2xl border-none pr-6 py-5 text-right relative group/cell">
+                                                <div className="absolute inset-x-0 bottom-0 h-0.5 bg-gradient-to-r from-blue-500/0 via-blue-500/30 to-blue-500/0 group-hover:opacity-100 transition-opacity" />
+                                                <div className=" z-10 flex justify-end items-center gap-2">
+                                                <UpdateFood food={food} />
+                                                <DeleteFood food={food} />
                                                 </div>
                                             </td>
                                         </motion.tr>
@@ -119,6 +145,7 @@ const FoodManagement = () => {
                                 </AnimatePresence>
                             )}
                         </tbody>
+                        
                     </table>
                 </div>
 

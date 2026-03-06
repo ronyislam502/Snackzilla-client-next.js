@@ -9,12 +9,12 @@ const CategoryCard = ({ category }: { category: TCategory }) => {
       whileInView={{ opacity: 1, scale: 1 }}
       viewport={{ once: true }}
       whileHover={{ y: -5 }}
-      className="group relative overflow-hidden bg-[#0a0a0a]/60 backdrop-blur-3xl border border-success/20 rounded-2xl shadow-2xl transition-all duration-500 hover:border-blue-500/40 hover:shadow-[0_20px_40px_-15px_rgba(59,130,246,0.2)]"
+      className="group relative overflow-hidden bg-[#0a0a0a]/60 backdrop-blur-3xl border border-success/20 rounded-2xl shadow-2xl transition-all duration-500 hover:border-blue-500/40 hover:shadow-[0_20px_40px_-15px_rgba(59,130,246,0.2)] flex flex-col h-full"
     >
       {/* Default: success gradient */}
-      <div className="absolute inset-0 bg-gradient-to-br from-success/8 via-success/3 to-transparent transition-opacity duration-700 group-hover:opacity-0 pointer-events-none" />
+      <div className="absolute inset-0 bg-gradient-to-tr from-success/8 via-success/3 to-transparent transition-opacity duration-700 group-hover:opacity-0 pointer-events-none" />
       {/* Hover: blue gradient */}
-      <div className="absolute inset-0 bg-gradient-to-br from-blue-500/10 via-blue-500/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-700 pointer-events-none" />
+      <div className="absolute inset-0 bg-gradient-to-tr from-blue-500/10 via-blue-500/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-700 pointer-events-none" />
 
       <div className="relative h-40 overflow-hidden">
         <motion.img

@@ -4,11 +4,10 @@ import { useUpdateOrderMutation } from "@/redux/features/order/orderApi";
 import { toast } from "react-toastify";
 import { TError } from "@/types/global";
 import Link from "next/link";
+import Image from "next/image";
 
 const OrderTable = ({ order }: { order: TOrder }) => {
     const [updateOrder, { isLoading }] = useUpdateOrderMutation();
-
-    console.log("order", order)
 
     const handleStatusUpdate = async (newStatus: string) => {
         try {
@@ -49,14 +48,15 @@ const OrderTable = ({ order }: { order: TOrder }) => {
             </td>
             <td className="px-8 py-5">
                 <div className="flex flex-col gap-3">
-                    {order?.foods?.map((item: any, index: number) => (
+                    {order?.foods?.map((item, index: number) => (
                         <div className="flex items-center gap-3 group/item" key={item?.food?._id || `food-${index}`}>
                             <div className="relative w-10 h-10 shrink-0">
                                 {item?.food?.image ? (
-                                    <img 
+                                    <Image 
                                         src={item?.food?.image} 
                                         alt={item?.food?.name || "Food Item"}
-                                        className="w-full h-full object-cover rounded-xl border border-white/10 relative z-10 brightness-75 group-hover/item:brightness-100 transition-all bg-[#0a0a0a]" 
+                                        fill
+                                        className="object-cover rounded-xl border border-white/10 relative z-10 brightness-75 group-hover/item:brightness-100 transition-all bg-[#0a0a0a]" 
                                     />
                                 ) : (
                                     <div className="w-full h-full rounded-xl border border-white/10 relative z-10 bg-white/5 flex items-center justify-center text-center">

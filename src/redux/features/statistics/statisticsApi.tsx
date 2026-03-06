@@ -3,9 +3,18 @@ import { baseApi } from "../../api/baseApi";
 const statisticsApi = baseApi.injectEndpoints({
   endpoints: (builder) => ({
     adminStatistics: builder.query({
-      query: () => ({
+      query: (filters) => ({
         url: "/dashboard/admin-stats",
         method: "GET",
+        params: filters,
+      }),
+      providesTags: ["dashboard"],
+    }),
+    topSellingFoods: builder.query({
+      query: (filter) => ({
+        url: "/dashboard/top-foods",
+        method: "GET",
+        params: { filter },
       }),
       providesTags: ["dashboard"],
     }),
@@ -19,5 +28,8 @@ const statisticsApi = baseApi.injectEndpoints({
   }),
 });
 
-export const { useAdminStatisticsQuery, useUserStatisticsQuery } =
-  statisticsApi;
+export const {
+  useAdminStatisticsQuery,
+  useUserStatisticsQuery,
+  useTopSellingFoodsQuery,
+} = statisticsApi;

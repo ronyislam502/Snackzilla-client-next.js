@@ -4,7 +4,7 @@ import { useState } from "react";
 import Image from "next/image";
 import "react-responsive-carousel/lib/styles/carousel.min.css";
 import { Carousel } from "react-responsive-carousel";
-import { motion } from "framer-motion";
+import { motion, Variants } from "framer-motion";
 import Link from "next/link";
 
 const Banner = () => {
@@ -71,7 +71,7 @@ const Banner = () => {
 
   const motionVariants: Record<
     string,
-    { hidden: any; visible: any }
+    Variants
   > = {
     zoomIn: {
       hidden: { scale: 1 },
