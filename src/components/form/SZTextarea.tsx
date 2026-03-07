@@ -1,7 +1,7 @@
 import { IInput } from "@/types/global";
 import { useFormContext } from "react-hook-form";
 
-interface IProps extends IInput {}
+type IProps = IInput;
 
 const SZTextarea = ({ name, label, placeholder = "" }: IProps) => {
   const {

@@ -9,7 +9,7 @@ import { motion } from "framer-motion";
 import { CalendarIcon, ClockIcon, UsersIcon, SendIcon } from "@/components/shared/Icons";
 
 const ReservationForm = () => {
-  const { register, handleSubmit, reset, formState: { errors } } = useForm();
+  const { register, handleSubmit, reset } = useForm();
   const [createReservation, { isLoading }] = useCreateReservationMutation();
   const user = useAppSelector((state) => state.auth.user) as TUser;
 

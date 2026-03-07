@@ -6,7 +6,7 @@ import { FieldValues } from "react-hook-form";
 import { FaStar } from "react-icons/fa";
 import { toast } from "react-toastify";
 import { motion, AnimatePresence } from "framer-motion";
-import { StarIcon, XIcon, SendIcon } from "@/components/shared/Icons";
+import { XIcon, SendIcon } from "@/components/shared/Icons";
 import SZForm from "@/components/form/SZFrom";
 import SZTextarea from "@/components/form/SZTextarea";
 import { useCreateServiceReviewMutation } from "@/redux/features/serviceReview/serviceReviewApi";

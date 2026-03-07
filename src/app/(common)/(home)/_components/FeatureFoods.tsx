@@ -10,7 +10,7 @@ import Link from "next/link";
 const FeatureFoods = () => {
   const { data: foods, isLoading } = useAllFoodsQuery({});
 
-  console.log("foods", foods)
+  // console.log("foods", foods)
 
   return (
     <div className="my-4">

@@ -8,28 +8,22 @@ import { useGetUserByEmailQuery } from "@/redux/features/user/userApi";
 import { useSingleOrderQuery } from "@/redux/features/order/orderApi";
 import { useAppSelector } from "@/redux/hooks";
 import { TError } from "@/types/global";
-import { useState, useEffect } from "react";
-import { createPortal } from "react-dom";
+import { useState } from "react";
 import { FieldValues } from "react-hook-form";
 import { FaStar } from "react-icons/fa";
 import { toast } from "react-toastify";
 import { motion, AnimatePresence } from "framer-motion";
-import { StarIcon, XIcon, SendIcon } from "@/components/shared/Icons";
+import { XIcon, SendIcon } from "@/components/shared/Icons";
 import Portal from "@/components/ui/Portal";
 
 const AddReview = ({ id }: { id: string }) => {
   const [isOpen, setIsOpen] = useState(false);
-  const [mounted, setMounted] = useState(false);
   const [rating, setRating] = useState<number>(0);
-
-  useEffect(() => {
-    setMounted(true);
-  }, []);
 
   const loggedUser = useAppSelector((state) => state.auth.user) as TUser;
   const { data: userData } = useGetUserByEmailQuery(loggedUser?.email);
   const user = userData?.data?.[0];
-  
+
   const { data: orderData } = useSingleOrderQuery(id);
   const order = orderData?.data;
 
@@ -43,12 +37,12 @@ const AddReview = ({ id }: { id: string }) => {
       }
 
       const reviewData = {
-        user: user?._id || (loggedUser as any)?.user,
+        user: user?._id || (loggedUser as { user?: string })?.user,
         order: id,
-        feedbacks: order.foods.map((f: any) => ({
-            food: f.food._id,
-            feedback: data?.feedback,
-            rating: rating
+        feedbacks: order.foods.map((f: { food: { _id: string } }) => ({
+          food: f.food._id,
+          feedback: data?.feedback,
+          rating: rating
         }))
       };
 
@@ -87,7 +81,7 @@ const AddReview = ({ id }: { id: string }) => {
                 onClick={() => setIsOpen(false)}
                 className="absolute inset-0 bg-black/40 backdrop-blur-sm"
               />
-              <motion.div 
+              <motion.div
                 initial={{ opacity: 0, scale: 0.9, y: 30 }}
                 animate={{ opacity: 1, scale: 1, y: 0 }}
                 exit={{ opacity: 0, scale: 0.9, y: 30 }}
@@ -108,7 +102,7 @@ const AddReview = ({ id }: { id: string }) => {
                         Refine our culinary edge
                       </p>
                     </div>
-                    <button 
+                    <button
                       onClick={() => setIsOpen(false)}
                       className="absolute top-6 right-6 p-2 rounded-lg bg-white/5 text-gray-400 hover:text-white hover:bg-white/10 transition-all border border-white/5 active:scale-90"
                     >
@@ -137,10 +131,10 @@ const AddReview = ({ id }: { id: string }) => {
                       </div>
 
                       <div className="space-y-2">
-                        <SZTextarea 
-                          name="feedback" 
+                        <SZTextarea
+                          name="feedback"
                           label="Culinary Commentary"
-                          placeholder="ARTICULATE THE FLAVORS, TEXTURES, AND PRESENTATION..." 
+                          placeholder="ARTICULATE THE FLAVORS, TEXTURES, AND PRESENTATION..."
                         />
                       </div>
 
@@ -152,8 +146,8 @@ const AddReview = ({ id }: { id: string }) => {
                         >
                           Abandon
                         </button>
-                        <button 
-                          className="flex-2 py-4 px-8 bg-warning text-black font-black uppercase tracking-[0.2em] rounded-xl hover:scale-[1.03] active:scale-[0.98] transition-all shadow-xl flex items-center justify-center gap-2 group italic text-[9px] disabled:opacity-30 disabled:grayscale" 
+                        <button
+                          className="flex-2 py-4 px-8 bg-warning text-black font-black uppercase tracking-[0.2em] rounded-xl hover:scale-[1.03] active:scale-[0.98] transition-all shadow-xl flex items-center justify-center gap-2 group italic text-[9px] disabled:opacity-30 disabled:grayscale"
                           type="submit"
                           disabled={isLoading || rating === 0}
                         >

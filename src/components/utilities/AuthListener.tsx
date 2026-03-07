@@ -4,6 +4,7 @@ import { useEffect, useMemo } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useAppDispatch } from "@/redux/hooks";
 import { setUser, TUser } from "@/redux/features/auth/authSlice";
+import { setCartUser } from "@/redux/features/order/orderSlice";
 import { verifyToken } from "@/components/utilities/verifyToken";
 import Cookies from "js-cookie";
 import { toast } from "react-toastify";
@@ -21,23 +22,26 @@ const AuthListener = () => {
 
     if (accessToken && !hasNotified.has(accessToken)) {
       const user = verifyToken(accessToken) as TUser;
-      
+
       if (user) {
         hasNotified.add(accessToken);
         const refreshToken = searchParams.get("refreshToken");
-        
+
         dispatch(setUser({ user, token: accessToken }));
+        dispatch(setCartUser(user.email));
+
         Cookies.set("accessToken", accessToken);
         if (refreshToken) {
           Cookies.set("refreshToken", refreshToken);
         }
 
         if (message) {
-            toast.success(decodeURIComponent(message), { autoClose: 1000 });
-        } else {
-            toast.success("Login successful", { autoClose: 1000 });
+          toast.success(decodeURIComponent(message), {
+            toastId: accessToken, // Prevent duplicate toasts for the same token
+            autoClose: 1000,
+          });
         }
-        
+
         // Use replace to avoid history stack issues
         const newUrl = redirect ? `/${redirect}` : "/";
         router.replace(newUrl);

@@ -23,8 +23,11 @@ const COLORS = ["#00ff80", "#00bfff", "#ffcc00", "#ff3333", "#a855f7", "#ec4899"
 
 const Dashboard = () => {
   const loggedUser = useAppSelector((state) => state?.auth?.user) as TUser;
+  console.log("loggedUser", loggedUser)
+
   const { data: statsData, isLoading } = useUserStatisticsQuery(loggedUser?.email);
   const stats = statsData?.data;
+  console.log("data", stats)
 
   if (isLoading) {
     return (
@@ -34,7 +37,7 @@ const Dashboard = () => {
     );
   }
 
-  const totalOrders = stats?.foodWise?.reduce((acc: number, curr: any) => acc + curr.totalOrders, 0) || 0;
+  const totalOrders = stats?.foodWise?.reduce((acc: number, curr: { totalOrders: number }) => acc + curr.totalOrders, 0) || 0;
 
   const statCardsData = [
     {
@@ -119,7 +122,7 @@ const Dashboard = () => {
                   dataKey="totalSpend"
                   nameKey="categoryName"
                 >
-                  {stats?.categoryWise?.map((entry: any, index: number) => (
+                  {stats?.categoryWise?.map((entry: { categoryName: string; totalSpend: number }, index: number) => (
                     <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
                   ))}
                 </Pie>
@@ -127,7 +130,7 @@ const Dashboard = () => {
                   contentStyle={{ backgroundColor: "#1a1a1a", border: "1px solid rgba(255,255,255,0.1)", borderRadius: "12px" }}
                   itemStyle={{ color: "#fff" }}
                 />
-                <Legend verticalAlign="bottom" height={36}/>
+                <Legend verticalAlign="bottom" height={36} />
               </PieChart>
             </ResponsiveContainer>
           </div>

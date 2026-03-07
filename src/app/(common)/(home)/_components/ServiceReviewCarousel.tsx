@@ -7,6 +7,8 @@ import "swiper/css";
 import "swiper/css/pagination";
 import "swiper/css/navigation";
 import { motion } from "framer-motion";
+import Image from "next/image";
+import { TServiceReview } from "@/types/review";
 
 const ServiceReviewCarousel = () => {
     const { data: reviews, isLoading } = useGetAllServiceReviewsQuery({});
@@ -21,7 +23,7 @@ const ServiceReviewCarousel = () => {
 
             <div className="max-w-7xl mx-auto px-4">
                 <div className="text-center mb-16 space-y-4">
-                    <motion.span 
+                    <motion.span
                         initial={{ opacity: 0, y: 10 }}
                         whileInView={{ opacity: 1, y: 0 }}
                         viewport={{ once: true }}
@@ -29,7 +31,7 @@ const ServiceReviewCarousel = () => {
                     >
                         Customer Testimonials
                     </motion.span>
-                    <motion.h2 
+                    <motion.h2
                         initial={{ opacity: 0, y: 10 }}
                         whileInView={{ opacity: 1, y: 0 }}
                         viewport={{ once: true }}
@@ -56,9 +58,9 @@ const ServiceReviewCarousel = () => {
                     pagination={{ clickable: true, dynamicBullets: true }}
                     className="pb-16"
                 >
-                    {reviews?.data?.map((review: { _id: string; rating: number; feedback: string; user: { name: string } }, index: number) => (
+                    {reviews?.data?.map((review: TServiceReview, index: number) => (
                         <SwiperSlide key={review._id}>
-                            <motion.div 
+                            <motion.div
                                 initial={{ opacity: 0, scale: 0.9 }}
                                 whileInView={{ opacity: 1, scale: 1 }}
                                 viewport={{ once: true }}
@@ -68,28 +70,28 @@ const ServiceReviewCarousel = () => {
                                 <div className="absolute top-6 right-8 text-success/20 group-hover:text-success/40 transition-colors">
                                     <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 24 24" fill="currentColor"><path d="M14.017 21L14.017 18C14.017 16.8954 14.9124 16 16.017 16H19.017C20.1216 16 21.017 16.8954 21.017 18V21H14.017ZM14.017 21C14.017 22.1046 14.9124 23 16.017 23H19.017C20.1216 23 21.017 22.1046 21.017 21V18M3 21L3 18C3 16.8954 3.89543 16 5 16H8C9.10457 16 10 16.8954 10 18V21H3ZM3 21C3 22.1046 3.89543 23 5 23H8C9.10457 23 10 22.1046 10 21V18M10 8C10 4.68629 7.31371 2 4 2V5C5.65685 5 7 6.34315 7 8H10ZM21 8C21 4.68629 18.3137 2 15 2V5C16.6569 5 18 6.34315 18 8H21Z" /></svg>
                                 </div>
-                                
+
                                 <div className="rating rating-xs mb-6 pointer-events-none">
                                     {[...Array(5)].map((_, i) => (
-                                        <input 
+                                        <input
                                             key={i}
-                                            type="radio" 
-                                            name={`rating-${review._id}`} 
-                                            className={`mask mask-star-2 ${i < review.rating ? "bg-success" : "bg-gray-700"}`} 
+                                            type="radio"
+                                            name={`rating-${review._id}`}
+                                            className={`mask mask-star-2 ${i < review.rating ? "bg-success" : "bg-gray-700"}`}
                                             checked={i + 1 === review.rating}
-                                            readOnly 
+                                            readOnly
                                         />
                                     ))}
                                 </div>
 
-                                <p className="text-gray-400 text-sm italic leading-relaxed mb-8 flex-1">
+                                <p className="text-gray-400 text-lg italic leading-relaxed mb-8 flex-1">
                                     &quot;{review?.feedback || "No feedback provided."}&quot;
                                 </p>
 
                                 <div className="flex items-center gap-4 pt-6 border-t border-white/5">
                                     <div className="avatar placeholder">
-                                        <div className="bg-gradient-to-br from-success/20 to-blue-500/20 text-white font-black italic rounded-2xl w-12 border border-white/10 shadow-lg">
-                                            <span>{(review?.user?.name || "Member").charAt(0)}</span>
+                                        <div className="bg-gradient-to-br from-success/20 to-blue-500/20 text-white font-black italic rounded-2xl w-12 border border-white/10 shadow-lg overflow-hidden">
+                                            <Image src={review?.user?.avatar as string || "https://i.ibb.co/5GzXkwq/user.png"} width={100} height={100} alt="" className="object-cover w-full h-full" />
                                         </div>
                                     </div>
                                     <div>
@@ -106,7 +108,7 @@ const ServiceReviewCarousel = () => {
                     ))}
                 </Swiper>
             </div>
-            
+
             <style jsx global>{`
                 .swiper-pagination-bullet {
                     background: rgba(255, 255, 255, 0.2) !important;

@@ -33,15 +33,16 @@ const PendingOrder = ({ order }: { order: TOrder }) => {
                         <div className="flex items-center gap-3 group/item" key={item?.food?._id || `food-${index}`}>
                             <div className="relative w-10 h-10 shrink-0">
                                 {item?.food?.image ? (
-                                    <Image 
-                                        src={item?.food?.image} 
+                                    <Image
+                                        src={item?.food?.image}
                                         alt={item?.food?.name || "Food Item"}
-                                        fill
-                                        className="object-cover rounded-xl border border-white/10 relative z-10 brightness-75 group-hover/item:brightness-100 transition-all bg-[#0a0a0a]" 
+                                        width={100}
+                                        height={100}
+                                        className="object-cover rounded-xl border border-white/10 relative z-10 brightness-75 group-hover/item:brightness-100 transition-all bg-[#0a0a0a]"
                                     />
                                 ) : (
                                     <div className="w-full h-full rounded-xl border border-white/10 relative z-10 bg-white/5 flex items-center justify-center text-center">
-                                        <span className="text-[7px] text-gray-500 font-bold uppercase leading-tight italic">No<br/>Img</span>
+                                        <span className="text-[7px] text-gray-500 font-bold uppercase leading-tight italic">No<br />Img</span>
                                     </div>
                                 )}
                                 <div className="absolute inset-0 bg-blue-500/10 rounded-xl blur-md opacity-0 group-hover/item:opacity-100 transition-opacity duration-500 pointer-events-none"></div>
@@ -63,10 +64,10 @@ const PendingOrder = ({ order }: { order: TOrder }) => {
                     <span className="px-3 py-1.5 rounded-full text-[8px] font-black uppercase tracking-widest bg-blue-500/10 text-blue-400 border border-blue-500/20 shadow-[0_0_20px_rgba(59,130,246,0.1)] animate-pulse italic group-hover/actions:opacity-0 transition-opacity">
                         PENDING SETTLEMENT
                     </span>
-                    
+
                     <div className="absolute inset-y-0 right-8 flex items-center opacity-0 group-hover/actions:opacity-100 transition-all duration-300 translate-x-4 group-hover/actions:translate-x-0">
                         <a
-                            href={`http://localhost:5000/api/v1/orders/invoice/${order._id}`}
+                            href={`${process.env.NEXT_PUBLIC_BASE_URL}/orders/invoice/${order._id}`}
                             download={`invoice-${order.transactionId}.html`}
                             className="px-4 py-2 bg-blue-600 text-white rounded-xl text-[9px] font-black uppercase tracking-widest shadow-[0_0_20px_rgba(59,130,246,0.3)] hover:scale-105 active:scale-95 transition-all italic flex items-center gap-2"
                         >

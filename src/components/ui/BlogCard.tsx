@@ -60,7 +60,7 @@ const BlogCard = ({ blog }: { blog: TBlog }) => {
                 </div>
 
                 <p className="text-[11px] font-medium text-gray-400 leading-relaxed italic flex-1">
-                    "{isLong ? `${preview}...` : blog?.description}"
+                    &quot;{isLong ? `${preview}...` : blog?.description}&quot;
                 </p>
 
                 <div className="pt-4 border-t border-success/10 group-hover:border-blue-500/10 transition-colors duration-500">

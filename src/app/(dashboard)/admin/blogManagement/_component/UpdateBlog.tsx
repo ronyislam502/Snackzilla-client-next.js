@@ -19,19 +19,12 @@ import { TError } from "@/types/global";
 const UpdateBlog = ({ blog }: { blog: TBlog }) => {
     const [isOpen, setIsOpen] = useState(false);
     const [mounted, setMounted] = useState(false);
+    const methods = useForm();
 
     useEffect(() => {
         setMounted(true);
     }, []);
 
-    const methods = useForm({
-        resolver: zodResolver(blogUpdatedSchema),
-        defaultValues: {
-            title: blog?.title,
-            description: blog?.description,
-            tags: blog?.tags?.join(", "),
-        }
-    });
 
     const [previewImage, setPreviewImage] = useState(blog?.image || "");
     const [selectedImage, setSelectedImage] = useState<File | null>(null);
@@ -52,7 +45,7 @@ const UpdateBlog = ({ blog }: { blog: TBlog }) => {
             const blogData = {
                 title: data.title,
                 description: data.description,
-                tags: data.tags.split(",").map((tag: string) => tag.trim()),
+                tags: data.tags,
             };
 
             formData.append("data", JSON.stringify(blogData));
@@ -65,13 +58,15 @@ const UpdateBlog = ({ blog }: { blog: TBlog }) => {
                 data: formData,
             }).unwrap();
 
+            console.log("res", res)
+
             if (res?.success) {
                 toast.success(res?.message, { autoClose: 1000 });
                 setIsOpen(false);
             }
         } catch (error) {
             const err = error as TError;
-            toast.error(err?.data?.message || "Something went wrong", { autoClose: 1000 });
+            toast.error(err?.data?.message, { autoClose: 1000 });
         }
     };
 
@@ -86,7 +81,7 @@ const UpdateBlog = ({ blog }: { blog: TBlog }) => {
                         onClick={() => setIsOpen(false)}
                         className="absolute inset-0 bg-black/90 backdrop-blur-2xl"
                     />
-                    
+
                     <motion.div
                         initial={{ opacity: 0, scale: 0.9, y: 20 }}
                         animate={{ opacity: 1, scale: 1, y: 0 }}
@@ -96,7 +91,7 @@ const UpdateBlog = ({ blog }: { blog: TBlog }) => {
                         {/* Header Section Backgrounds */}
                         <div className="absolute inset-0 bg-gradient-to-tr from-success/8 via-success/3 to-transparent transition-opacity duration-700 group-hover:opacity-0 pointer-events-none" />
                         <div className="absolute inset-0 bg-gradient-to-tr from-blue-500/10 via-blue-500/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-700 pointer-events-none" />
-                        
+
                         <div className="relative flex items-center px-8 pt-4">
                             <div className="absolute top-0 right-0 p-6 opacity-10 rotate-12">
                                 <EditIcon size={80} />
@@ -110,7 +105,7 @@ const UpdateBlog = ({ blog }: { blog: TBlog }) => {
                                     <p className="text-success font-medium text-[10px] tracking-widest uppercase opacity-70 italic">Content Integrity</p>
                                 </div>
                             </div>
-                            <button 
+                            <button
                                 onClick={() => setIsOpen(false)}
                                 className="absolute top-6 right-6 p-2 rounded-lg bg-white/5 text-gray-400 hover:text-white hover:bg-white/10 transition-all border border-white/5"
                             >
@@ -120,7 +115,14 @@ const UpdateBlog = ({ blog }: { blog: TBlog }) => {
 
                         <div className="p-8 pt-4 relative z-10">
                             <FormProvider {...methods}>
-                                <SZForm onSubmit={onSubmit}>
+                                <SZForm
+                                    defaultValues={{
+                                        title: blog?.title,
+                                        description: blog?.description,
+                                        tags: blog?.tags?.join(", "),
+                                    }}
+                                    resolver={zodResolver(blogUpdatedSchema)}
+                                    onSubmit={onSubmit}>
                                     <div className="space-y-4">
                                         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                                             <SZInput label="Article Title" name="title" type="text" placeholder="Update title" />
@@ -147,7 +149,13 @@ const UpdateBlog = ({ blog }: { blog: TBlog }) => {
 
                                             {previewImage && (
                                                 <div className="relative group/img w-full h-32 rounded-xl overflow-hidden border border-white/10 shadow-lg">
-                                                    <Image src={previewImage} alt="Preview" fill className="object-cover transition-transform duration-700 group-hover/img:scale-110" />
+                                                    <Image
+                                                        src={previewImage}
+                                                        alt="Preview"
+                                                        width={600}
+                                                        height={128}
+                                                        className="w-full h-32 object-cover transition-transform duration-700 group-hover/img:scale-110"
+                                                    />
                                                     <div className="absolute inset-0 bg-black/40 opacity-0 group-hover/img:opacity-100 transition-opacity flex items-center justify-center backdrop-blur-sm">
                                                         <p className="text-white font-black text-[10px] uppercase tracking-widest italic">Asset Preview</p>
                                                     </div>
@@ -157,14 +165,14 @@ const UpdateBlog = ({ blog }: { blog: TBlog }) => {
 
                                         {/* Actions */}
                                         <div className="flex items-center justify-end gap-3 pt-4 border-t border-white/5">
-                                            <button 
+                                            <button
                                                 type="button"
                                                 onClick={() => setIsOpen(false)}
                                                 className="px-6 py-2 rounded-xl text-gray-400 font-bold hover:text-white transition-colors uppercase text-[10px] tracking-widest"
                                             >
                                                 Discard
                                             </button>
-                                            <button 
+                                            <button
                                                 type="submit"
                                                 className="bg-success text-black px-4 py-2 rounded-xl font-black hover:scale-105 active:scale-95 transition-all shadow-[0_0_20px_rgba(34,197,94,0.1)] uppercase text-[10px] tracking-widest"
                                             >
@@ -196,4 +204,3 @@ const UpdateBlog = ({ blog }: { blog: TBlog }) => {
 };
 
 export default UpdateBlog;
-

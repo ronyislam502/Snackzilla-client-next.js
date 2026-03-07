@@ -14,11 +14,11 @@ const Home = () => {
       <Banner />
       <Story />
       <Category />
-      <TopSellingFoods />
       <FeatureFoods />
       <Special />
-      <ServiceReviewCarousel />
+      <TopSellingFoods />
       <Gallery />
+      <ServiceReviewCarousel />
       <FeatureBlogs />
     </div>
   );

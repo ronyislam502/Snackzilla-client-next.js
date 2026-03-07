@@ -1,8 +1,9 @@
-import { useEffect, useState } from "react";
-import { createPortal } from "react-dom";
+"use client"
+
+import React, { useState } from "react";
 import { toast } from "react-toastify";
 import { motion, AnimatePresence } from "framer-motion";
-import SZForm from "@/components/form/SZFrom";
+
 import { DeleteIcon, XIcon } from "@/components/shared/Icons";
 import { useDeleteFoodMutation } from "@/redux/features/food/foodApi";
 import { TError } from "@/types/global";
@@ -11,12 +12,10 @@ import Portal from "@/components/ui/Portal";
 
 const DeleteFood = ({ food }: { food: TFood }) => {
     const [isOpen, setIsOpen] = useState(false);
-    const [mounted, setMounted] = useState(false);
+    // const [mounted, setMounted] = useState(false);
     const [deleteFood] = useDeleteFoodMutation();
 
-    useEffect(() => {
-        setMounted(true);
-    }, []);
+
 
     const handleDelete = async () => {
         try {

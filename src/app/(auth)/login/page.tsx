@@ -54,7 +54,8 @@ const Login = () => {
 
 
   const googleLogin = () => {
-    window.location.href = `https://snackzilla-server.vercel.app/api/auth/google`;
+    const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || "https://snackzilla-server.vercel.app/api";
+    window.location.href = `${baseUrl}/auth/google`;
   }
 
 

@@ -7,8 +7,8 @@ const layout = ({ children }: { children: React.ReactNode }) => {
   return (
     <div className="h-screen grid grid-rows-[auto_1fr] overflow-hidden">
       <Navbar />
-      <div className="grid grid-cols-1 lg:grid-cols-5 gap-2  overflow-hidden">
-        <div className="col-span-1 h-full overflow-hidden">
+      <div className="grid grid-cols-1 lg:grid-cols-5 h-full overflow-hidden">
+        <div className="lg:col-span-1 h-full">
           <Sidebar />
         </div>
         <div className="col-span-4 h-full overflow-y-auto custom-scrollbar bg-black/20">

@@ -1,7 +1,6 @@
 "use client"
 
-import { ChangeEvent, useEffect, useState } from "react";
-import { createPortal } from "react-dom";
+import { ChangeEvent, useState } from "react";
 import { FieldValues, FormProvider, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { toast } from "react-toastify";
@@ -21,22 +20,13 @@ import Image from "next/image";
 
 const UpdateFood = ({ food }: { food: TFood }) => {
     const [isOpen, setIsOpen] = useState(false);
-    const [mounted, setMounted] = useState(false);
-    const methods = useForm({
-        resolver: zodResolver(foodUpdatedSchema),
-        defaultValues: {
-            name: food?.name,
-            description: food?.description,
-            price: food?.price,
-            category: food?.category?._id,
-            preparationTime: food?.preparationTime,
-        },
-    });
+    // const [mounted, setMounted] = useState(false);
+    const methods = useForm();
 
-    useEffect(() => {
-        setMounted(true);
-    }, []);
-    
+    // useEffect(() => {
+    //     setMounted(true);
+    // }, []);
+
 
     const [previewImage, setPreviewImage] = useState(food?.image || "");
     const [selectedImage, setSelectedImage] = useState<File | null>(null);
@@ -114,7 +104,7 @@ const UpdateFood = ({ food }: { food: TFood }) => {
                                 onClick={() => setIsOpen(false)}
                                 className="absolute inset-0 bg-black/40 backdrop-blur-sm"
                             />
-                            
+
                             <motion.div
                                 key="modal"
                                 initial={{ opacity: 0, scale: 0.9, y: 20 }}
@@ -138,7 +128,7 @@ const UpdateFood = ({ food }: { food: TFood }) => {
                                             <p className="text-success font-medium text-[10px] tracking-widest uppercase opacity-70 italic">Inventory Management</p>
                                         </div>
                                     </div>
-                                    <button 
+                                    <button
                                         onClick={() => setIsOpen(false)}
                                         className="absolute top-6 right-6 p-2 rounded-lg bg-white/5 text-gray-400 hover:text-white hover:bg-white/10 transition-all border border-white/5"
                                     >
@@ -148,13 +138,22 @@ const UpdateFood = ({ food }: { food: TFood }) => {
 
                                 <div className="p-8">
                                     <FormProvider {...methods}>
-                                        <SZForm onSubmit={onSubmit}>
+                                        <SZForm
+                                            defaultValues={{
+                                                name: food?.name,
+                                                description: food?.description,
+                                                price: food?.price,
+                                                category: food?.category?._id,
+                                                preparationTime: food?.preparationTime,
+                                            }}
+                                            resolver={zodResolver(foodUpdatedSchema)}
+                                            onSubmit={onSubmit}>
                                             <div className="grid grid-cols-1 md:grid-cols-12 gap-8">
                                                 {/* Left Column: Form Fields */}
                                                 <div className="md:col-span-12 space-y-2">
                                                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                                                         <SZInput label="Dish Name" name="name" type="text" placeholder="Enter Dish Name" />
-                                                        <SZSelect label="Category" name="category" options={categoryOption}/>
+                                                        <SZSelect label="Category" name="category" options={categoryOption} />
                                                     </div>
 
                                                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -182,7 +181,13 @@ const UpdateFood = ({ food }: { food: TFood }) => {
 
                                                         {(previewImage || food.image) && (
                                                             <div className="relative group/img w-full h-32 rounded-xl overflow-hidden border border-white/10 shadow-lg">
-                                                                <Image src={previewImage || food.image as string} alt="Preview" fill className="object-cover transition-transform duration-700 group-hover/img:scale-110" />
+                                                                <Image
+                                                                    src={previewImage || food.image as string}
+                                                                    alt="Preview"
+                                                                    width={600}
+                                                                    height={128}
+                                                                    className="w-full h-32 object-cover transition-transform duration-700 group-hover/img:scale-110"
+                                                                />
                                                                 <div className="absolute inset-0 bg-black/40 opacity-0 group-hover/img:opacity-100 transition-opacity flex items-center justify-center backdrop-blur-sm">
                                                                     <p className="text-white font-black text-[10px] uppercase tracking-widest italic">Current Image</p>
                                                                 </div>
@@ -194,14 +199,14 @@ const UpdateFood = ({ food }: { food: TFood }) => {
 
                                             {/* Footer Actions */}
                                             <div className="mt-2 flex items-center justify-end gap-3 border-t border-white/5 pt-2">
-                                                <button 
+                                                <button
                                                     type="button"
                                                     onClick={() => setIsOpen(false)}
                                                     className="px-6 py-2 rounded-xl text-gray-400 font-bold hover:text-white transition-colors uppercase text-[10px] tracking-widest"
                                                 >
                                                     Discard
                                                 </button>
-                                                <button 
+                                                <button
                                                     type="submit"
                                                     className="bg-success text-black px-4 py-2  rounded-xl font-black hover:scale-105 active:scale-95 transition-all shadow-[0_0_20px_rgba(34,197,94,0.2)] uppercase text-[10px] tracking-widest"
                                                 >

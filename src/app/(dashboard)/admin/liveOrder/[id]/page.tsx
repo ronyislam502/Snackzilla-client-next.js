@@ -208,7 +208,7 @@ const SingleOrderPage = () => {
                         </div>
                         <div className="divide-y divide-white/[0.03]">
                             <AnimatePresence>
-                                {(order.foods as { quantity: number; food: any }[])?.map((item: { quantity: number; food: { image?: string; name?: string; price?: number; category?: { name?: string } } }, i: number) => {
+                                {(order.foods as { quantity: number; food: { image?: string; name?: string; price?: number; category?: { name?: string } } }[])?.map((item, i: number) => {
                                     const food = item.food;
                                     return (
                                         <motion.div

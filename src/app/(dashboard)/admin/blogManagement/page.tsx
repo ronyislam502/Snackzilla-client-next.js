@@ -82,7 +82,8 @@ const BlogManagement = () => {
                                                   <Image
                                                       src={blog?.user?.avatar || "/avatar.png"}
                                                       alt="author"
-                                                      fill
+                                                      width={100}
+                                                      height={100}
                                                       className="object-cover rounded-xl border border-white/10 group-hover/row:border-success/30 transition-colors"
                                                   />
                                               </div>
@@ -97,7 +98,8 @@ const BlogManagement = () => {
                                                   <Image
                                                       src={blog?.image || "/placeholder.png"}
                                                       alt="blog"
-                                                      fill
+                                                      width={100}
+                                                      height={100}
                                                       className="object-cover rounded-lg border border-white/10 brightness-75 group-hover/row:brightness-100 transition-all"
                                                   />
                                               </div>

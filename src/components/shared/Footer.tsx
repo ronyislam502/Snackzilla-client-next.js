@@ -23,7 +23,7 @@ const Footer = () => {
                 />
             </div>
             <p className="text-gray-500 font-medium italic leading-relaxed pl-3 border-l-2 border-white/5 text-[11px]">
-              "Redefining gastronomy through culinary excellence and architectural design."
+              &quot;Redefining gastronomy through culinary excellence and architectural design.&quot;
             </p>
             <div className="flex gap-2.5 pl-3">
               {[FacebookIcon, TwitterIcon, MailIcon].map((Icon, i) => (

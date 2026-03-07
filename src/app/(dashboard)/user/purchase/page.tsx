@@ -6,7 +6,7 @@ import { TUser } from "@/redux/features/auth/authSlice";
 import { useMyOrdersQuery } from "@/redux/features/order/orderApi";
 import { useAppSelector } from "@/redux/hooks";
 import { TOrder } from "@/types/order";
-import { useState, Fragment } from "react";
+import { useState } from "react";
 import CancelOrder from "./_component/CancelOrder";
 import AddReview from "./_component/AddReview";
 import { motion, AnimatePresence } from "framer-motion";

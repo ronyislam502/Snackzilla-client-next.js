@@ -1,3 +1,5 @@
+"use client"
+
 import { Cell, Pie, PieChart, ResponsiveContainer, Tooltip } from "recharts";
 const COLORS = ["#22c55e", "#10b981", "#059669", "#047857", "#064e3b"];
 

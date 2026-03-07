@@ -1,3 +1,5 @@
+// @typescript-eslint / no - explicit - any
+
 "use client";
 
 import { useState, useEffect, useRef } from "react";
@@ -20,7 +22,7 @@ interface TMessage { _id?: string; chatId?: string; sender?: { _id: string } | s
 
 const AdminChatManagement = () => {
     const user = useAppSelector((state) => state.auth.user) as TUser;
-    const socket = useSocket("http://localhost:5000");
+    const socket = useSocket(process.env.NEXT_PUBLIC_SERVER_URL as string || "https://snackzilla-server.vercel.app");
     const [selectedChat, setSelectedChat] = useState<TChat | null>(null);
     const [messages, setMessages] = useState<TMessage[]>([]);
     const [input, setInput] = useState("");
@@ -47,9 +49,10 @@ const AdminChatManagement = () => {
     }, [initialMessages]);
 
     useEffect(() => {
-        socket.on("receive-message", (message: TMessage) => {
-            if (message.chatId === selectedChat?._id) {
-                setMessages((prev) => [...prev, message]);
+        socket.on("receive-message", (message: unknown) => {
+            const msg = message as TMessage;
+            if (msg.chatId === selectedChat?._id) {
+                setMessages((prev) => [...prev, msg]);
             }
         });
         return () => socket.off("receive-message");
@@ -76,7 +79,7 @@ const AdminChatManagement = () => {
                 userId: customerId,
                 adminId: (user as { _id?: string; user?: string })?._id || (user as { _id?: string; user?: string })?.user
             }).unwrap();
-            
+
             if (res.success) {
                 setSelectedChat(res.data);
                 setActiveTab("CHATS");
@@ -106,63 +109,60 @@ const AdminChatManagement = () => {
 
                 <div className="flex-1 bg-[#0a0a0a]/60 backdrop-blur-3xl border border-white/5 rounded-[2rem] overflow-hidden flex flex-col shadow-2xl relative group">
                     <div className="absolute inset-0 bg-gradient-to-b from-success/[0.01] to-transparent pointer-events-none"></div>
-                    
+
                     {/* Tabs */}
                     <div className="grid grid-cols-2 p-2 gap-2 bg-white/[0.02] border-b border-white/5 relative z-10">
-                        <button 
+                        <button
                             onClick={() => setActiveTab("CHATS")}
-                            className={`py-2.5 rounded-xl text-[9px] font-black uppercase tracking-widest transition-all italic ${
-                                activeTab === "CHATS" 
-                                ? "bg-success text-black shadow-[0_0_20px_rgba(34,197,94,0.3)]" 
+                            className={`py-2.5 rounded-xl text-[9px] font-black uppercase tracking-widest transition-all italic ${activeTab === "CHATS"
+                                ? "bg-success text-black shadow-[0_0_20px_rgba(34,197,94,0.3)]"
                                 : "text-gray-500 hover:text-white hover:bg-white/5"
-                            }`}
+                                }`}
                         >
                             Active Nodes
                         </button>
-                        <button 
+                        <button
                             onClick={() => setActiveTab("CUSTOMERS")}
-                            className={`py-2.5 rounded-xl text-[9px] font-black uppercase tracking-widest transition-all italic ${
-                                activeTab === "CUSTOMERS" 
-                                ? "bg-success text-black shadow-[0_0_20px_rgba(34,197,94,0.3)]" 
+                            className={`py-2.5 rounded-xl text-[9px] font-black uppercase tracking-widest transition-all italic ${activeTab === "CUSTOMERS"
+                                ? "bg-success text-black shadow-[0_0_20px_rgba(34,197,94,0.3)]"
                                 : "text-gray-500 hover:text-white hover:bg-white/5"
-                            }`}
+                                }`}
                         >
                             Customer Base
                         </button>
                     </div>
-                    
+
                     <div className="p-4 border-b border-white/5 relative z-10">
                         <div className="relative group/search">
                             <SearchIcon size={12} className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-600 group-focus-within/search:text-success transition-colors" />
-                            <input 
-                                type="text" 
+                            <input
+                                type="text"
                                 placeholder={activeTab === "CHATS" ? "IDENTIFY_TRANSMISSION..." : "QUERY_SUBJECT..."}
                                 className="w-full bg-white/[0.02] border border-white/5 rounded-xl py-3 pl-10 pr-4 text-[10px] font-black text-white outline-none focus:border-success/20 transition-all italic placeholder:text-gray-700"
                             />
                         </div>
                     </div>
-                    
+
                     <div className="flex-1 overflow-y-auto p-3 space-y-1.5 scrollbar-hide relative z-10">
                         {activeTab === "CHATS" ? (
                             allChats?.data?.map((chat: TChat) => (
-                                <button 
+                                <button
                                     key={chat._id}
                                     onClick={() => setSelectedChat(chat)}
-                                    className={`w-full p-4 rounded-2xl text-left transition-all border group/item ${
-                                        selectedChat?._id === chat._id 
-                                        ? 'bg-success text-black border-success shadow-lg scale-[1.02]' 
+                                    className={`w-full p-4 rounded-2xl text-left transition-all border group/item ${selectedChat?._id === chat._id
+                                        ? 'bg-success text-black border-success shadow-lg scale-[1.02]'
                                         : 'bg-white/[0.01] text-white border-white/5 hover:bg-white/[0.03] hover:border-white/10'
-                                    }`}
+                                        }`}
                                 >
                                     <div className="flex items-center gap-4">
-                                        <div className={`w-10 h-10 rounded-xl flex items-center justify-center border transition-all overflow-hidden ${
-                                            selectedChat?._id === chat._id ? 'bg-black/10 border-black/20' : 'bg-white/5 border-white/5 group-hover/item:border-success/20'
-                                        }`}>
+                                        <div className={`w-10 h-10 rounded-xl flex items-center justify-center border transition-all overflow-hidden ${selectedChat?._id === chat._id ? 'bg-black/10 border-black/20' : 'bg-white/5 border-white/5 group-hover/item:border-success/20'
+                                            }`}>
                                             {chat?.participants?.find((p: TParticipant) => p.role === 'USER')?.avatar ? (
-                                                <Image 
-                                                    src={chat?.participants?.find((p: TParticipant) => p.role === 'USER')?.avatar as string} 
-                                                    alt="" 
-                                                    fill
+                                                <Image
+                                                    src={chat?.participants?.find((p: TParticipant) => p.role === 'USER')?.avatar as string}
+                                                    alt=""
+                                                    width={100}
+                                                    height={100}
                                                     className="object-cover opacity-80 group-hover:opacity-100 transition-opacity"
                                                 />
                                             ) : (
@@ -175,18 +175,16 @@ const AdminChatManagement = () => {
                                                     {chat?.participants?.find((p: TParticipant) => p.role === 'USER')?.name || 'Customer Node'}
                                                 </p>
                                                 {chat?.participants?.find((p: TParticipant) => p.role === 'ADMIN') && (
-                                                    <span className={`text-[7px] font-black px-1.5 py-0.5 rounded border ${
-                                                        selectedChat?._id === chat._id ? 'border-black/20 bg-black/5 text-black' : 'border-success/20 bg-success/5 text-success'
-                                                    }`}>
+                                                    <span className={`text-[7px] font-black px-1.5 py-0.5 rounded border ${selectedChat?._id === chat._id ? 'border-black/20 bg-black/5 text-black' : 'border-success/20 bg-success/5 text-success'
+                                                        }`}>
                                                         STAFF_ACTIVE
                                                     </span>
                                                 )}
                                             </div>
                                             <div className="flex items-center gap-1.5 mt-0.5">
                                                 <div className={`w-1 h-1 rounded-full animate-pulse ${selectedChat?._id === chat._id ? 'bg-black' : 'bg-success'}`} />
-                                                <p className={`text-[8px] font-bold uppercase tracking-widest italic truncate ${
-                                                    selectedChat?._id === chat._id ? 'text-black/60' : 'text-gray-500'
-                                                }`}>
+                                                <p className={`text-[8px] font-bold uppercase tracking-widest italic truncate ${selectedChat?._id === chat._id ? 'text-black/60' : 'text-gray-500'
+                                                    }`}>
                                                     {chat?.lastMessage || 'Channel Initialized'}
                                                 </p>
                                             </div>
@@ -196,7 +194,7 @@ const AdminChatManagement = () => {
                             ))
                         ) : (
                             customers.map((cust: TCustomer) => (
-                                <button 
+                                <button
                                     key={cust._id}
                                     onClick={() => handleStartChat(cust._id)}
                                     className="w-full p-4 rounded-2xl text-left transition-all border bg-white/[0.01] text-white border-white/5 hover:bg-white/[0.03] hover:border-white/10 group/item"
@@ -204,7 +202,7 @@ const AdminChatManagement = () => {
                                     <div className="flex items-center gap-4">
                                         <div className="w-10 h-10 rounded-xl bg-white/5 border border-white/5 flex items-center justify-center text-gray-600 group-hover/item:border-success/20 group-hover/item:text-success transition-all">
                                             {cust.avatar ? (
-                                                <Image fill src={cust.avatar} alt="" className="object-cover rounded-xl opacity-70 group-hover/item:opacity-100 transition-all" />
+                                                <Image width={100} height={100} src={cust.avatar} alt="" className="object-cover rounded-xl opacity-70 group-hover/item:opacity-100 transition-all" />
                                             ) : (
                                                 <UserIcon size={18} />
                                             )}
@@ -224,10 +222,10 @@ const AdminChatManagement = () => {
             {/* Main Chat Area */}
             <div className="flex-1 flex flex-col bg-[#0a0a0a]/60 backdrop-blur-3xl border border-white/5 rounded-[2.5rem] overflow-hidden shadow-2xl relative group/main">
                 <div className="absolute inset-x-0 top-0 h-32 bg-gradient-to-b from-success/[0.02] to-transparent pointer-events-none"></div>
-                
+
                 <AnimatePresence mode="wait">
                     {selectedChat ? (
-                        <motion.div 
+                        <motion.div
                             key={selectedChat._id}
                             initial={{ opacity: 0, scale: 0.99 }}
                             animate={{ opacity: 1, scale: 1 }}
@@ -240,10 +238,11 @@ const AdminChatManagement = () => {
                                     <div className="w-12 h-12 rounded-[1.25rem] bg-success/10 flex items-center justify-center text-success border border-success/20 shadow-[0_0_30px_rgba(34,197,94,0.1)] relative group/avatar overflow-hidden">
                                         <div className="absolute inset-0 bg-success/20 blur-xl opacity-0 group-hover/avatar:opacity-100 transition-opacity"></div>
                                         {selectedChat?.participants?.find((p: TParticipant) => p.role === 'USER')?.avatar ? (
-                                            <Image 
-                                                src={selectedChat?.participants?.find((p: TParticipant) => p.role === 'USER')?.avatar as string} 
-                                                alt="" 
-                                                fill
+                                            <Image
+                                                src={selectedChat?.participants?.find((p: TParticipant) => p.role === 'USER')?.avatar as string}
+                                                alt=""
+                                                width={100}
+                                                height={100}
                                                 className="object-cover relative z-10"
                                             />
                                         ) : (
@@ -271,21 +270,20 @@ const AdminChatManagement = () => {
 
                             {/* Messages */}
                             <div className="flex-1 overflow-y-auto p-8 space-y-6 scrollbar-hide">
-                                {messages.map((msg, idx) => {
+                                {messages?.map((msg, idx) => {
                                     const isMe = ((msg.sender as { _id?: string })?._id || msg.sender) === ((user as { _id?: string; user?: string })?._id || (user as { _id?: string; user?: string })?.user);
                                     return (
-                                        <motion.div 
+                                        <motion.div
                                             key={msg._id || idx}
                                             initial={{ opacity: 0, y: 15, scale: 0.95 }}
                                             animate={{ opacity: 1, y: 0, scale: 1 }}
                                             className={`flex ${isMe ? 'justify-end' : 'justify-start'}`}
                                         >
                                             <div className={`max-w-[75%] space-y-2`}>
-                                                <div className={`p-5 px-6 rounded-3xl shadow-2xl relative group/msg ${
-                                                    isMe 
-                                                    ? 'bg-success text-black rounded-tr-sm shadow-success/10' 
+                                                <div className={`p-5 px-6 rounded-3xl shadow-2xl relative group/msg ${isMe
+                                                    ? 'bg-success text-black rounded-tr-sm shadow-success/10'
                                                     : 'bg-white/[0.03] text-white border border-white/5 rounded-tl-sm backdrop-blur-xl'
-                                                }`}>
+                                                    }`}>
                                                     <p className="font-bold leading-relaxed text-[13px] italic">{msg.content}</p>
                                                     <div className={`absolute top-2 ${isMe ? '-right-1' : '-left-1'} w-2 h-2 rotate-45 ${isMe ? 'bg-success' : 'bg-white/[0.03] border-l border-t border-white/5'}`}></div>
                                                 </div>
@@ -306,7 +304,7 @@ const AdminChatManagement = () => {
                             <div className="p-8 bg-white/[0.01] border-t border-white/5">
                                 <div className="relative group/input">
                                     <div className="absolute inset-0 bg-success/5 blur-2xl opacity-0 group-focus-within/input:opacity-100 transition-opacity pointer-events-none"></div>
-                                    <input 
+                                    <input
                                         type="text"
                                         value={input}
                                         onChange={(e) => setInput(e.target.value)}
@@ -314,7 +312,7 @@ const AdminChatManagement = () => {
                                         placeholder="FORMULATE_ENCRYPTED_RESPONSE..."
                                         className="w-full bg-white/[0.03] border border-white/5 rounded-[1.5rem] py-5 pl-8 pr-24 text-[12px] text-white font-black placeholder:text-gray-700 outline-none focus:border-success/30 focus:bg-white/[0.05] transition-all shadow-inner italic relative z-10"
                                     />
-                                    <button 
+                                    <button
                                         onClick={handleSend}
                                         disabled={!input.trim()}
                                         className="absolute right-2.5 top-1/2 -translate-y-1/2 p-4 bg-success text-black rounded-2xl hover:scale-105 active:scale-95 transition-all shadow-2xl disabled:opacity-30 disabled:grayscale z-10 group-hover/input:shadow-success/20"
@@ -326,7 +324,7 @@ const AdminChatManagement = () => {
                         </motion.div>
                     ) : (
                         <div className="flex-1 flex flex-col items-center justify-center p-20 space-y-8">
-                            <motion.div 
+                            <motion.div
                                 initial={{ rotate: -10, opacity: 0 }}
                                 animate={{ rotate: 0, opacity: 1 }}
                                 className="w-24 h-24 bg-white/[0.02] rounded-[2rem] flex items-center justify-center text-gray-800 border border-white/5 shadow-inner relative group/empty"

@@ -1,7 +1,7 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { ClockIcon, ShieldCheckIcon } from "@/components/shared/Icons";
+import { ClockIcon } from "../shared/Icons";
 import { formatDate } from "@/components/utilities/Date";
 
 const OrderTimeline = ({ history }: { history: { status: string; updatedAt: string }[] }) => {
@@ -18,9 +18,9 @@ const OrderTimeline = ({ history }: { history: { status: string; updatedAt: stri
 
       <div className="relative pl-8 space-y-8">
         <div className="absolute left-[15px] top-2 bottom-2 w-px bg-gradient-to-b from-success via-success/50 to-transparent" />
-        
+
         {history.map((item, index) => (
-          <motion.div 
+          <motion.div
             key={index}
             initial={{ opacity: 0, x: -10 }}
             animate={{ opacity: 1, x: 0 }}
@@ -28,7 +28,7 @@ const OrderTimeline = ({ history }: { history: { status: string; updatedAt: stri
             className="relative"
           >
             <div className="absolute -left-[21px] top-1 w-3 h-3 rounded-full bg-black border-2 border-success shadow-[0_0_10px_rgba(34,197,94,0.5)] z-10" />
-            
+
             <div className="space-y-1">
               <div className="flex items-center gap-2">
                 <span className="text-[10px] font-black text-white uppercase tracking-tighter italic">

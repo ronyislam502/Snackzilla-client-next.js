@@ -7,10 +7,7 @@ import { useState } from "react";
 import { 
     StarIcon, 
     UserIcon, 
-    ClockIcon, 
     DeleteIcon,
-    MailIcon,
-    SearchIcon,
     ShieldCheckIcon
 } from "@/components/shared/Icons";
 import { toast } from "react-toastify";
@@ -139,7 +136,7 @@ const AdminReviewManagement = () => {
                                     <div className="p-4 bg-white/[0.01] border border-white/5 rounded-xl group-hover/card:bg-white/[0.03] transition-colors relative h-full min-h-[80px]">
                                         <div className={`absolute -left-[1px] top-3 w-0.5 h-4 rounded-full ${activeTab === 'food' ? 'bg-success/30' : 'bg-blue-500/30'}`} />
                                         <p className="text-[11px] font-bold text-gray-400 leading-relaxed italic uppercase tracking-wider line-clamp-4">
-                                            "{review?.feedback}"
+                                            &quot;{review?.feedback}&quot;
                                         </p>
                                     </div>
                                     {activeTab === 'service' && review?.order && (

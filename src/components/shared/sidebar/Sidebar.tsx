@@ -15,14 +15,14 @@ const Sidebar = () => {
     <div className="h-full">
       <div className="drawer lg:drawer-open h-full">
         <input id="my-drawer-2" type="checkbox" className="drawer-toggle" />
-        <div className="drawer-start flex flex-col items-center justify-center lg:hidden">
+        <div className="lg:hidden absolute top-4 left-4 z-[30]">
           <label
             htmlFor="my-drawer-2"
-            className="btn btn-ghost drawer-button text-success"
+            className="flex items-center justify-center w-10 h-10 bg-success/10 border border-success/20 rounded-xl text-success hover:bg-success hover:text-black transition-all shadow-lg backdrop-blur-md cursor-pointer"
           >
             <svg
               xmlns="http://www.w3.org/2000/svg"
-              className="h-6 w-6"
+              className="h-5 w-5"
               fill="none"
               viewBox="0 0 24 24"
               stroke="currentColor"
@@ -30,8 +30,8 @@ const Sidebar = () => {
               <path
                 strokeLinecap="round"
                 strokeLinejoin="round"
-                strokeWidth="2"
-                d="M4 6h16M4 12h16m-7 6h7"
+                strokeWidth="2.5"
+                d="M4 6h16M4 12h16M4 18h7"
               />
             </svg>
           </label>

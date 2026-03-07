@@ -1,3 +1,5 @@
+import { TUserDetail } from "./user";
+
 export type TReview = {
   _id: string;
   user: {
@@ -12,3 +14,10 @@ export type TReview = {
   createdAt: string;
   updatedAt: string;
 };
+
+export type TServiceReview = {
+  _id: string;
+  rating: number;
+  feedback: string;
+  user: TUserDetail
+}

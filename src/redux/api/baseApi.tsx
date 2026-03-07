@@ -2,7 +2,6 @@
 import {
   BaseQueryApi,
   BaseQueryFn,
-  DefinitionType,
   FetchArgs,
   createApi,
   fetchBaseQuery,
@@ -11,8 +10,10 @@ import { logout, setUser } from "../features/auth/authSlice";
 import { toast } from "react-toastify";
 import { RootState } from "../store";
 
+const baseUrl = "http://localhost:5000/api"
+
 const baseQuery = fetchBaseQuery({
-  baseUrl: "https://snackzilla-server.vercel.app/api",
+  baseUrl,
   credentials: "include",
   prepareHeaders: (headers, { getState }) => {
     const token = (getState() as RootState).auth.token;
@@ -27,8 +28,7 @@ const baseQuery = fetchBaseQuery({
 
 const baseQueryWithRefreshToken: BaseQueryFn<
   FetchArgs,
-  BaseQueryApi,
-  DefinitionType
+  BaseQueryApi
 > = async (args, api, extraOptions): Promise<any> => {
   let result = await baseQuery(args, api, extraOptions);
 
@@ -41,9 +41,9 @@ const baseQueryWithRefreshToken: BaseQueryFn<
 
   if (result?.error?.status === 401) {
     //* Send Refresh
-    console.log("Sending refresh token");
+    // console.log("Sending refresh token");
 
-    const res = await fetch("http://localhost:5000/api/auth/refresh-token", {
+    const res = await fetch(`${baseUrl}/auth/refresh-token`, {
       method: "POST",
       credentials: "include",
     });

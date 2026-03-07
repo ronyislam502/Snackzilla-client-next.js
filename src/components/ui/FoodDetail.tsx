@@ -5,7 +5,7 @@ import Image from "next/image";
 import { MinusIcon, PlusIcon, ShoppingCartIcon, ClockIcon, StarIcon } from "../shared/Icons";
 import { toast } from "react-toastify";
 import { useState } from "react";
-import { motion, AnimatePresence } from "framer-motion";
+import { motion } from "framer-motion";
 import FoodReviewSection from "./FoodReviewSection";
 
 const FoodDetail = ({ food }: { food: TFood }) => {
@@ -93,7 +93,7 @@ const FoodDetail = ({ food }: { food: TFood }) => {
                         transition={{ delay: 0.4 }}
                         className="text-gray-400 text-sm md:text-[15px] leading-relaxed font-medium italic border-l-2 border-white/10 pl-5"
                     >
-                        "{food?.description}"
+                        &quot;{food?.description}&quot;
                     </motion.p>
 
                     <div className="grid grid-cols-2 gap-6 pb-8 border-b border-white/5">

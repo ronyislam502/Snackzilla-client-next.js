@@ -125,9 +125,10 @@ const Banner = () => {
               <Image
                 src={slide.image}
                 alt={`banner-${index}`}
-                fill
+                width={1920}
+                height={1080}
                 priority={index === 0}
-                className="object-cover brightness-50"
+                className="w-full h-full object-cover brightness-50"
                 sizes="(max-width: 640px) 100vw,
                        (max-width: 1024px) 100vw,
                        100vw"
