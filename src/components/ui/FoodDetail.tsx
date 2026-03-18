@@ -2,7 +2,7 @@ import { addToCart } from "@/redux/features/order/orderSlice";
 import { useAppDispatch } from "@/redux/hooks";
 import { TFood } from "@/types/food";
 import Image from "next/image";
-import { MinusIcon, PlusIcon, ShoppingCartIcon, ClockIcon, StarIcon } from "../shared/Icons";
+import { MinusIcon, PlusIcon, ShoppingCartIcon, ClockIcon } from "../shared/Icons";
 import { toast } from "react-toastify";
 import { useState } from "react";
 import { motion } from "framer-motion";

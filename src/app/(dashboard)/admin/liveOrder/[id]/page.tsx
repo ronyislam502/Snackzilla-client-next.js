@@ -43,7 +43,7 @@ const SingleOrderPage = () => {
 
     const order = data?.data;
     const user = order?.user;
-    const socket = useSocket(process.env.NEXT_PUBLIC_SERVER_URL || "http://localhost:5000");
+    const socket = useSocket(process.env.NEXT_PUBLIC_SERVER_URL || "https://snackzilla-server.onrender.com");
 
     const [trackingId, setTrackingId] = useState(order?.trackingId || "");
 

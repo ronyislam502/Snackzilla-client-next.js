@@ -58,8 +58,6 @@ const UpdateBlog = ({ blog }: { blog: TBlog }) => {
                 data: formData,
             }).unwrap();
 
-            console.log("res", res)
-
             if (res?.success) {
                 toast.success(res?.message, { autoClose: 1000 });
                 setIsOpen(false);

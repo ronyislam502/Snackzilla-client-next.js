@@ -18,7 +18,7 @@ interface TMessage { _id?: string; chatId?: string; sender?: { _id: string } | s
 
 const AdminChatManagement = () => {
     const user = useAppSelector((state) => state.auth.user) as TUser;
-    const socket = useSocket(process.env.NEXT_PUBLIC_SERVER_URL as string || "http://localhost:5000");
+    const socket = useSocket(process.env.NEXT_PUBLIC_SERVER_URL as string || "https://snackzilla-server.onrender.com");
     const [allChats, setAllChats] = useState<TChat[]>([]);
     const [selectedChat, setSelectedChat] = useState<TChat | null>(null);
     const [messages, setMessages] = useState<TMessage[]>([]);

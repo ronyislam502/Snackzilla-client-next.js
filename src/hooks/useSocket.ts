@@ -14,12 +14,10 @@ export const useSocket = (url: string) => {
         socketRef.current = socket;
 
         socket.on("connect", () => {
-            console.log("Socket connected:", socket.id);
             setIsConnected(true);
         });
 
         socket.on("disconnect", () => {
-            console.log("Socket disconnected");
             setIsConnected(false);
         });
 

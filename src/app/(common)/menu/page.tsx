@@ -71,7 +71,6 @@ const Menu = () => {
 
   const handleCategoryChange = (id: string) => {
     setSelectedCategory(id);
-    console.log('se',id)
     setPage(1);
     router.replace("/menu", { scroll: false });
   };
@@ -117,7 +116,7 @@ const Menu = () => {
                 max={1000}
                 value={minPrice}
                 onChange={handleMinChange}
-                className="w-full h-1 bg-white/5 rounded-lg appearance-none cursor-pointer accent-success transition-all"
+                className="w-full h-1 bg-white rounded-lg appearance-none cursor-pointer accent-success transition-all"
               />
               <input
                 type="range"
@@ -125,7 +124,7 @@ const Menu = () => {
                 max={1000}
                 value={maxPrice}
                 onChange={handleMaxChange}
-                className="w-full h-1 bg-white/5 rounded-lg appearance-none cursor-pointer accent-success transition-all"
+                className="w-full h-1 bg-white rounded-lg appearance-none cursor-pointer accent-success transition-all"
               />
             </div>
           </div>
@@ -139,7 +138,7 @@ const Menu = () => {
               </div>
               <button
                 onClick={clearSelection}
-                className="text-[9px] font-black text-gray-500 hover:text-white uppercase tracking-widest italic transition-colors"
+                className="text-[9px] font-black text-success hover:text-info uppercase tracking-widest italic transition-colors"
               >
                 Reset
               </button>
@@ -148,7 +147,7 @@ const Menu = () => {
               {categories?.data?.map((category: TCategory) => (
                 <label
                   key={category?._id}
-                  className={`flex items-center gap-3 p-2 rounded-xl border border-transparent cursor-pointer transition-all duration-300 ${selectedCategory === category._id ? 'bg-success/5 border-success/20 text-success' : 'hover:bg-white/5 text-gray-500'}`}
+                  className={`flex items-center gap-3 p-2 rounded-xl border border-transparent cursor-pointer transition-all duration-300 ${selectedCategory === category._id ? 'bg-info/5 border-info/20 text-info' : 'hover:bg-white/5 text-success'}`}
                 >
                   <input
                     type="radio"

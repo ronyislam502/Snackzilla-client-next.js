@@ -24,14 +24,12 @@ import {
 } from "recharts";
 import StatCard from "@/components/ui/StatsCard";
 import { useMyOrdersQuery } from "@/redux/features/order/orderApi";
-import { SearchIcon, PackageIcon } from "@/components/shared/Icons";
-import Link from "next/link";
 
 const COLORS = ["#00ff80", "#00bfff", "#ffcc00", "#ff3333", "#a855f7", "#ec4899"];
 
 const Dashboard = () => {
   const loggedUser = useAppSelector((state) => state?.auth?.user) as TUser;
-  const socket = useSocket(process.env.NEXT_PUBLIC_SERVER_URL as string || "http://localhost:5000");
+  const socket = useSocket(process.env.NEXT_PUBLIC_SERVER_URL as string || "https://snackzilla-server.onrender.com");
 
   const { data: statsData, isLoading, refetch: refetchStats } = useUserStatisticsQuery(loggedUser?.email);
   const { data: ordersData, refetch: refetchOrders } = useMyOrdersQuery({ email: loggedUser?.email, limit: 1 });
@@ -63,8 +61,8 @@ const Dashboard = () => {
   }, [socket.isConnected, loggedUser?.user, refetchStats, refetchOrders]);
 
   const stats = statsData?.data;
-  const latestOrder = ordersData?.data?.[0];
-  console.log("data", stats)
+  // const latestOrder = ordersData?.data?.[0];
+  // console.log("data", stats)
 
   if (isLoading) {
     return (

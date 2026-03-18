@@ -26,7 +26,6 @@ const RecoverPassword = () => {
       }
     } catch (error) {
       const err = error as TError;
-      console.log(err);
       toast.error(err?.data?.message);
     }
   };

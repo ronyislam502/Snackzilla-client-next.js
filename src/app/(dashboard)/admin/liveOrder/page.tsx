@@ -28,7 +28,7 @@ const OrderManagement = () => {
     const { data: cancelOrders, isLoading: cancelLoading, refetch: refetchCancel } = useCancelOrdersQuery({ page, limit });
     const { data: deliveredOrders, isLoading: deliveredLoading, refetch: refetchDelivered } = useDeliveredOrdersQuery({ page, limit });
 
-    const socket = useSocket(process.env.NEXT_PUBLIC_SERVER_URL as string || "http://localhost:5000");
+    const socket = useSocket(process.env.NEXT_PUBLIC_SERVER_URL as string || "https://snackzilla-server.onrender.com");
 
     useEffect(() => {
         if (!socket.isConnected) return;

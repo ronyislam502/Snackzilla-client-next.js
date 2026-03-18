@@ -14,8 +14,6 @@ const FoodCard = ({ food }: { food: TFood }) => {
   const dispatch = useDispatch();
   const { data: foodReview } = useGetReviewsByFoodIdQuery(food?._id);
 
-  console.log(foodReview)
-
   const handleAddToCart = (food: TFood) => {
     dispatch(addToCart(food));
     toast.success(`🍽️ ${food?.name} in your collection!`, {

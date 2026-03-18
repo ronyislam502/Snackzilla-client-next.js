@@ -72,12 +72,7 @@ const CheckOut = () => {
         })),
       };
 
-      console.log("order", orderData)
-
-
       const orderRes = await createOrder(orderData).unwrap();
-
-      console.log("res", orderRes)
 
       if (orderRes?.success) {
         // toast.success(orderRes?.message);

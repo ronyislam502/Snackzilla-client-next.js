@@ -22,7 +22,7 @@ const FoodReviewSection = ({ foodId }: FoodReviewSectionProps) => {
   const totalReviews = reviewsData?.totalReviews || 0;
 
   const loggedUser = useAppSelector((state) => state.auth.user) as TUser;
-  const socket = useSocket(process.env.NEXT_PUBLIC_SERVER_URL as string || "http://localhost:5000");
+  const socket = useSocket(process.env.NEXT_PUBLIC_SERVER_URL as string || "https://snackzilla-server.onrender.com");
   const [eligibleOrderId, setEligibleOrderId] = useState<string | null>(null);
 
   const { data: ordersData, refetch } = useMyOrdersQuery({ email: loggedUser?.email }, { skip: !loggedUser?.email });

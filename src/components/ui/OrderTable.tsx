@@ -2,14 +2,14 @@ import { useState } from "react";
 import { TOrder } from "@/types/order";
 import { formatDate, orderTime, TimeAgo } from "../utilities/Date";
 import { toast } from "react-toastify";
-import { useSocket } from "@/hooks/useSocket";
+// import { useSocket } from "@/hooks/useSocket";
 import { useUpdateOrderMutation } from "@/redux/features/order/orderApi";
 import { TError } from "@/types/global";
 import Link from "next/link";
 import Image from "next/image";
 
 const OrderTable = ({ order }: { order: TOrder }) => {
-    const socket = useSocket(process.env.NEXT_PUBLIC_SERVER_URL as string || "http://localhost:5000");
+    // const socket = useSocket(process.env.NEXT_PUBLIC_SERVER_URL as string || "http://localhost:5000");
     const [isLoading, setIsLoading] = useState(false);
 
     const [updateOrder] = useUpdateOrderMutation();
