@@ -3,6 +3,7 @@ import { SVGProps } from "react";
 
 export type IconSvgProps = SVGProps<SVGSVGElement> & {
   size?: number;
+  className?: string;
 };
 
 export const EyeSlashFilledIcon: React.FC<IconSvgProps> = ({ size = 24, ...props }) => {
@@ -390,8 +391,9 @@ export const DeleteIcon: React.FC<IconSvgProps> = ({ size = 24, ...props }) => {
   );
 };
 
-export const CreditCardIcon: React.FC<{ size?: number; color?: string }> = ({
+export const CreditCardIcon: React.FC<IconSvgProps> = ({
   size = 24,
+  className,
   color = "currentColor",
 }) => {
   return (
@@ -400,6 +402,7 @@ export const CreditCardIcon: React.FC<{ size?: number; color?: string }> = ({
       height={size}
       viewBox="0 0 24 24"
       width={size}
+      className={className}
       xmlns="http://www.w3.org/2000/svg"
     >
       <rect
@@ -808,23 +811,6 @@ export const TrashIcon: React.FC<IconSvgProps> = ({ size = 24, ...props }) => (
   </svg>
 );
 
-export const DownloadIcon: React.FC<IconSvgProps> = ({ size = 24, ...props }) => (
-  <svg
-    width={size}
-    height={size}
-    viewBox="0 0 24 24"
-    fill="none"
-    stroke="currentColor"
-    strokeWidth="2"
-    strokeLinecap="round"
-    strokeLinejoin="round"
-    {...props}
-  >
-    <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v4" />
-    <polyline points="7 10 12 15 17 10" />
-    <line x1="12" x2="12" y1="15" y2="3" />
-  </svg>
-);
 
 export const MenuIcon: React.FC<IconSvgProps> = ({ size = 24, ...props }) => (
   <svg
@@ -841,5 +827,61 @@ export const MenuIcon: React.FC<IconSvgProps> = ({ size = 24, ...props }) => (
     <line x1="4" x2="20" y1="12" y2="12" />
     <line x1="4" x2="20" y1="6" y2="6" />
     <line x1="4" x2="20" y1="18" y2="18" />
+  </svg>
+);
+
+export const PackageIcon: React.FC<IconSvgProps> = ({ size = 24, ...props }) => (
+  <svg
+    width={size}
+    height={size}
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    strokeWidth="2"
+    strokeLinecap="round"
+    strokeLinejoin="round"
+    {...props}
+  >
+    <path d="M16.5 9.4 7.5 4.21" />
+    <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z" />
+    <polyline points="3.29 7 12 12 20.71 7" />
+    <line x1="12" x2="12" y1="22" y2="12" />
+  </svg>
+);
+
+export const HashIcon: React.FC<IconSvgProps> = ({ size = 24, ...props }) => (
+  <svg
+    width={size}
+    height={size}
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    strokeWidth="2"
+    strokeLinecap="round"
+    strokeLinejoin="round"
+    {...props}
+  >
+    <line x1="4" x2="20" y1="9" y2="9" />
+    <line x1="4" x2="20" y1="15" y2="15" />
+    <line x1="10" x2="8" y1="3" y2="21" />
+    <line x1="16" x2="14" y1="3" y2="21" />
+  </svg>
+);
+
+export const DownloadIcon: React.FC<IconSvgProps> = ({ size = 24, ...props }) => (
+  <svg
+    width={size}
+    height={size}
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    strokeWidth="2"
+    strokeLinecap="round"
+    strokeLinejoin="round"
+    {...props}
+  >
+    <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2" />
+    <polyline points="7 10 12 15 17 10" />
+    <line x1="12" x2="12" y1="15" y2="3" />
   </svg>
 );

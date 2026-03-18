@@ -30,7 +30,7 @@ const CartDetails = ({ food }: TProps) => {
       <div className="absolute inset-0 bg-gradient-to-tr from-blue-500/10 via-blue-500/5 to-transparent opacity-0 group-hover/cart-item:opacity-100 transition-opacity duration-700 pointer-events-none" />
       {/* Product Image */}
       <div className="relative w-14 h-14 rounded-xl overflow-hidden border border-white/10 shadow-xl group">
-        <Image src={food.image || ""} alt={food.name} fill className="object-cover transition-transform duration-700 group-hover:scale-110" />
+        <Image src={food.image || ""} alt={food.name} width={100} height={100} className="object-cover transition-transform duration-700 group-hover:scale-110" />
       </div>
 
       {/* Product Info */}

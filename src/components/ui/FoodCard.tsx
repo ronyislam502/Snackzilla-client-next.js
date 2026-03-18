@@ -8,9 +8,13 @@ import Link from "next/link";
 import { useDispatch } from "react-redux";
 import { toast } from "react-toastify";
 import { StarIcon, ShoppingCartIcon, ClockIcon } from "@/components/shared/Icons";
+import { useGetReviewsByFoodIdQuery } from "@/redux/features/review/reviewApi";
 
 const FoodCard = ({ food }: { food: TFood }) => {
   const dispatch = useDispatch();
+  const { data: foodReview } = useGetReviewsByFoodIdQuery(food?._id);
+
+  console.log(foodReview)
 
   const handleAddToCart = (food: TFood) => {
     dispatch(addToCart(food));
@@ -40,9 +44,11 @@ const FoodCard = ({ food }: { food: TFood }) => {
           className="w-full h-full"
         >
           <Image
-            src={food?.image || "https://i.ibb.co/L8N9Xm4/fallback-food.png"}
-            alt={food?.name || "Culinary Creation"}
-            fill
+            src={food?.image}
+            alt={food?.name}
+            width={768}
+            height={500}
+            priority 
             className="object-cover brightness-90 group-hover:brightness-110 transition-all duration-700"
             sizes="(max-width: 768px) 100vw, 33vw"
           />
@@ -72,7 +78,7 @@ const FoodCard = ({ food }: { food: TFood }) => {
             <p className="text-[8px] font-black text-success/70 group-hover:text-blue-400/70 uppercase tracking-[0.2em] italic transition-colors duration-500">Signature</p>
             <div className="flex items-center gap-1 text-warning">
               <StarIcon size={7} />
-              <span className="text-[8px] font-black italic">4.8</span>
+              <span className="text-[8px] font-black italic">{foodReview?.averageRating}</span>
             </div>
           </div>
           <Link href={`/menu/${food?._id}`}>

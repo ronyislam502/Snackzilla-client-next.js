@@ -71,10 +71,6 @@ const FoodDetail = ({ food }: { food: TFood }) => {
                             <span className="px-3 py-1 bg-success text-black text-[8px] font-black uppercase tracking-[0.2em] rounded-full shadow-[0_0_30px_rgba(34,197,94,0.15)] italic">
                                 Epicurean Selection
                             </span>
-                            <div className="flex items-center gap-1 text-warning">
-                                <StarIcon size={10} />
-                                <span className="text-[10px] font-black italic">4.9</span>
-                            </div>
                         </motion.div>
                         
                         <motion.h1 

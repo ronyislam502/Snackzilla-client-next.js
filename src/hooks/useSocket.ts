@@ -28,7 +28,7 @@ export const useSocket = (url: string) => {
         };
     }, [url]);
 
-    const emit = (event: string, data: unknown) => {
+    const emit = (event: string, data?: unknown) => {
         socketRef.current?.emit(event, data);
     };
 

@@ -1,8 +1,10 @@
 "use client";
 
+import { useState, useEffect } from "react";
 import OrderTable from "@/components/ui/OrderTable";
 import PendingOrder from "@/components/ui/PendingOrder";
 import TableSkeleton from "@/components/ui/skeleton/TableSkeleton";
+import { useSocket } from "@/hooks/useSocket";
 import { 
     usePendingOrdersQuery,
     useUnshippedOrdersQuery,
@@ -11,59 +13,80 @@ import {
     useDeliveredOrdersQuery
 } from "@/redux/features/order/orderApi";
 import { TOrder } from "@/types/order";
-import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 
 const OrderManagement = () => {
     const [activeTab, setActiveTab] = useState<
         "PENDING" | "UNSHIPPED" | "SHIPPED" | "CANCELLED" | "DELIVERED"
     >("UNSHIPPED");
-    
     const [page, setPage] = useState(1);
     const [limit] = useState(10);
 
-    const { data: pendingOrders, isLoading: pendingLoading } = usePendingOrdersQuery({page, limit});
-    const { data: unshippedOrders, isLoading: unshippedLoading } = useUnshippedOrdersQuery({page, limit});
-    const { data: shippedOrders, isLoading: shippedLoading } = useShippedOrdersQuery({ page, limit });
-    const { data: cancelOrders, isLoading: cancelLoading } = useCancelOrdersQuery({ page, limit });
-    const { data: deliveredOrders, isLoading: deliveredLoading } = useDeliveredOrdersQuery({ page, limit });
+    const { data: pendingOrders, isLoading: pendingLoading, refetch: refetchPending } = usePendingOrdersQuery({page, limit});
+    const { data: unshippedOrders, isLoading: unshippedLoading, refetch: refetchUnshipped } = useUnshippedOrdersQuery({page, limit});
+    const { data: shippedOrders, isLoading: shippedLoading, refetch: refetchShipped } = useShippedOrdersQuery({ page, limit });
+    const { data: cancelOrders, isLoading: cancelLoading, refetch: refetchCancel } = useCancelOrdersQuery({ page, limit });
+    const { data: deliveredOrders, isLoading: deliveredLoading, refetch: refetchDelivered } = useDeliveredOrdersQuery({ page, limit });
 
-     const getActiveData = () => {
-    switch (activeTab) {
-      case "PENDING":
-        return {
-          orders: pendingOrders?.data ?? [],
-          total: pendingOrders?.meta?.total ?? 0,
-          loading: pendingLoading,
+    const socket = useSocket(process.env.NEXT_PUBLIC_SERVER_URL as string || "http://localhost:5000");
+
+    useEffect(() => {
+        if (!socket.isConnected) return;
+
+        socket.emit("join-admin");
+
+        const handleOrderListUpdated = () => {
+            // Refetch current active tab
+            refetchPending();
+            refetchUnshipped();
+            refetchShipped();
+            refetchCancel();
+            refetchDelivered();
         };
-      case "UNSHIPPED":
-        return {
-          orders: unshippedOrders?.data ?? [],
-          total: unshippedOrders?.meta?.total ?? 0,
-          loading: unshippedLoading,
+
+        socket.on("order-list-updated", handleOrderListUpdated as any);
+
+        return () => {
+            socket.off("order-list-updated", handleOrderListUpdated as any);
         };
-      case "SHIPPED":
-        return {
-          orders: shippedOrders?.data ?? [],
-          total: shippedOrders?.meta?.total ?? 0,
-          loading: shippedLoading,
-        };
-      case "CANCELLED":
-        return {
-          orders: cancelOrders?.data ?? [],
-          total: cancelOrders?.meta?.total ?? 0,
-          loading: cancelLoading,
-        };
-      case "DELIVERED":
-        return {
-          orders: deliveredOrders?.data ?? [],
-          total: deliveredOrders?.meta?.total ?? 0,
-          loading: deliveredLoading,
-        };
-      default:
-        return { orders: [], total: 0, loading: false };
-    }
-  };
+    }, [socket.isConnected, refetchPending, refetchUnshipped, refetchShipped, refetchCancel, refetchDelivered]);
+
+    const getActiveData = () => {
+        switch (activeTab) {
+            case "PENDING":
+                return {
+                    orders: pendingOrders?.data ?? [],
+                    total: pendingOrders?.meta?.total ?? 0,
+                    loading: pendingLoading,
+                };
+            case "UNSHIPPED":
+                return {
+                    orders: unshippedOrders?.data ?? [],
+                    total: unshippedOrders?.meta?.total ?? 0,
+                    loading: unshippedLoading,
+                };
+            case "SHIPPED":
+                return {
+                    orders: shippedOrders?.data ?? [],
+                    total: shippedOrders?.meta?.total ?? 0,
+                    loading: shippedLoading,
+                };
+            case "CANCELLED":
+                return {
+                    orders: cancelOrders?.data ?? [],
+                    total: cancelOrders?.meta?.total ?? 0,
+                    loading: cancelLoading,
+                };
+            case "DELIVERED":
+                return {
+                    orders: deliveredOrders?.data ?? [],
+                    total: deliveredOrders?.meta?.total ?? 0,
+                    loading: deliveredLoading,
+                };
+            default:
+                return { orders: [], total: 0, loading: false };
+        }
+    };
 
     const { orders: paginatedOrders, total: activeTotal, loading: isLoading } = getActiveData();
     const totalPages = Math.ceil(activeTotal / limit);
@@ -228,14 +251,14 @@ const OrderManagement = () => {
                           <button
                               className="px-6 py-3 bg-white/[0.02] border border-white/5 rounded-xl text-[9px] font-black uppercase tracking-[0.2em] text-gray-500 hover:text-success hover:border-success/30 hover:bg-success/5 transition-all disabled:opacity-20 disabled:grayscale italic"
                               disabled={page <= 1}
-                              onClick={() => setPage((prev) => Math.max(prev - 1, 1))}
+                              onClick={() => setPage((prev: number) => Math.max(prev - 1, 1))}
                           >
                               Previous Cycle
                           </button>
                           <button
                               className="px-6 py-3 bg-success text-black rounded-xl text-[9px] font-black uppercase tracking-[0.2em] transition-all shadow-xl shadow-success/10 disabled:opacity-50 disabled:grayscale hover:scale-105 active:scale-95 italic"
                               disabled={page >= totalPages}
-                              onClick={() => setPage((prev) => Math.min(prev + 1, totalPages))}
+                              onClick={() => setPage((prev: number) => Math.min(prev + 1, totalPages))}
                           >
                               Next Horizon
                           </button>
@@ -249,4 +272,3 @@ const OrderManagement = () => {
 };
 
 export default OrderManagement;
-

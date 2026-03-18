@@ -5,9 +5,10 @@ import { useParams, useRouter } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
 import Image from "next/image";
 import { toast } from "react-toastify";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { formatDate } from "@/components/utilities/Date";
 import Link from "next/link";
+import { useSocket } from "@/hooks/useSocket";
 
 const ORDER_STATUSES = ["UNSHIPPED", "SHIPPED", "DELIVERED", "CANCELLED"] as const;
 type OrderStatus = typeof ORDER_STATUSES[number];
@@ -41,16 +42,33 @@ const SingleOrderPage = () => {
     const [selectedStatus, setSelectedStatus] = useState<OrderStatus | "">("");
 
     const order = data?.data;
-    const user = order?.user as { avatar?: string; name?: string; email?: string; phone?: string; address?: string };
+    const user = order?.user;
+    const socket = useSocket(process.env.NEXT_PUBLIC_SERVER_URL || "http://localhost:5000");
+
+    const [trackingId, setTrackingId] = useState(order?.trackingId || "");
+
+    useEffect(() => {
+        if (order?.trackingId) {
+            setTrackingId(order.trackingId);
+        }
+    }, [order]);
+
+    const formattedAddress = user?.address
+        ? `${user.address.street}, ${user.address.city}, ${user.address.state} ${user.address.postalCode}, ${user.address.country}`
+        : "—";
 
     const handleUpdateStatus = async () => {
-        if (!selectedStatus) return;
+        if (!selectedStatus && !trackingId) return;
         try {
-            await updateOrder({ id: order?._id, data: { status: selectedStatus } }).unwrap();
-            toast.success(`Order status updated to ${selectedStatus}`);
+            socket.socket?.emit("update-order-status", {
+                id: order?._id,
+                status: selectedStatus || order?.status,
+                trackingId: trackingId.trim()
+            });
+            toast.success(`Order Protocol Updated: ${selectedStatus || "TRACKING_ID"}`);
             setSelectedStatus("");
         } catch {
-            toast.error("Failed to update order status");
+            toast.error("Failed to synchronize order status");
         }
     };
 
@@ -157,7 +175,7 @@ const SingleOrderPage = () => {
                         {[
                             { label: "Email", value: user?.email },
                             { label: "Phone", value: user?.phone ?? "—" },
-                            { label: "Address", value: user?.address ?? "—" },
+                            { label: "Address", value: formattedAddress },
                         ].map(({ label, value }) => (
                             <div key={label} className="space-y-0.5">
                                 <p className="text-[8px] font-black text-gray-600 uppercase tracking-widest italic">{label}</p>
@@ -280,9 +298,19 @@ const SingleOrderPage = () => {
                         className="bg-[#0a0a0a]/40 backdrop-blur-xl border border-white/5 rounded-3xl p-6 space-y-4"
                     >
                         <p className="text-[9px] font-black text-gray-500 uppercase tracking-[0.3em] italic border-b border-white/5 pb-3">
-                            Update Order Status
+                            Update Order Logistics
                         </p>
-                        <div className="flex flex-wrap gap-2">
+                        <div className="space-y-2">
+                             <p className="text-[8px] font-black text-gray-600 uppercase tracking-widest italic">Manual Tracking ID</p>
+                             <input 
+                                type="text"
+                                placeholder="ENTER_TRACKING_ID (e.g. TRK-SZ101)..."
+                                value={trackingId}
+                                onChange={(e) => setTrackingId(e.target.value)}
+                                className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-white font-black italic tracking-widest placeholder:text-gray-700 text-[10px] focus:border-success/50 outline-none transition-all"
+                             />
+                        </div>
+                        <div className="flex flex-wrap gap-2 pt-2">
                             {ORDER_STATUSES.map((status) => {
                                 const cfg = statusConfig[status] ?? { color: "text-gray-400", bg: "", border: "border-white/10", glow: "" };
                                 const isActive = selectedStatus === status;

@@ -6,13 +6,11 @@ import { motion } from "framer-motion";
 
 interface ReviewSummaryProps {
   reviews: TReview[];
+  averageRating: number;
+  totalReviews: number;
 }
 
-const ReviewSummary = ({ reviews }: ReviewSummaryProps) => {
-  const totalReviews = reviews.length;
-  const averageRating = totalReviews > 0 
-    ? (reviews.reduce((acc, rev) => acc + rev.rating, 0) / totalReviews).toFixed(1)
-    : "0.0";
+const ReviewSummary = ({ reviews, averageRating, totalReviews }: ReviewSummaryProps) => {
 
   const ratingCounts = [5, 4, 3, 2, 1].map((star) => {
     const count = reviews.filter((rev) => Math.round(rev.rating) === star).length;

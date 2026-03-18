@@ -4,7 +4,6 @@ import { TOrder } from "@/types/order";
 import Image from "next/image";
 
 const PendingOrder = ({ order }: { order: TOrder }) => {
-    console.log("or", order)
     return (
         <>
             <td className="px-8 py-5">

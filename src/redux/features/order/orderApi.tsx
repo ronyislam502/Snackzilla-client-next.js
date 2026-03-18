@@ -40,7 +40,7 @@ const orderApi = baseApi.injectEndpoints({
       }),
     }),
     myOrders: builder.query({
-      query: ({ user, page, limit }) => {
+      query: ({ email, page, limit }) => {
         const params = new URLSearchParams();
 
         if (page) {
@@ -51,7 +51,7 @@ const orderApi = baseApi.injectEndpoints({
         }
 
         return {
-          url: `/orders/my-orders/${user?.email}`,
+          url: `/orders/my-orders/${email}`,
           method: "GET",
           params: params,
         };
@@ -176,7 +176,7 @@ const orderApi = baseApi.injectEndpoints({
         const params = new URLSearchParams();
         if (page) {
           params.append("page", page.toString());
-        }
+        } 
         if (limit) {
           params.append("limit", limit.toString());
         }
@@ -207,5 +207,5 @@ export const {
   useUnshippedOrdersQuery,
   useShippedOrdersQuery,
   useCancelOrdersQuery,
-  useDeliveredOrdersQuery
+  useDeliveredOrdersQuery,
 } = orderApi;

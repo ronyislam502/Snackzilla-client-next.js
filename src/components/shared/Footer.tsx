@@ -39,8 +39,14 @@ const Footer = () => {
           <nav className="space-y-5">
             <h6 className="text-[8px] font-black text-gray-400 uppercase tracking-[0.3em] mb-3 italic">The Experience</h6>
             <div className="flex flex-col gap-2.5">
-              {["Exclusive Menu", "Private Dining", "Wine Selection", "Gourmet Catering"].map((item) => (
-                <a key={item} className="text-[11px] font-bold text-gray-600 hover:text-success uppercase tracking-widest transition-colors cursor-pointer italic">{item}</a>
+              {["Exclusive Menu", "Private Dining", "Wine Selection", "Gourmet Catering", "Order Tracking"].map((item) => (
+                <a 
+                  key={item} 
+                  href={item === "Order Tracking" ? "/user/track" : "#"}
+                  className="text-[11px] font-bold text-gray-600 hover:text-success uppercase tracking-widest transition-colors cursor-pointer italic"
+                >
+                  {item}
+                </a>
               ))}
             </div>
           </nav>

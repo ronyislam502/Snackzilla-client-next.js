@@ -28,29 +28,39 @@ const CheckOut = () => {
 
 
   const onSubmit = async (data: FieldValues) => {
+    if (!user) {
+      toast.info("User data is not ready. Please try again in a moment.");
+      return;
+    }
     try {
       // Google login user
-      if (user.auths[0]?.provider === "google") {
-        const formData = new FormData();
+      if (user?.auths?.[0]?.provider === "google") {
+        const isDataChanged = 
+          data.phone !== user?.phone ||
+          data.street !== user?.address?.street ||
+          data.city !== user?.address?.city ||
+          data.state !== user?.address?.state ||
+          data.postalCode !== user?.address?.postalCode ||
+          data.country !== user?.address?.country;
 
-        const userData = {
-          phone: data.phone,
-          address: {
-            street: data.street,
-            city: data.city,
-            state: data.state,
-            postalCode: data.postalCode,
-            country: data.country,
-          },
-        };
-
-        formData.append("data", JSON.stringify(userData));
-
-        await updateUser({
-          id: user?._id,
-          data: formData,
-        }).unwrap();
-
+        if (isDataChanged) {
+          const formData = new FormData();
+          const userData = {
+            phone: data.phone,
+            address: {
+              street: data.street,
+              city: data.city,
+              state: data.state,
+              postalCode: data.postalCode,
+              country: data.country,
+            },
+          };
+          formData.append("data", JSON.stringify(userData));
+          await updateUser({
+            id: user?._id,
+            data: formData,
+          }).unwrap();
+        }
       }
 
       // Custom login user অথবা Google login পরেও order create
@@ -62,17 +72,21 @@ const CheckOut = () => {
         })),
       };
 
+      console.log("order", orderData)
+
 
       const orderRes = await createOrder(orderData).unwrap();
 
+      console.log("res", orderRes)
+
       if (orderRes?.success) {
         // toast.success(orderRes?.message);
-        window.location.href = orderRes?.data; // payment page redirect
+        window.location.href = orderRes?.data; 
         dispatch(clearCart());
       }
     } catch (error) {
       const err = error as TError;
-      toast.error(err?.data?.message || "Something went wrong");
+      toast.error(err?.data?.message);
     }
   };
 

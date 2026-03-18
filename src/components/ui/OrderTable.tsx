@@ -1,26 +1,29 @@
+import { useState } from "react";
 import { TOrder } from "@/types/order";
 import { formatDate, orderTime, TimeAgo } from "../utilities/Date";
-import { useUpdateOrderMutation } from "@/redux/features/order/orderApi";
 import { toast } from "react-toastify";
+import { useSocket } from "@/hooks/useSocket";
+import { useUpdateOrderMutation } from "@/redux/features/order/orderApi";
 import { TError } from "@/types/global";
 import Link from "next/link";
 import Image from "next/image";
 
 const OrderTable = ({ order }: { order: TOrder }) => {
-    const [updateOrder, { isLoading }] = useUpdateOrderMutation();
+    const socket = useSocket(process.env.NEXT_PUBLIC_SERVER_URL as string || "http://localhost:5000");
+    const [isLoading, setIsLoading] = useState(false);
+
+    const [updateOrder] = useUpdateOrderMutation();
 
     const handleStatusUpdate = async (newStatus: string) => {
+        setIsLoading(true);
         try {
-            const res = await updateOrder({
-                id: order._id,
-                data: { status: newStatus }
-            }).unwrap();
-            if (res.success) {
-                toast.success(`Order ${newStatus.toLowerCase()} successfully`);
-            }
-        } catch (error) {
-            const err = error as TError;
-            toast.error(err?.data?.message || "Failed to update order");
+            await updateOrder({ id: order._id, status: newStatus }).unwrap();
+            toast.success(`Order update transmission successful: ${newStatus}`);
+        } catch (err) {
+            const error = err as TError;
+            toast.error(error?.data?.message || "Operation failed");
+        } finally {
+            setIsLoading(false);
         }
     };
 
@@ -91,7 +94,7 @@ const OrderTable = ({ order }: { order: TOrder }) => {
                         
                         <div className="flex gap-2 opacity-0 group-hover/row:opacity-100 transition-opacity duration-300">
                             <Link
-                                href={`/admin/orderManagement/${order._id}`}
+                                href={`/admin/liveOrder/${order._id}`}
                                 className="px-3 py-1.5 bg-white/5 hover:bg-white/10 text-gray-400 hover:text-white border border-white/10 rounded-lg text-[8px] font-black uppercase tracking-widest transition-all italic"
                             >
                                 View Details

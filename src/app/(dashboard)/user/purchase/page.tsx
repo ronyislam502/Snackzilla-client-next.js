@@ -1,32 +1,55 @@
 "use client";
 
+import { useEffect, useState } from "react";
 import TableSkeleton from "@/components/ui/skeleton/TableSkeleton";
 import { formatDate } from "@/components/utilities/Date";
 import { TUser } from "@/redux/features/auth/authSlice";
-import { useMyOrdersQuery } from "@/redux/features/order/orderApi";
 import { useAppSelector } from "@/redux/hooks";
 import { TOrder } from "@/types/order";
-import { useState } from "react";
 import CancelOrder from "./_component/CancelOrder";
 import AddReview from "./_component/AddReview";
 import { motion, AnimatePresence } from "framer-motion";
-import OrderTimeline from "@/components/ui/OrderTimeline";
 import ServiceReviewForm from "@/components/ui/ServiceReviewForm";
-import { ChevronDownIcon, ChevronUpIcon, ShieldCheckIcon, DownloadIcon } from "@/components/shared/Icons";
+import {  ShieldCheckIcon, DownloadIcon } from "@/components/shared/Icons";
+import { useSocket } from "@/hooks/useSocket";
+import { useMyOrdersQuery } from "@/redux/features/order/orderApi";
+import Link from "next/link";
+import OrderDetailsModal from "./_component/OrderDetailsModal";
 
 const Purchase = () => {
     const [page, setPage] = useState(1);
     const [limit] = useState(7);
-    const [expandedOrder, setExpandedOrder] = useState<string | null>(null);
+    const [selectedOrder, setSelectedOrder] = useState<TOrder | null>(null);
+    const [isModalOpen, setIsModalOpen] = useState(false);
     const user = useAppSelector((state) => state?.auth?.user) as TUser;
+    const socket = useSocket(process.env.NEXT_PUBLIC_SERVER_URL as string || "http://localhost:5000");
 
-    const { data: purchases, isLoading } = useMyOrdersQuery({
-        user,
-        page,
-        limit,
-    });
+    const { data: purchases, isLoading, refetch } = useMyOrdersQuery({ email: user?.email, page, limit }, { skip: !user?.email });
+
+    useEffect(() => {
+        if (!user?.user || !socket.isConnected) return;
+
+        // Join user-specific room
+        socket.emit("join-user", user.user);
+        
+        const handleOrderUpdated = (updatedOrder: TOrder) => {
+            // Refetch via REST to get updated data
+            refetch();
+        };
+
+        socket.on("order-updated", handleOrderUpdated as any);
+
+        return () => {
+            socket.off("order-updated", handleOrderUpdated as any);
+        };
+    }, [socket.isConnected, user?.user, refetch]);
 
     const totalPages = purchases?.meta?.totalPage || 1;
+
+    const openOrderDetails = (order: TOrder) => {
+        setSelectedOrder(order);
+        setIsModalOpen(true);
+    };
 
     return (
         <div className="p-4 md:p-8 space-y-8 lg:max-w-7xl mx-auto">
@@ -48,7 +71,6 @@ const Purchase = () => {
                 </div>
             </div>
 
-            {/* Table Section */}
             <div className="bg-[#0a0a0a]/60 backdrop-blur-3xl rounded-3xl border border-success/20 overflow-hidden shadow-[0_0_50px_rgba(0,0,0,0.5)] relative group hover:border-blue-500/40 hover:shadow-[0_0_50px_rgba(59,130,246,0.15)] transition-all duration-500">
                 <div className="absolute inset-0 bg-gradient-to-tr from-success/8 via-success/3 to-transparent opacity-100 group-hover:opacity-0 transition-opacity duration-700 pointer-events-none"></div>
                 <div className="absolute inset-0 bg-gradient-to-tr from-blue-500/10 via-blue-500/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-700 pointer-events-none" />
@@ -70,20 +92,20 @@ const Purchase = () => {
                                 <TableSkeleton columns={6} rows={limit} />
                             ) : (
                                 <AnimatePresence mode="popLayout">
-                                    {purchases?.data?.map((order: TOrder, index: number) => [
+                                    {purchases?.data?.map((order: TOrder, index: number) => (
                                         <motion.tr 
                                             key={order._id}
                                             initial={{ opacity: 0, y: 10 }}
                                             animate={{ opacity: 1, y: 0 }}
                                             exit={{ opacity: 0, scale: 0.95 }}
                                             transition={{ delay: index * 0.05 }}
-                                            className={`group bg-white/[0.02] hover:bg-white/[0.05] transition-all duration-300 rounded-2xl border border-white/5 cursor-pointer ${expandedOrder === order._id ? 'bg-white/[0.05]' : ''}`}
-                                            onClick={() => setExpandedOrder(expandedOrder === order._id ? null : order._id)}
+                                            className="group bg-white/[0.02] hover:bg-white/[0.05] transition-all duration-300 rounded-2xl border border-white/5 cursor-pointer"
+                                            onClick={() => openOrderDetails(order)}
                                         >
                                             <td className="pl-8 py-4 rounded-l-2xl border-none">
                                                 <div className="flex items-center gap-3">
-                                                    <div className={`p-1.5 rounded-lg border transition-all ${expandedOrder === order._id ? 'bg-success border-success text-black' : 'bg-white/5 border-white/10 text-gray-500 group-hover:border-success/30 group-hover:text-success'}`}>
-                                                        {expandedOrder === order._id ? <ChevronUpIcon size={12} /> : <ChevronDownIcon size={12} />}
+                                                    <div className="p-1.5 rounded-lg bg-white/5 border border-white/10 text-gray-500 group-hover:border-success/30 group-hover:text-success transition-all">
+                                                        <ShieldCheckIcon size={12} />
                                                     </div>
                                                     <p className="font-black text-white text-sm uppercase tracking-tighter italic">
                                                         {formatDate(order.createdAt)}
@@ -97,21 +119,40 @@ const Purchase = () => {
                                             </td>
                                             <td className="border-none py-4 text-center">
                                                 <div className="flex flex-col gap-0.5 items-center">
-                                                    <span className="text-gray-500 text-[9px] font-black uppercase tracking-widest italic">Base: ${order?.totalPrice.toFixed(2)}</span>
-                                                    <span className="text-gray-500 text-[9px] font-black uppercase tracking-widest italic">Tax: ${order?.tax.toFixed(2)}</span>
+                                                    <span className="text-gray-500 text-[9px] font-black uppercase tracking-widest italic">Base: ${order?.totalPrice?.toFixed(2)}</span>
+                                                    <span className="text-gray-500 text-[9px] font-black uppercase tracking-widest italic">Tax: ${order?.tax?.toFixed(2)}</span>
                                                 </div>
                                             </td>
                                             <td className="border-none py-4 text-center font-black text-white text-sm tracking-tighter italic">
-                                                ${order?.grandAmount.toFixed(2)}
+                                                ${order?.grandAmount?.toFixed(2)}
                                             </td>
                                             <td className="border-none py-4 text-center">
-                                                <span className={`px-3 py-1 rounded-lg text-[9px] font-black uppercase tracking-widest italic ${
-                                                    order?.paymentStatus === "PAID" 
-                                                    ? "bg-success/20 text-success border border-success/20" 
-                                                    : "bg-warning/20 text-warning border border-warning/20"
-                                                }`}>
-                                                    {order?.paymentStatus}
-                                                </span>
+                                                <div className="flex flex-col gap-2 items-center">
+                                                    <span className={`px-3 py-1 rounded-lg text-[9px] font-black uppercase tracking-widest italic ${
+                                                        order?.paymentStatus === "PAID" 
+                                                        ? "bg-success/20 text-success border border-success/20" 
+                                                        : "bg-warning/20 text-warning border border-warning/20"
+                                                    }`}>
+                                                        {order?.paymentStatus === "PAID" ? "SETTLED" : order?.paymentStatus}
+                                                    </span>
+                                                    <span className={`px-3 py-1 rounded-lg text-[9px] font-black uppercase tracking-widest italic ${
+                                                        order?.status === "DELIVERED" 
+                                                        ? "bg-emerald-500/20 text-emerald-400 border border-emerald-500/20" 
+                                                        : order?.status === "SHIPPED"
+                                                        ? "bg-blue-500/20 text-blue-400 border border-blue-500/20"
+                                                        : "bg-gray-500/20 text-gray-400 border border-white/10"
+                                                    }`}>
+                                                        {order?.status}
+                                                    </span>
+                                                    {order.trackingId && (
+                                                        <Link 
+                                                            href={`/user/track?id=${order.trackingId}`}
+                                                            className="text-[8px] font-black text-success uppercase tracking-widest italic opacity-70 hover:opacity-100 hover:underline transition-all"
+                                                        >
+                                                            TRK: {order.trackingId}
+                                                        </Link>
+                                                    )}
+                                                </div>
                                             </td>
                                             <td className="rounded-r-2xl border-none pr-8 py-4 text-right">
                                                 <div className="flex justify-end items-center gap-3" onClick={(e) => e.stopPropagation()}>
@@ -133,51 +174,20 @@ const Purchase = () => {
                                                     <CancelOrder order={order} />
                                                 </div>
                                             </td>
-                                        </motion.tr>,
-                                        <AnimatePresence key={`expanded-${order._id}`}>
-                                            {expandedOrder === order._id && (
-                                                <motion.tr
-                                                    initial={{ opacity: 0, height: 0 }}
-                                                    animate={{ opacity: 1, height: "auto" }}
-                                                    exit={{ opacity: 0, height: 0 }}
-                                                    className="bg-white/[0.01]"
-                                                >
-                                                    <td colSpan={6} className="px-12 py-6 border-none">
-                                                        <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
-                                                            <OrderTimeline history={order.statusHistory || []} />
-                                                            <div className="space-y-4">
-                                                                <div className="flex items-center gap-3 mb-4">
-                                                                    <div className="w-8 h-8 rounded-lg bg-blue-500/10 flex items-center justify-center text-blue-400 border border-blue-500/20">
-                                                                        <ShieldCheckIcon size={16} />
-                                                                    </div>
-                                                                    <h4 className="text-[11px] font-black text-white uppercase tracking-widest italic">Verification Status</h4>
-                                                                </div>
-                                                                <div className="bg-white/[0.02] border border-white/5 rounded-2xl p-6 space-y-4 shadow-inner">
-                                                                    <div className="flex justify-between items-center text-[9px] font-bold uppercase tracking-widest italic">
-                                                                        <span className="text-gray-500">Global Identification:</span>
-                                                                        <span className="text-white">{order._id}</span>
-                                                                    </div>
-                                                                    <div className="flex justify-between items-center text-[9px] font-bold uppercase tracking-widest italic">
-                                                                        <span className="text-gray-500">Operation Status:</span>
-                                                                        <span className="text-success">{order.status}</span>
-                                                                    </div>
-                                                                    <div className="flex justify-between items-center text-[9px] font-bold uppercase tracking-widest italic">
-                                                                        <span className="text-gray-500">Financial Clearance:</span>
-                                                                        <span className="text-success">{order.paymentStatus}</span>
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    </td>
-                                                </motion.tr>
-                                            )}
-                                        </AnimatePresence>
-                                    ])}
+                                        </motion.tr>
+                                    ))}
                                 </AnimatePresence>
                             )}
                         </tbody>
                     </table>
                 </div>
+
+                {/* Modal Integration */}
+                <OrderDetailsModal 
+                    isOpen={isModalOpen}
+                    onClose={() => setIsModalOpen(false)}
+                    order={selectedOrder}
+                />
 
                 {/* Pagination Section */}
                 {totalPages > 1 && (

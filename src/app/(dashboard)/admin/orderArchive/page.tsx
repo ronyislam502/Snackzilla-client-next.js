@@ -112,7 +112,7 @@ const OrderHistory = () => {
                                       </td>
                                       <td className="px-8 py-4 text-right">
                                           <Link
-                                              href={`/admin/orderManagement/${order._id}`}
+                                              href={`/admin/liveOrder/${order._id}`}
                                               className="px-3 py-1.5 bg-white/5 hover:bg-white/10 text-gray-500 hover:text-white border border-white/10 rounded-lg text-[8px] font-black uppercase tracking-widest transition-all italic"
                                           >
                                               View

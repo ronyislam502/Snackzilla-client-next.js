@@ -158,16 +158,19 @@ const Banner = () => {
                 {slide.subtitle}
               </motion.p>
 
-              <Link href={"/menu"}>
-                <motion.button
-                  variants={scaleIn}
-                  initial="hidden"
-                  animate={isActive ? "visible" : "hidden"}
-                  transition={{ delay: 0.5 }}
-                  className="bg-success hover:bg-success/90 text-black px-6 sm:px-8 md:px-10 py-2.5 sm:py-3.5 rounded-xl text-xs sm:text-[13px] font-black uppercase tracking-widest shadow-[0_20px_40px_-10px_rgba(34,197,94,0.3)] transition-all hover:scale-105 active:scale-95 italic"
-                >
-                  {slide.buttonText}
-                </motion.button></Link>
+              <div className="flex flex-wrap items-center justify-center gap-4">
+                <Link href={"/menu"}>
+                  <motion.button
+                    variants={scaleIn}
+                    initial="hidden"
+                    animate={isActive ? "visible" : "hidden"}
+                    transition={{ delay: 0.5 }}
+                    className="bg-success hover:bg-success/90 text-black px-6 sm:px-8 md:px-10 py-2.5 sm:py-3.5 rounded-xl text-xs sm:text-[13px] font-black uppercase tracking-widest shadow-[0_20px_40px_-10px_rgba(34,197,94,0.3)] transition-all hover:scale-105 active:scale-95 italic"
+                  >
+                    {slide.buttonText}
+                  </motion.button>
+                </Link>
+              </div>
             </div>
           </div>
         );

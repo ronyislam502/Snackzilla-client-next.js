@@ -10,6 +10,13 @@ const reviewApi = baseApi.injectEndpoints({
         method: "GET",
       }),
       providesTags: ["review"],
+      transformResponse: (response: any) => {
+        return {
+          reviews: response.data.reviews,
+          averageRating: response.data.averageRating,
+          totalReviews: response.data.totalReviews,
+        };
+      },
     }),
     allReviews: builder.query({
       query: ({ search, sort, page, limit, category, minPrice, maxPrice }) => {

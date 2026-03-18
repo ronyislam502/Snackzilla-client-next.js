@@ -79,6 +79,10 @@ const TopSellingFoods = () => {
                                             </span>
                                         </div>
                                     </div>
+                                    <div className="absolute bottom-4 left-4 flex items-center gap-1.5 px-3 py-1 bg-black/60 backdrop-blur-md border border-white/10 rounded-full">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="10" height="10" viewBox="0 0 24 24" fill="currentColor" className="text-warning"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg>
+                                        <span className="text-[10px] font-black text-white italic">4.5</span>
+                                    </div>
                                     <div className="absolute bottom-4 right-4 text-white font-black italic text-xl drop-shadow-lg">
                                         ${(food?.price || 0).toFixed(2)}
                                     </div>

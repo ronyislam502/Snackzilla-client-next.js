@@ -1,7 +1,7 @@
 "use client";
 
 import { useAdminStatisticsQuery } from "@/redux/features/statistics/statisticsApi";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 import CategoryStates from "./_components/CategoryStats";
 import FoodStats from "./_components/FoodStats";
@@ -9,6 +9,8 @@ import StatCard from "@/components/ui/StatsCard";
 import SummaryStats from "./_components/SummaryStats";
 import SalesSummary from "./_components/SalesSummary";
 import { motion } from "framer-motion";
+import { useSocket } from "@/hooks/useSocket";
+import { toast } from "react-toastify";
 
 
 const Dashboard = () => {
@@ -17,6 +19,23 @@ const Dashboard = () => {
   const [dateRange, setDateRange] = useState<{ startDate?: string; endDate?: string }>({});
 
   const { data: stats } = useAdminStatisticsQuery(dateRange);
+  const socket = useSocket(process.env.NEXT_PUBLIC_SERVER_URL as string || "http://localhost:5000");
+
+  useEffect(() => {
+    if (!socket.isConnected) return;
+
+    const handleNewOrder = (data: any) => {
+        toast.info(`SYSTEM ALERT: ${data.message}`, {
+            position: "top-right",
+            autoClose: 8000
+        });
+    };
+
+    socket.on("new-order", handleNewOrder);
+    return () => {
+      socket.off("new-order", handleNewOrder);
+    };
+  }, [socket.isConnected]);
 
   if (!stats?.data) return null;
 
@@ -25,8 +44,14 @@ const Dashboard = () => {
     categoryWise: categoryData,
     foodWise: foodData,
     dailyRevenue,
+    weeklyRevenue,
     monthlyRevenue,
+    yearlyRevenue,
   } = stats?.data;
+
+  const currentSalesData = filter === "all" || filter === "daily" || filter === "weekly" ? dailyRevenue : 
+                          filter === "monthly" ? monthlyRevenue : 
+                          filter === "yearly" ? yearlyRevenue : dailyRevenue;
 
   // Filter handlers
   const handleFilterChange = (type: string) => {
@@ -209,7 +234,7 @@ const Dashboard = () => {
           viewport={{ once: true }}
           transition={{ duration: 0.6, delay: 0.3 }}
         >
-          <SalesSummary />
+          <SalesSummary salesData={currentSalesData} totalRevenue={totalRevenue} />
         </motion.div>
         <motion.div
           initial={{ opacity: 0, scale: 0.98 }}
@@ -217,7 +242,7 @@ const Dashboard = () => {
           viewport={{ once: true }}
           transition={{ duration: 0.6, delay: 0.4 }}
         >
-          <SummaryStats />
+          <SummaryStats orderStatusCounts={stats?.data?.orderStatusCounts} />
         </motion.div>
       </div>
     </div>

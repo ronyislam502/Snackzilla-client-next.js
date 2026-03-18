@@ -7,11 +7,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { useSocket } from "@/hooks/useSocket";
 import { useAppSelector } from "@/redux/hooks";
 import { TUser } from "@/redux/features/auth/authSlice";
-import { useGetAllChatsQuery, useGetMessagesByChatIdQuery } from "@/redux/features/chat/chatApi";
 import { SendIcon, UserIcon, ClockIcon, SearchIcon, MailIcon } from "@/components/shared/Icons";
-
-import { useAllUsersQuery } from "@/redux/features/user/userApi";
-import { useGetOrCreateChatMutation } from "@/redux/features/chat/chatApi";
 import { toast } from "react-toastify";
 import Image from "next/image";
 
@@ -22,41 +18,76 @@ interface TMessage { _id?: string; chatId?: string; sender?: { _id: string } | s
 
 const AdminChatManagement = () => {
     const user = useAppSelector((state) => state.auth.user) as TUser;
-    const socket = useSocket(process.env.NEXT_PUBLIC_SERVER_URL as string || "https://snackzilla-server.vercel.app");
+    const socket = useSocket(process.env.NEXT_PUBLIC_SERVER_URL as string || "http://localhost:5000");
+    const [allChats, setAllChats] = useState<TChat[]>([]);
     const [selectedChat, setSelectedChat] = useState<TChat | null>(null);
     const [messages, setMessages] = useState<TMessage[]>([]);
     const [input, setInput] = useState("");
     const [activeTab, setActiveTab] = useState<"CHATS" | "CUSTOMERS">("CHATS");
     const chatEndRef = useRef<HTMLDivElement>(null);
 
-    const { data: allChats } = useGetAllChatsQuery({});
-    const { data: initialMessages } = useGetMessagesByChatIdQuery(selectedChat?._id, { skip: !selectedChat });
-    const { data: usersData } = useAllUsersQuery({ limit: 100 });
-    const [getOrCreateChat] = useGetOrCreateChatMutation();
-
-    const customers = usersData?.data?.filter((u: TCustomer) => u.role === "USER") || [];
+    const [allUsers, setAllUsers] = useState<TCustomer[]>([]);
 
     useEffect(() => {
-        if (selectedChat && socket) {
-            socket.emit("join-chat", selectedChat._id);
-        }
-    }, [selectedChat, socket, user?.user]);
+        if (!socket.isConnected) return;
 
-    useEffect(() => {
-        if (initialMessages?.data) {
-            setMessages(initialMessages.data);
-        }
-    }, [initialMessages]);
+        // Join admin room for global updates
+        socket.emit("join-admin");
+        socket.emit("get-all-chats");
+        socket.emit("get-users");
 
-    useEffect(() => {
-        socket.on("receive-message", (message: unknown) => {
-            const msg = message as TMessage;
-            if (msg.chatId === selectedChat?._id) {
-                setMessages((prev) => [...prev, msg]);
+        const handleAllChats = (chats: TChat[]) => {
+            setAllChats(chats);
+        };
+
+        const handleAllUsers = (users: TCustomer[]) => {
+            setAllUsers(users);
+        };
+
+        const handleChatMessages = (history: TMessage[]) => {
+            setMessages(history);
+        };
+
+        const handleReceiveMessage = (message: TMessage) => {
+            if (message.chatId === selectedChat?._id) {
+                setMessages((prev) => [...prev, message]);
             }
-        });
-        return () => socket.off("receive-message");
-    }, [socket, selectedChat]);
+        };
+
+        const handleChatUpdated = () => {
+            socket.emit("get-all-chats");
+        };
+
+        const handleChatInitiated = (chat: TChat) => {
+            setSelectedChat(chat);
+            setActiveTab("CHATS");
+            socket.emit("get-all-chats");
+            toast.success("CHANNEL_SYNCHRONIZED");
+        };
+
+        socket.on("all-chats", handleAllChats as any);
+        socket.on("all-users", handleAllUsers as any);
+        socket.on("chat-messages", handleChatMessages as any);
+        socket.on("receive-message", handleReceiveMessage as any);
+        socket.on("chat-initiated", handleChatInitiated as any);
+        socket.on("chat-updated", handleChatUpdated as any);
+
+        return () => {
+            socket.off("all-chats", handleAllChats as any);
+            socket.off("all-users", handleAllUsers as any);
+            socket.off("chat-messages", handleChatMessages as any);
+            socket.off("receive-message", handleReceiveMessage as any);
+            socket.off("chat-initiated", handleChatInitiated as any);
+            socket.off("chat-updated", handleChatUpdated as any);
+        };
+    }, [socket.isConnected, selectedChat?._id]);
+
+    useEffect(() => {
+        if (selectedChat && socket.isConnected) {
+            socket.emit("join-chat", selectedChat._id);
+            socket.emit("get-messages", selectedChat._id);
+        }
+    }, [selectedChat?._id, socket.isConnected]);
 
     useEffect(() => {
         chatEndRef.current?.scrollIntoView({ behavior: "smooth" });
@@ -66,7 +97,7 @@ const AdminChatManagement = () => {
         if (!input.trim() || !selectedChat) return;
         const messageData = {
             chatId: selectedChat._id,
-            senderId: (user as { _id?: string; user?: string })?._id || (user as { _id?: string; user?: string })?.user,
+            senderId: user.user,
             content: input.trim(),
         };
         socket.emit("send-message", messageData);
@@ -74,20 +105,10 @@ const AdminChatManagement = () => {
     };
 
     const handleStartChat = async (customerId: string) => {
-        try {
-            const res = await getOrCreateChat({
-                userId: customerId,
-                adminId: (user as { _id?: string; user?: string })?._id || (user as { _id?: string; user?: string })?.user
-            }).unwrap();
-
-            if (res.success) {
-                setSelectedChat(res.data);
-                setActiveTab("CHATS");
-                toast.success("CHANNEL_SYNCHRONIZED");
-            }
-        } catch {
-            toast.error("SYNCHRONIZATION_FAILURE");
-        }
+        socket.emit("initiate-chat", {
+            userId: customerId,
+            adminId: user.user
+        });
     };
 
     return (
@@ -145,7 +166,7 @@ const AdminChatManagement = () => {
 
                     <div className="flex-1 overflow-y-auto p-3 space-y-1.5 scrollbar-hide relative z-10">
                         {activeTab === "CHATS" ? (
-                            allChats?.data?.map((chat: TChat) => (
+                            allChats?.map((chat: TChat) => (
                                 <button
                                     key={chat._id}
                                     onClick={() => setSelectedChat(chat)}
@@ -193,7 +214,7 @@ const AdminChatManagement = () => {
                                 </button>
                             ))
                         ) : (
-                            customers.map((cust: TCustomer) => (
+                            allUsers.map((cust: TCustomer) => (
                                 <button
                                     key={cust._id}
                                     onClick={() => handleStartChat(cust._id)}
@@ -271,7 +292,7 @@ const AdminChatManagement = () => {
                             {/* Messages */}
                             <div className="flex-1 overflow-y-auto p-8 space-y-6 scrollbar-hide">
                                 {messages?.map((msg, idx) => {
-                                    const isMe = ((msg.sender as { _id?: string })?._id || msg.sender) === ((user as { _id?: string; user?: string })?._id || (user as { _id?: string; user?: string })?.user);
+                                    const isMe = ((msg.sender as { _id?: string })?._id || msg.sender) === user.user;
                                     return (
                                         <motion.div
                                             key={msg._id || idx}
